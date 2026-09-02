@@ -1,0 +1,28 @@
+# Compilados e Binários C
+bin/
+build/
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Haskell (U2)
+dist/
+dist-newstyle/
+*.hi
+*.dyn_o
+*.dyn_hi
+.stack-work/
