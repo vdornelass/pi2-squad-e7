@@ -9,19 +9,19 @@ O **Project Model Canvas (PM Canvas)** sintetiza a estratégia, escopo, requisit
 +---------------------------------------------------------------------------------------------------------------+
 |                                           PROJECT MODEL CANVAS                                                |
 +-------------------+-------------------+-------------------+-------------------+-------------------------------+
-| POR QUÊ?          | O QUÊ?            | QUEM?             | COMO?             | QUANDO?                       |
+| POR QUE?          | O QUE?            | QUEM?             | COMO?             | QUANDO?                       |
 +-------------------+-------------------+-------------------+-------------------+-------------------------------+
 | JUSTIFICATIVAS    | PRODUTO           | STAKEHOLDERS      | PREMISSAS         | GRUPO DE ENTREGAS             |
 |                   |                   |                   |                   |                               |
-| OBJETIVOS SMART   | REQUISITOS        | EQUIPE (SQUAD E7) | RISCOS            | LINHA DO TEMPO & RESTRIÇÕES   |
+| OBJETIVOS SMART   | REQUISITOS        | EQUIPE (SQUAD E7) | RISCOS            | LINHA DO TEMPO & RESTRICOES   |
 |                   |                   |                   |                   |                               |
-| BENEFÍCIOS        | NÃO-ESCOPO        |                   |                   |                               |
+| BENEFICIOS        | NAO-ESCOPO        |                   |                   |                               |
 +-------------------+-------------------+-------------------+-------------------+-------------------------------+
 ```
 
 ---
 
-### 1. 🎯 Por Quê? (Justificativa, Objetivos e Benefícios)
+### 1. Por Que? (Justificativa, Objetivos e Benefícios)
 
 #### 1.1. Justificativas
 * Dificuldade recorrente dos estudantes em assimilar conceitos abstratos de **Lógica Proposicional** e formalismo matemático sem aplicação prática imediata.
@@ -38,7 +38,7 @@ O **Project Model Canvas (PM Canvas)** sintetiza a estratégia, escopo, requisit
 
 ---
 
-### 2. 📦 O Quê? (Produto, Requisitos e Não-Escopo)
+### 2. O Que? (Produto, Requisitos e Não-Escopo)
 
 #### 2.1. Produto
 * **Lockdown CESAR:** Jogo de suspense/escape room 3D em primeira pessoa para navegadores web, renderizado via JS Canvas / WebGL com motor lógico em C, ambientado no campus da CESAR School.
@@ -64,7 +64,7 @@ O **Project Model Canvas (PM Canvas)** sintetiza a estratégia, escopo, requisit
 
 ---
 
-### 3. 👥 Quem? (Stakeholders e Equipe)
+### 3. Quem? (Stakeholders e Equipe)
 
 #### 3.1. Stakeholders Externos
 * **Docentes Avaliadores:** Professores das disciplinas de FP2, FDS, LMC, IHC e PIF da CESAR School.
@@ -78,7 +78,7 @@ O **Project Model Canvas (PM Canvas)** sintetiza a estratégia, escopo, requisit
 
 ---
 
-### 4. ⚙️ Como? (Premissas e Riscos)
+### 4. Como? (Premissas e Riscos)
 
 #### 4.1. Premissas
 * O usuário final possui navegador web moderno (Chrome, Firefox, Edge) com suporte a HTML5 Canvas e WebGL.
@@ -96,7 +96,7 @@ O **Project Model Canvas (PM Canvas)** sintetiza a estratégia, escopo, requisit
 
 ---
 
-### 5. 📅 Quando? (Grupo de Entregas e Linha do Tempo)
+### 5. Quando? (Grupo de Entregas e Linha do Tempo)
 
 ```text
 [UNIDADE 1] =====================================> [UNIDADE 2] ====================================>

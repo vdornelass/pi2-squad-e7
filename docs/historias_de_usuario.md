@@ -5,7 +5,7 @@ Este documento contém o Product Backlog detalhado no padrão **3Cs (Card, Conve
 
 ---
 
-## 🗺️ Módulo 1: Exploração e Ambiente 3D no Canvas Web
+## Módulo 1: Exploração e Ambiente 3D no Canvas Web
 
 ### US01: Movimentação 3D no Campus da CESAR School
 * **Card (Cartão):**
@@ -55,7 +55,7 @@ Este documento contém o Product Backlog detalhado no padrão **3Cs (Card, Conve
 
 ---
 
-## 🧩 Módulo 2: Puzzles de Lógica Proposicional
+## Módulo 2: Puzzles de Lógica Proposicional
 
 ### US05: Interface do Terminal de Trava Lógica
 * **Card (Cartão):**
@@ -105,7 +105,7 @@ Este documento contém o Product Backlog detalhado no padrão **3Cs (Card, Conve
 
 ---
 
-## 💾 Módulo 3: Coleta de Dados e Conscientização da IA
+## Módulo 3: Coleta de Dados e Conscientização da IA
 
 ### US09: Coleta de Datasets Éticos de IA
 * **Card (Cartão):**
@@ -155,7 +155,7 @@ Este documento contém o Product Backlog detalhado no padrão **3Cs (Card, Conve
 
 ---
 
-## ⚙️ Módulo 4: Sistema, Interface e Fim de Jogo
+## Módulo 4: Sistema, Interface e Fim de Jogo
 
 ### US13: Menu Principal e Interface de Configurações
 * **Card (Cartão):**

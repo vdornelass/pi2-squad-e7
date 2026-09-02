@@ -5,7 +5,7 @@
 
 ---
 
-## 👥 1. Integrantes da Equipe e Matriz RACI (FP2)
+## 1. Integrantes da Equipe e Matriz RACI (FP2)
 
 ### 1.1. Membros da Squad E7
 * **João Gabriel** — Scrum Master (FP2) & Desenvolvedor Web/C ([@vdornelass](https://github.com/vdornelass))
@@ -24,11 +24,11 @@
 | **Desenvolvimento do Motor em C / Web (PIF)** | João Gabriel, Caio Brayner | João Gabriel | Matheus Chaves | Squad E7 |
 
 ### 1.3. Project Model Canvas (PM Canvas)
-* 📄 **Documento Completo do PM Canvas:** [Consulte o Project Model Canvas detalhado em docs/pm_canvas.md](./docs/pm_canvas.md)
+* **Documento Completo do PM Canvas:** [Consulte o Project Model Canvas detalhado em docs/pm_canvas.md](./docs/pm_canvas.md)
 
 ---
 
-## 🎯 2. Visão do Produto & Sinopse do Jogo (FDS)
+## 2. Visão do Produto & Sinopse do Jogo (FDS)
 
 É tarde da noite no campus da **CESAR School** (Recife Antigo). Um estudante fica após o horário nos laboratórios para concluir um projeto. De repente, o sistema predial entra em colapso: as luzes apagam, os monitores ligam sozinhos e todas as saídas são trancadas magneticamente.
 
@@ -40,18 +40,18 @@ Um modelo de Inteligência Artificial experimental assumiu o controle do prédio
 
 ---
 
-## 🔗 3. Acesso ao Board de Gestão Ágil no Jira (FP2)
+## 3. Acesso ao Board de Gestão Ágil no Jira (FP2)
 
 * **Ferramenta de Gestão:** Jira Software (Atlassian Cloud)
 * **Link Oficial do Board:** [Acessar Board do Projeto PI2 - Squad E7](https://csprj-adsr-2p-e7.atlassian.net/jira/software/c/projects/PI2/boards/2)
 
 ---
 
-## 📋 4. Histórias de Usuário (Padrão 3Cs - INVEST)
+## 4. Histórias de Usuário (Padrão 3Cs - INVEST)
 
 O projeto possui **15 Histórias de Usuário** cadastradas e priorizadas no Jira, detalhadas no padrão **3Cs (Card, Conversation, Confirmation)**:
 
-* 📄 **Documento Completo das Histórias:** [Consulte as 15 Histórias de Usuário detalhadas em docs/historias_de_usuario.md](./docs/historias_de_usuario.md)
+* **Documento Completo das Histórias:** [Consulte as 15 Histórias de Usuário detalhadas em docs/historias_de_usuario.md](./docs/historias_de_usuario.md)
 
 ### Resumo das Histórias:
 * **Módulo 1: Exploração e Ambiente 3D no Canvas Web**
@@ -76,23 +76,23 @@ O projeto possui **15 Histórias de Usuário** cadastradas e priorizadas no Jira
 
 ---
 
-## 📸 5. Evidências do Board e Backlog (Entrega 01)
+## 5. Evidências do Board e Backlog (Entrega 01)
 
 ### 5.1. Visão Geral do Board (Quadro Kanban no Jira)
-*(Anexe o print do quadro Kanban com as colunas Backlog, A Fazer, Em Andamento e Concluído)*
+*(Print do quadro Kanban com as colunas Backlog, A Fazer, Em Andamento e Concluído)*
 ![Board Atualizado no Jira](./docs/img/print_board.png)
 
 ### 5.2. Visão do Backlog Priorizado no Jira
-*(Anexe o print da lista de Backlog ordenada por prioridade no Jira)*
+*(Print da lista de Backlog ordenada por prioridade no Jira)*
 ![Backlog Priorizado no Jira](./docs/img/print_backlog.png)
 
 ### 5.3. Detalhe de Card no Padrão 3Cs (Card, Conversation, Confirmation)
-*(Anexe o print de um ticket aberto no Jira exibindo os 3Cs preenchidos)*
+*(Print de um ticket aberto no Jira exibindo os 3Cs preenchidos)*
 ![Exemplo de Card 3Cs no Jira](./docs/img/print_card_3cs.png)
 
 ---
 
-## 🛠️ 6. Estrutura do Repositório
+## 6. Estrutura do Repositório
 
 ```text
 pi2-squad-e7/
@@ -110,7 +110,7 @@ pi2-squad-e7/
 
 ---
 
-## 🚀 7. Como Executar o Projeto
+## 7. Como Executar o Projeto
 
 ```bash
 # Compilar o módulo em C
