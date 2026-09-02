@@ -2,6 +2,13 @@
 
 Repositório oficial de desenvolvimento da Squad E7 para o Projeto Integrador 2 (CESAR School).
 
+## 👥 Membros da Squad
+
+* **João Gabriel** - [@vdornelass](https://github.com/vdornelass)
+* **Caio Brayner** - [@BraynerCaio](https://github.com/BraynerCaio)
+* **Matheus Chaves** - [@MatheusChavesDev](https://github.com/MatheusChavesDev)
+* **Julio Cesar** - [@JCesar-dev](https://github.com/JCesar-dev)
+
 ## 📁 Estrutura do Repositório
 
 ```text
@@ -10,7 +17,7 @@ pi2-squad-e7/
 ├── docs/         # Documentações técnicas e especificações
 ├── src/          # Código-fonte em C (U1) e Haskell (U2)
 ├── .gitignore    # Configuração de arquivos ignorados
-└── README.md     # Apresentação do projeto
+└── README.md     # Apresentação do projeto e da squad
 ```
 
 ## 🚀 Como Compilar e Executar (C - U1)
