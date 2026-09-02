@@ -23,6 +23,9 @@
 | **Especificação e Validador Lógico (LMC)** | Julio Cesar, João Gabriel | Julio Cesar | Caio Brayner | Squad E7 |
 | **Desenvolvimento do Motor em C / Web (PIF)** | João Gabriel, Caio Brayner | João Gabriel | Matheus Chaves | Squad E7 |
 
+### 1.3. Project Model Canvas (PM Canvas)
+* 📄 **Documento Completo do PM Canvas:** [Consulte o Project Model Canvas detalhado em docs/pm_canvas.md](./docs/pm_canvas.md)
+
 ---
 
 ## 🎯 2. Visão do Produto & Sinopse do Jogo (FDS)
@@ -96,6 +99,7 @@ pi2-squad-e7/
 ├── bin/                       # Executáveis compilados (ignorado no Git)
 ├── docs/                      # Documentações de Requisitos, IHC, LMC e Gestão
 │   ├── historias_de_usuario.md# As 15 Histórias de Usuário completas (3Cs)
+│   ├── pm_canvas.md           # Project Model Canvas (FP2)
 │   └── img/                   # Imagens e prints de evidências para o README
 ├── src/                       # Código-fonte (JS Canvas, WebGL/3D, Lógica C)
 │   └── main.c                 # Núcleo de validação lógica e estados em C
