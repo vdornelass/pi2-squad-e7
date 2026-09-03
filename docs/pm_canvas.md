@@ -71,13 +71,14 @@ O **Project Model Canvas (PM Canvas)** sintetiza a estratégia, escopo, requisit
 * **Usuários Finais:** Estudantes de Ciência da Computação, ADS, Engenharia e entusiastas de jogos de lógica.
 
 #### 3.2. Equipe de Desenvolvimento (Squad E7)
-* **Larissa Almeida:** Lead de Engenharia de Software (FDS) & Designer de Interface (IHC)
-* **Mateus Lacerda:** Engenheiro de Requisitos (FDS) & Desenvolvedor C/Haskell
+* **Larissa Almeida:** Lead de Engenharia de Software (FDS)
+* **Mateus Lacerda:** Gestão Ágil / Scrum Master (FP2) & Engenharia de Requisitos
 * **Theo Monteiro:** Analista de Requisitos & Testador de Software (QA)
-* **João Gabriel:** Desenvolvedor Web/C e Gestão Técnica
+* **João Gabriel:** Desenvolvedor Web/C, Haskell e Arquitetura
 * **Caio Brayner:** Desenvolvedor C
-* **Matheus Chaves:** UI/UX Designer (IHC) & Desenvolvedor Canvas 3D
+* **Matheus Chaves:** Designer de Interface (IHC) & Desenvolvedor Canvas/Web
 * **Julio Cesar:** Consultor de Lógica Matemática (LMC) & Testador
+* **Jhorge Araújo:** Consultor de Arquitetura e Lógica Matemática (LMC)
 
 ---
 
