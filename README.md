@@ -8,8 +8,11 @@
 ## 1. Integrantes da Equipe e Matriz RACI (FP2)
 
 ### 1.1. Membros da Squad E7
-* **João Gabriel** — Scrum Master (FP2) & Desenvolvedor Web/C ([@vdornelass](https://github.com/vdornelass))
-* **Caio Brayner** — Engenheiro de Requisitos (FDS) & Desenvolvedor C ([@BraynerCaio](https://github.com/BraynerCaio))
+* **Larissa Almeida** — Lead de Engenharia de Software (FDS) & Designer de Interface (IHC) ([@Larissalmeidaa](https://github.com/Larissalmeidaa))
+* **Mateus Lacerda** — Engenheiro de Requisitos (FDS) & Desenvolvedor C/Haskell ([@MateusLacerdaprog](https://github.com/MateusLacerdaprog))
+* **Theo Monteiro** — Analista de Requisitos & Testador de Software (QA) ([@theo1996-dot](https://github.com/theo1996-dot))
+* **João Gabriel** — Desenvolvedor Web/C e Gestão Técnica ([@vdornelass](https://github.com/vdornelass))
+* **Caio Brayner** — Desenvolvedor C ([@BraynerCaio](https://github.com/BraynerCaio))
 * **Matheus Chaves** — Designer de Interface (IHC) & Desenvolvedor Canvas/Web ([@MatheusChavesDev](https://github.com/MatheusChavesDev))
 * **Julio Cesar** — Consultor de Lógica Matemática (LMC) & Testador de Software ([@JCesar-dev](https://github.com/JCesar-dev))
 
@@ -17,11 +20,11 @@
 
 | Atividade / Entregável | Executor (R) | Aprovador (A) | Consultado (C) | Informado (I) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Histórias de Usuário & Jira (US01 a US15)** | João Gabriel, Caio Brayner | João Gabriel | Squad E7 | Docentes |
-| **Documento de Visão e Requisitos (FDS)** | Caio Brayner, Julio Cesar | Caio Brayner | Matheus Chaves | Squad E7 |
-| **Interface 3D e Heurísticas de Usabilidade (IHC)** | Matheus Chaves, João Gabriel | Matheus Chaves | Julio Cesar | Squad E7 |
-| **Especificação e Validador Lógico (LMC)** | Julio Cesar, João Gabriel | Julio Cesar | Caio Brayner | Squad E7 |
-| **Desenvolvimento do Motor em C / Web (PIF)** | João Gabriel, Caio Brayner | João Gabriel | Matheus Chaves | Squad E7 |
+| **Histórias de Usuário & Jira (US01 a US15)** | Mateus Lacerda, Larissa Almeida | Mateus Lacerda | Squad E7 | Docentes |
+| **Documento de Visão e Requisitos (FDS)** | Larissa Almeida, Mateus Lacerda, Theo Monteiro | Larissa Almeida | João Gabriel | Squad E7 |
+| **Interface 3D e Heurísticas de Usabilidade (IHC)** | Larissa Almeida, Matheus Chaves, Theo Monteiro | Larissa Almeida | Julio Cesar | Squad E7 |
+| **Especificação e Validador Lógico (LMC)** | Julio Cesar, Theo Monteiro, João Gabriel | Julio Cesar | Mateus Lacerda | Squad E7 |
+| **Desenvolvimento do Motor em C / Web (PIF)** | Mateus Lacerda, João Gabriel, Caio Brayner | Mateus Lacerda | Matheus Chaves | Squad E7 |
 
 ### 1.3. Project Model Canvas (PM Canvas)
 * **Documento Completo do PM Canvas:** [Consulte o Project Model Canvas detalhado em docs/pm_canvas.md](./docs/pm_canvas.md)
