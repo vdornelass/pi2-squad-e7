@@ -1,1 +1,1 @@
-# Protótipos Lo-Fi
+# Protótipos Lo-Fi (Sketches e Storyboards)
