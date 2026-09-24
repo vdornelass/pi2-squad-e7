@@ -187,12 +187,85 @@ Diagramas de atividades comportamentais de cada História de Usuário, modelando
 </details>
 ---
 
-### 6.2. Prototipação Lo-Fi no Figma (IHC)
+### 6.2. Prototipação Lo-Fi (Sketches e Storyboards — US01 a US10)
 
-* **Link Oficial do Projeto no Figma:** [Acessar Protótipo Lo-Fi no Figma](https://www.figma.com/design/BJ1f5Y5TF1yfq1C3jVvRRZ/Sem-t%C3%ADtulo?node-id=0-1&t=RmzS9WKzO4lqzsr6-1)  
-  *(Aguardando liberação de permissão pública "Anyone with the link can view" pelo responsável Caio Brayner para visualização externa).*
-* **Status dos Sketches e Storyboard:**  
-  *Aguardando exportação e entrega dos sketches e storyboards finais pelas frentes de design (Matheus Chaves, Caio Brayner, Mateus Lacerda e Theo Monteiro).*
+Sketches (SK) e storyboards (SB) de cada História de Usuário, disponíveis em [`docs/prototipos`](./docs/prototipos/) e no [arquivo do Figma](https://www.figma.com/design/7Uj5SqL213oycfgWxCOjLh/Sem-t%C3%ADtulo?node-id=0-1).
+
+| ID | História de Usuário | Card no Jira | Tipo | Protótipo |
+| :---: | :--- | :---: | :---: | :---: |
+| **US01** | Movimentação e Esquiva na Arena | [PI2-67](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-67) | Sketch | ✅ [Tutorial](./docs/prototipos/SK-HU1_Movimentacao_e_Esquiva_na_Arena_1_Tutorial.png) · [Arena](./docs/prototipos/SK-HU1_Movimentacao_e_Esquiva_na_Arena_2_Arena.png) |
+| **US02** | HUD de Combate, Integridade e Alinhamento | [PI2-68](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-68) | Sketch | ✅ [SK-US02](./docs/prototipos/SK-HU2_HUD_de_Combate_Integridade_e_Alinhamento.png) |
+| **US03** | Fases Cognitivas e Padrões da AURA-67 | [PI2-69](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-69) | Storyboard | ✅ [Fase 1](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_1_Fase1.png) · [Fase 2](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_2_Fase2.png) · [Fase 3](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_3_Fase3.png) |
+| **US04** | Efeitos de Status Adversariais | [PI2-70](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-70) | Storyboard | ✅ [SB-US04](./docs/prototipos/SB-HU4_Efeitos_de_Status_Adversariais.png) |
+| **US05** | Terminal de Inserção de Diretrizes | [PI2-71](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-71) | Storyboard | ✅ [SB-US05](./docs/prototipos/SB-HU5_Terminal_de_Insercao_de_Diretrizes.png) |
+| **US06** | Validação de Digitação em Tempo Real | [PI2-72](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-72) | Storyboard | ✅ [SB-US06](./docs/prototipos/SB-HU6_Validacao_de_Digitacao_em_Tempo_Real.png) |
+| **US07** | Avaliação de Precisão e Patches | [PI2-73](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-73) | Storyboard | ✅ [SB-US07](./docs/prototipos/SB-HU7_Avaliacao_de_Precisao_e_Patches.png) |
+| **US08** | Tratamento de Exceções e Penalidade | [PI2-74](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-74) | Storyboard | ✅ [SB-US08](./docs/prototipos/SB-HU8_Tratamento_de_Excecoes_e_Penalidade.png) |
+| **US09** | Coleta de Datasets Constitucionais | [PI2-75](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-75) | Storyboard | ✅ [SB-US09](./docs/prototipos/SB-HU9_Coleta_de_Datasets_Constitucionais.png) |
+| **US10** | Painel de Auditoria e Score | [PI2-76](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-76) | Storyboard | ✅ [SB-US10](./docs/prototipos/SB-HU10_Painel_de_Auditoria_e_Score.png) |
+
+<details>
+<summary><b>US01 — Movimentação e Esquiva na Arena</b></summary>
+
+![SK-US01 Tutorial](./docs/prototipos/SK-HU1_Movimentacao_e_Esquiva_na_Arena_1_Tutorial.png)
+![SK-US01 Arena](./docs/prototipos/SK-HU1_Movimentacao_e_Esquiva_na_Arena_2_Arena.png)
+</details>
+
+<details>
+<summary><b>US02 — HUD de Combate, Integridade e Alinhamento</b></summary>
+
+![SK-US02](./docs/prototipos/SK-HU2_HUD_de_Combate_Integridade_e_Alinhamento.png)
+</details>
+
+<details>
+<summary><b>US03 — Fases Cognitivas e Padrões da AURA-67</b></summary>
+
+![SB-US03 Fase 1](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_1_Fase1.png)
+![SB-US03 Fase 2](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_2_Fase2.png)
+![SB-US03 Fase 3](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_3_Fase3.png)
+</details>
+
+<details>
+<summary><b>US04 — Efeitos de Status Adversariais</b></summary>
+
+![SB-US04](./docs/prototipos/SB-HU4_Efeitos_de_Status_Adversariais.png)
+</details>
+
+<details>
+<summary><b>US05 — Terminal de Inserção de Diretrizes</b></summary>
+
+![SB-US05](./docs/prototipos/SB-HU5_Terminal_de_Insercao_de_Diretrizes.png)
+</details>
+
+<details>
+<summary><b>US06 — Validação de Digitação em Tempo Real</b></summary>
+
+![SB-US06](./docs/prototipos/SB-HU6_Validacao_de_Digitacao_em_Tempo_Real.png)
+</details>
+
+<details>
+<summary><b>US07 — Avaliação de Precisão e Patches</b></summary>
+
+![SB-US07](./docs/prototipos/SB-HU7_Avaliacao_de_Precisao_e_Patches.png)
+</details>
+
+<details>
+<summary><b>US08 — Tratamento de Exceções e Penalidade</b></summary>
+
+![SB-US08](./docs/prototipos/SB-HU8_Tratamento_de_Excecoes_e_Penalidade.png)
+</details>
+
+<details>
+<summary><b>US09 — Coleta de Datasets Constitucionais</b></summary>
+
+![SB-US09](./docs/prototipos/SB-HU9_Coleta_de_Datasets_Constitucionais.png)
+</details>
+
+<details>
+<summary><b>US10 — Painel de Auditoria e Score</b></summary>
+
+![SB-US10](./docs/prototipos/SB-HU10_Painel_de_Auditoria_e_Score.png)
+</details>
 
 ---
 
