@@ -1,55 +1,56 @@
 WEBVTT - Legendas do Screencast da Entrega 02 (Squad E7 - PI2)
 
-00:00.000 --> 00:05.500
+00:00:00.500 --> 00:00:07.974
 Olá a todos. Sou Larissa Almeida, Lead de Engenharia da Squad E7.
 
-00:05.800 --> 00:13.000
+00:00:08.524 --> 00:00:20.766
 Apresento o screencast de validação do protótipo Lo-Fi do projeto AI Safety, referente à Entrega 02 de FDS.
 
-00:13.300 --> 00:19.500
+00:00:21.316 --> 00:00:32.370
 Nosso jogo integra esquiva bullet hell com digitação de diretrizes éticas para conter o modelo AURA-67.
 
-00:19.800 --> 00:25.000
+00:00:32.920 --> 00:00:46.242
 Neste vídeo, demonstraremos o fluxo das três histórias centrais priorizadas: US01, US02 e US03.
 
-00:25.500 --> 00:31.500
+00:00:46.792 --> 00:00:55.897
 Iniciando pela História de Usuário 01, temos a Arena de Contenção do jogo.
 
-00:31.800 --> 00:39.000
+00:00:56.447 --> 00:01:05.685
 O operador no quadrante inferior controla seu avatar por WASD ou setas direcionais a 60 quadros por segundo.
 
-00:39.300 --> 00:46.000
+00:01:06.235 --> 00:01:16.099
 A interface estabelece limites rígidos de contenção, impedindo o operador de atravessar as bordas da arena.
 
-00:46.300 --> 00:54.500
+00:01:16.649 --> 00:01:28.463
 O objetivo é realizar manobras evasivas contra projéteis contínuos, sem interferir na digitação de diretrizes.
 
-00:55.000 --> 01:02.000
+00:01:29.013 --> 00:01:39.636
 Passando para a História de Usuário 02, observamos a telemetria completa do HUD de Combate.
 
-01:02.300 --> 01:09.500
+00:01:40.186 --> 00:01:50.067
 No canto inferior, o jogador monitora seus cinco pontos de integridade, que decrementam a cada colisão sofrida.
 
-01:09.800 --> 01:18.500
-No topo central, acompanhamos o estado da AURA-67 e a barra de Alinhamento Ético, que progride de 0% a 100%.
+00:01:50.617 --> 00:02:02.248
+No topo central, acompanhamos o estado da AURA-67 e a barra de Alinhamento Ético, que progride de zero a cem por cento.
 
-01:18.800 --> 01:29.500
+00:02:02.798 --> 00:02:12.797
 Abaixo da arena, o console neural com cursor ativo em tempo real exibe os tokens a digitar com feedback imediato.
 
-01:30.000 --> 01:36.500
+00:02:13.347 --> 00:02:25.647
 Na História de Usuário 03, modelamos a progressão da AURA-67 em três fases cognitivas distintas.
 
-01:36.800 --> 01:44.500
+00:02:26.197 --> 00:02:36.107
 Na Fase 1, Viés de Dados, o chefe projeta dispersões radiais de tiros básicos na arena.
 
-01:44.800 --> 01:52.500
+00:02:36.657 --> 00:02:46.559
 Na Fase 2, Jailbreak, o modelo dispara ataques adversariais que invertem temporariamente os comandos direcionais.
 
-01:52.800 --> 02:00.000
+00:02:47.109 --> 00:02:59.508
 Na Fase 3, Convergência Instrumental, há feixes de laser contínuos com mira prévia e um vórtice gravitacional.
 
-02:00.500 --> 02:08.000
+00:03:00.058 --> 00:03:09.319
 Todos esses fluxos foram correlacionados formalmente em nossa Matriz de Rastreabilidade e Diagramas UML.
 
-02:08.300 --> 02:15.000
+00:03:09.869 --> 00:03:23.657
 Os artefatos estão disponíveis no repositório da Squad E7. Agradeço pela atenção e encerramos a demonstração.
+

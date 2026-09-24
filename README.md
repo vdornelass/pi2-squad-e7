@@ -181,7 +181,12 @@ Roteiro de apresentação e narração estruturado por Larissa Almeida para o sc
   * **Cena 3 (00:55 – 01:30):** **US02** — Telemetria do HUD (5 vidas, barra de alinhamento 0% a 100% e console neural `>_`).
   * **Cena 4 (01:30 – 02:00):** **US03** — Transição comportamental da AURA-67 nas 3 fases cognitivas (Viés, Jailbreak e Convergência).
   * **Cena 5 (02:00 – 02:15):** Encerramento e correspondência com a Matriz de Rastreabilidade.
-* **Status do Screencast:** *Aguardando liberação de acesso e fluxo interativo definitivo no Figma pelo responsável (Caio Brayner) para execução da gravação com legendas.*
+* **Vídeo da Demonstração (Áudio e Legendas Integradas):**
+  * Arquivo de Vídeo MP4 (1080p Full HD): [`docs/screencast_demonstracao_lofi.mp4`](./docs/screencast_demonstracao_lofi.mp4)
+  * Faixa de Legenda SubRip (SRT): [`docs/legendas_screencast_pi2_127.srt`](./docs/legendas_screencast_pi2_127.srt)
+  * Faixa de Legenda WebVTT (VTT): [`docs/legendas_screencast_pi2_127.vtt`](./docs/legendas_screencast_pi2_127.vtt)
+
+![Preview do Screencast com Legendas Embutidas](./docs/img/screenshot_screencast_legendado.png)
 
 ---
 

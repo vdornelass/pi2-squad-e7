@@ -65,3 +65,10 @@ Roteiro narrativo e falas completas preparados por Larissa Almeida (`PI2-127`) p
   3. **US02: HUD de Combate e Alinhamento Ético (00:55 – 01:30):** Telemetria das 5 vidas, barra de alinhamento da AURA-67 (0% a 100%) e prompt neural.
   4. **US03: Fases Cognitivas da IA (01:30 – 02:00):** Visualização sequencial das 3 fases do chefe (Viés de Dados, Jailbreak e Convergência Instrumental).
   5. **Encerramento e Rastreabilidade (02:00 – 02:15):** Fechamento e conexão com os Diagramas UML e a Matriz de Rastreabilidade.
+
+* **Vídeo com Áudio e Legendas Embutidas:** [`docs/screencast_demonstracao_lofi.mp4`](./screencast_demonstracao_lofi.mp4)
+* **Arquivos de Legendas Sincronizadas:**
+  * SubRip: [`docs/legendas_screencast_pi2_127.srt`](./legendas_screencast_pi2_127.srt)
+  * WebVTT: [`docs/legendas_screencast_pi2_127.vtt`](./legendas_screencast_pi2_127.vtt)
+
+![Preview do Screencast Legendado](./img/screenshot_screencast_legendado.png)
