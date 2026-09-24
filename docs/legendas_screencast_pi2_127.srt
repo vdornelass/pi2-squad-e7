@@ -1,0 +1,71 @@
+1
+00:00:00,000 --> 00:00:05,500
+Olá a todos. Sou Larissa Almeida, Lead de Engenharia da Squad E7.
+
+2
+00:00:05,800 --> 00:00:13,000
+Apresento o screencast de validação do protótipo Lo-Fi do projeto AI Safety, referente à Entrega 02 de FDS.
+
+3
+00:00:13,300 --> 00:00:19,500
+Nosso jogo integra esquiva bullet hell com digitação de diretrizes éticas para conter o modelo AURA-67.
+
+4
+00:00:19,800 --> 00:00:25,000
+Neste vídeo, demonstraremos o fluxo das três histórias centrais priorizadas: US01, US02 e US03.
+
+5
+00:00:25,500 --> 00:00:31,500
+Iniciando pela História de Usuário 01, temos a Arena de Contenção do jogo.
+
+6
+00:00:31,800 --> 00:00:39,000
+O operador no quadrante inferior controla seu avatar por WASD ou setas direcionais a 60 quadros por segundo.
+
+7
+00:00:39,300 --> 00:00:46,000
+A interface estabelece limites rígidos de contenção, impedindo o operador de atravessar as bordas da arena.
+
+8
+00:00:46,300 --> 00:00:54,500
+O objetivo é realizar manobras evasivas contra projéteis contínuos, sem interferir na digitação de diretrizes.
+
+9
+00:00:55,000 --> 00:01:02,000
+Passando para a História de Usuário 02, observamos a telemetria completa do HUD de Combate.
+
+10
+00:01:02,300 --> 00:01:09,500
+No canto inferior, o jogador monitora seus cinco pontos de integridade, que decrementam a cada colisão sofrida.
+
+11
+00:01:09,800 --> 00:01:18,500
+No topo central, acompanhamos o estado da AURA-67 e a barra de Alinhamento Ético, que progride de 0% a 100%.
+
+12
+00:01:18,800 --> 00:01:29,500
+Abaixo da arena, o console neural com cursor ativo em tempo real exibe os tokens a digitar com feedback imediato.
+
+13
+00:01:30,000 --> 00:01:36,500
+Na História de Usuário 03, modelamos a progressão da AURA-67 em três fases cognitivas distintas.
+
+14
+00:01:36,800 --> 00:01:44,500
+Na Fase 1, Viés de Dados, o chefe projeta dispersões radiais de tiros básicos na arena.
+
+15
+00:01:44,800 --> 00:01:52,500
+Na Fase 2, Jailbreak, o modelo dispara ataques adversariais que invertem temporariamente os comandos direcionais.
+
+16
+00:01:52,800 --> 00:02:00,000
+Na Fase 3, Convergência Instrumental, há feixes de laser contínuos com mira prévia e um vórtice gravitacional.
+
+17
+00:02:00,500 --> 00:02:08,000
+Todos esses fluxos foram correlacionados formalmente em nossa Matriz de Rastreabilidade e Diagramas UML.
+
+18
+00:02:08,300 --> 00:02:15,000
+Os artefatos estão disponíveis no repositório da Squad E7. Agradeço pela atenção e encerramos a demonstração.
