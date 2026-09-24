@@ -126,65 +126,7 @@ Diagramas de atividades comportamentais de cada História de Usuário, modelando
 | **US09** | Coleta de Datasets Constitucionais | [PI2-75](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-75) | Larissa Almeida | ✅ [AD-US09](./docs/diagramas_atividade/HU9_Coleta_de_Datasets_Constitucionais.png) |
 | **US10** | Painel de Auditoria e Score | [PI2-76](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-76) | Larissa Almeida | ✅ [AD-US10](./docs/diagramas_atividade/HU10_Painel_de_Auditoria_e_Score.png) |
 
-<details>
-<summary><b>US01 — Movimentação e Esquiva na Arena</b></summary>
 
-![AD-US01](./docs/diagramas_atividade/HU1_Movimentacao_e_Esquiva_na_Arena.png)
-</details>
-
-<details>
-<summary><b>US02 — HUD de Combate, Integridade e Alinhamento</b></summary>
-
-![AD-US02](./docs/diagramas_atividade/HU2_HUD_de_Combate_Integridade_e_Alinhamento.png)
-</details>
-
-<details>
-<summary><b>US03 — Fases Cognitivas e Padrões da AURA-67</b></summary>
-
-![AD-US03](./docs/diagramas_atividade/HU3_Fases_Cognitivas_e_Padroes_da_AURA-67.png)
-</details>
-
-<details>
-<summary><b>US04 — Efeitos de Status Adversariais</b></summary>
-
-![AD-US04](./docs/diagramas_atividade/HU4_Efeitos_de_Status_Adversariais.png)
-</details>
-
-<details>
-<summary><b>US05 — Terminal de Inserção de Diretrizes</b></summary>
-
-![AD-US05](./docs/diagramas_atividade/HU5_Terminal_de_Insercao_de_Diretrizes.png)
-</details>
-
-<details>
-<summary><b>US06 — Validação de Digitação em Tempo Real</b></summary>
-
-![AD-US06](./docs/diagramas_atividade/HU6_Validacao_de_Digitacao_em_Tempo_Real.png)
-</details>
-
-<details>
-<summary><b>US07 — Avaliação de Precisão e Patches</b></summary>
-
-![AD-US07](./docs/diagramas_atividade/HU7_Avaliacao_de_Precisao_e_Patches.png)
-</details>
-
-<details>
-<summary><b>US08 — Tratamento de Exceções e Penalidade</b></summary>
-
-![AD-US08](./docs/diagramas_atividade/HU8_Tratamento_de_Excecoes_e_Penalidade.png)
-</details>
-
-<details>
-<summary><b>US09 — Coleta de Datasets Constitucionais</b></summary>
-
-![AD-US09](./docs/diagramas_atividade/HU9_Coleta_de_Datasets_Constitucionais.png)
-</details>
-
-<details>
-<summary><b>US10 — Painel de Auditoria e Score</b></summary>
-
-![AD-US10](./docs/diagramas_atividade/HU10_Painel_de_Auditoria_e_Score.png)
-</details>
 ---
 
 ### 6.2. Prototipação Lo-Fi (Sketches e Storyboards — US01 a US10)
@@ -204,68 +146,7 @@ Sketches (SK) e storyboards (SB) de cada História de Usuário, disponíveis em 
 | **US09** | Coleta de Datasets Constitucionais | [PI2-75](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-75) | Storyboard | ✅ [SB-US09](./docs/prototipos/SB-HU9_Coleta_de_Datasets_Constitucionais.png) |
 | **US10** | Painel de Auditoria e Score | [PI2-76](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-76) | Storyboard | ✅ [SB-US10](./docs/prototipos/SB-HU10_Painel_de_Auditoria_e_Score.png) |
 
-<details>
-<summary><b>US01 — Movimentação e Esquiva na Arena</b></summary>
 
-![SK-US01 Tutorial](./docs/prototipos/SK-HU1_Movimentacao_e_Esquiva_na_Arena_1_Tutorial.png)
-![SK-US01 Arena](./docs/prototipos/SK-HU1_Movimentacao_e_Esquiva_na_Arena_2_Arena.png)
-</details>
-
-<details>
-<summary><b>US02 — HUD de Combate, Integridade e Alinhamento</b></summary>
-
-![SK-US02](./docs/prototipos/SK-HU2_HUD_de_Combate_Integridade_e_Alinhamento.png)
-</details>
-
-<details>
-<summary><b>US03 — Fases Cognitivas e Padrões da AURA-67</b></summary>
-
-![SB-US03 Fase 1](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_1_Fase1.png)
-![SB-US03 Fase 2](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_2_Fase2.png)
-![SB-US03 Fase 3](./docs/prototipos/SB-HU3_Fases_Cognitivas_e_Padroes_da_AURA-67_3_Fase3.png)
-</details>
-
-<details>
-<summary><b>US04 — Efeitos de Status Adversariais</b></summary>
-
-![SB-US04](./docs/prototipos/SB-HU4_Efeitos_de_Status_Adversariais.png)
-</details>
-
-<details>
-<summary><b>US05 — Terminal de Inserção de Diretrizes</b></summary>
-
-![SB-US05](./docs/prototipos/SB-HU5_Terminal_de_Insercao_de_Diretrizes.png)
-</details>
-
-<details>
-<summary><b>US06 — Validação de Digitação em Tempo Real</b></summary>
-
-![SB-US06](./docs/prototipos/SB-HU6_Validacao_de_Digitacao_em_Tempo_Real.png)
-</details>
-
-<details>
-<summary><b>US07 — Avaliação de Precisão e Patches</b></summary>
-
-![SB-US07](./docs/prototipos/SB-HU7_Avaliacao_de_Precisao_e_Patches.png)
-</details>
-
-<details>
-<summary><b>US08 — Tratamento de Exceções e Penalidade</b></summary>
-
-![SB-US08](./docs/prototipos/SB-HU8_Tratamento_de_Excecoes_e_Penalidade.png)
-</details>
-
-<details>
-<summary><b>US09 — Coleta de Datasets Constitucionais</b></summary>
-
-![SB-US09](./docs/prototipos/SB-HU9_Coleta_de_Datasets_Constitucionais.png)
-</details>
-
-<details>
-<summary><b>US10 — Painel de Auditoria e Score</b></summary>
-
-![SB-US10](./docs/prototipos/SB-HU10_Painel_de_Auditoria_e_Score.png)
-</details>
 
 ---
 
