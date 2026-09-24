@@ -169,16 +169,19 @@ A Matriz de Rastreabilidade mapeia a correlação formal entre Requisitos, Hist�
 
 ---
 
-### 6.4. Demonstração (Roteiro e Planejamento de Screencast)
+### 6.4. Demonstração (Roteiro e Planejamento de Screencast — PI2-127)
 
-Estrutura de apresentação e roteiro preparado para a gravação do screencast da aplicação após a liberação do protótipo no Figma:
+Roteiro de apresentação e narração estruturado por Larissa Almeida para o screencast de validação do protótipo no Figma:
 
-* **Roteiro Planejado de Apresentação (1 a 3 minutos):**
-  * **Bloco 1 (00:00 – 00:30):** Apresentação do Menu Principal retrô e navegação até a aba de Tutorial.
-  * **Bloco 2 (00:30 – 01:15):** Demonstração dos controles de movimentação do engenheiro (WASD) e mecânicas de esquiva sem penalidade na digitação.
-  * **Bloco 3 (01:15 – 02:00):** Entrada na Arena Neural, telemetria da AURA-67 e demonstração da caixa de comando com prompt de diretrizes éticas.
-  * **Bloco 4 (02:00 – 02:30):** Exibição do painel de Score e fechamento com o índice de alinhamento alcançado.
-* **Status do Screencast:** *Aguardando liberação de acesso e fluxo interativo definitivo no Figma para realização da gravação com legendas.*
+* **Documento Técnico de Falas (Teleprompter):** [Consulte as falas e minutagem detalhadas em docs/roteiro_screencast_pi2_127.md](./docs/roteiro_screencast_pi2_127.md)
+* **Critérios Formais da Rubrica:** Demonstração em vídeo (1 a 3 minutos) com áudio e legendas, navegando pelo protótipo Lo-Fi.
+* **Sequência Planejada de Demonstração (02:15):**
+  * **Cena 1 (00:00 – 00:25):** Abertura institucional da Squad E7 e contextualização do projeto AI Safety.
+  * **Cena 2 (00:25 – 00:55):** **US01** — Movimentação e esquiva do operador na arena retangular a 60 FPS (WASD).
+  * **Cena 3 (00:55 – 01:30):** **US02** — Telemetria do HUD (5 vidas, barra de alinhamento 0% a 100% e console neural `>_`).
+  * **Cena 4 (01:30 – 02:00):** **US03** — Transição comportamental da AURA-67 nas 3 fases cognitivas (Viés, Jailbreak e Convergência).
+  * **Cena 5 (02:00 – 02:15):** Encerramento e correspondência com a Matriz de Rastreabilidade.
+* **Status do Screencast:** *Aguardando liberação de acesso e fluxo interativo definitivo no Figma pelo responsável (Caio Brayner) para execução da gravação com legendas.*
 
 ---
 

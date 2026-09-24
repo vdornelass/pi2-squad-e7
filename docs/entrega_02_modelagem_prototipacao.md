@@ -55,11 +55,13 @@ Elaborada pela Lead de Engenharia (Larissa Almeida), esta matriz formaliza a con
 
 ## 4. Planejamento da Demonstração (Screencast)
 
-Roteiro narrativo preparado por Larissa Almeida para orientar a gravação do screencast assim que os fluxos do Figma estiverem desbloqueados:
+Roteiro narrativo e falas completas preparados por Larissa Almeida (`PI2-127`) para orientar a gravação do screencast assim que os fluxos do Figma estiverem desbloqueados:
 
-* **Critérios de Aceitação:** Vídeo de 1 a 3 minutos, com áudio/legenda, demonstrando o fluxo principal da solução.
+* **Documento Completo de Falas e Minutagem:** [Consulte o roteiro detalhado em docs/roteiro_screencast_pi2_127.md](./roteiro_screencast_pi2_127.md)
+* **Critérios de Aceitação:** Vídeo de 1 a 3 minutos (planejado em 02:15), com narração em áudio e/ou legendas, demonstrando o fluxo principal da solução.
 * **Sequência Planejada:**
-  1. **Navegação Inicial (00:00 – 00:30):** Apresentação da interface retrô e seleção do tutorial.
-  2. **Tutorial & Regras (00:30 – 01:15):** Exibição dos comandos de movimentação e digitação.
-  3. **Arena Neural (01:15 – 02:00):** Visualização do confronto com a AURA-67 e caixa de diretrizes éticas.
-  4. **Auditoria & Score (02:00 – 02:30):** Exibição do relatório de pontuação e ranking de conformidade.
+  1. **Abertura e Apresentação do Escopo (00:00 – 00:25):** Visão panorâmica do Figma e introdução da Squad E7 e do projeto AI Safety.
+  2. **US01: Movimentação e Esquiva na Arena (00:25 – 00:55):** Demonstração dos comandos WASD, 60 FPS e contenção aos limites da arena retangular.
+  3. **US02: HUD de Combate e Alinhamento Ético (00:55 – 01:30):** Telemetria das 5 vidas, barra de alinhamento da AURA-67 (0% a 100%) e prompt neural.
+  4. **US03: Fases Cognitivas da IA (01:30 – 02:00):** Visualização sequencial das 3 fases do chefe (Viés de Dados, Jailbreak e Convergência Instrumental).
+  5. **Encerramento e Rastreabilidade (02:00 – 02:15):** Fechamento e conexão com os Diagramas UML e a Matriz de Rastreabilidade.
