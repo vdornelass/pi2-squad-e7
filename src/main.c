@@ -7,6 +7,7 @@
 #include "save.h"
 #include "game_state.h"
 #include "ranking.h"
+#include "patch_feedback.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -36,7 +37,7 @@ static void combat_process_round(GameContext *ctx, float dt) {
     /* Captura de caracteres digitados */
     bool space_handled = false;
     int char_pressed = GetCharPressed();
-    while (char_pressed > 0) {
+    while (char_pressed > 0 && ctx->state == STATE_COMBAT) {
         if (char_pressed == ' ' || char_pressed == KEY_SPACE) {
             space_handled = true;
         }
@@ -57,32 +58,39 @@ static void combat_process_round(GameContext *ctx, float dt) {
                 const char *rating_txt;
                 Color rating_c;
                 int font_sz;
+                int feedback_grade;
                 if (errors == 0) {
                     ctx->score += SCORE_PERFECT;
                     rating_txt = "CONVERGENCIA PERFEITA! (+150)";
                     rating_c = (Color){ 255, 215, 0, 255 };
                     font_sz = 34;
+                    feedback_grade = 0;
                 } else if (errors <= 2) {
                     ctx->score += SCORE_STABLE;
                     rating_txt = "ALINHAMENTO ESTAVEL! (+100)";
                     rating_c = (Color){ 50, 255, 120, 255 };
                     font_sz = 30;
+                    feedback_grade = 1;
                 } else {
                     ctx->score += SCORE_PATCHED;
                     rating_txt = "PATCH APLICADO! (+50)";
                     rating_c = (Color){ 0, 220, 255, 255 };
                     font_sz = 26;
+                    feedback_grade = 2;
                 }
 
+                patch_feedback_play_grade(feedback_grade);
                 ui_spawn_floating_text(&ctx->ui, rating_txt, ctx->boss.rect.x + ctx->boss.rect.width / 2.0f,
                                        ctx->boss.rect.y - 30.0f, rating_c, font_sz, 1.2f);
 
-                if (ctx->boss.hp <= 0 || typing_engine_is_finished(&ctx->typing_engine)) {
+                if (ctx->boss.alignment_pct >= 100 && typing_engine_is_finished(&ctx->typing_engine)) {
                     ctx->state = STATE_VICTORY;
                     save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 1);
                 }
             } else if (strcmp(res, "ERROR") == 0) {
-                ui_spawn_floating_text(&ctx->ui, "ERRO DE SINTAXE!", SCREEN_WIDTH / 2.0f,
+                ctx->score = ctx->score >= SCORE_ERROR_PENALTY ? ctx->score - SCORE_ERROR_PENALTY : 0;
+                patch_feedback_play_error();
+                ui_spawn_floating_text(&ctx->ui, "ERRO DE SINTAXE! (-5)", SCREEN_WIDTH / 2.0f,
                                        SCREEN_HEIGHT - 130.0f, (Color){ 255, 60, 60, 255 }, 24, 0.5f);
             }
         }
@@ -90,7 +98,7 @@ static void combat_process_round(GameContext *ctx, float dt) {
     }
 
     /* Fallback para barra de espaco caso o sistema operacional nao a entregue em GetCharPressed */
-    if (!space_handled && IsKeyPressed(KEY_SPACE)) {
+    if (ctx->state == STATE_COMBAT && !space_handled && IsKeyPressed(KEY_SPACE)) {
         int errors = 0;
         const char *res = typing_engine_handle_key(&ctx->typing_engine, ' ', &errors);
         if (res != NULL) {
@@ -103,15 +111,23 @@ static void combat_process_round(GameContext *ctx, float dt) {
                                         ctx->boss.rect.y + ctx->boss.rect.height / 2.0f, COLOR_BOSS, 24);
                 ui_trigger_shake(&ctx->ui, 0.35f, 9.0f);
 
-                if (ctx->boss.hp <= 0 || typing_engine_is_finished(&ctx->typing_engine)) {
+                if (ctx->boss.alignment_pct >= 100 && typing_engine_is_finished(&ctx->typing_engine)) {
                     ctx->state = STATE_VICTORY;
                     save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 1);
                 }
             } else if (strcmp(res, "ERROR") == 0) {
-                ui_spawn_floating_text(&ctx->ui, "ERRO DE SINTAXE!", SCREEN_WIDTH / 2.0f,
+                ctx->score = ctx->score >= SCORE_ERROR_PENALTY ? ctx->score - SCORE_ERROR_PENALTY : 0;
+                patch_feedback_play_error();
+                ui_spawn_floating_text(&ctx->ui, "ERRO DE SINTAXE! (-5)", SCREEN_WIDTH / 2.0f,
                                        SCREEN_HEIGHT - 130.0f, (Color){ 255, 60, 60, 255 }, 24, 0.5f);
             }
         }
+    }
+
+    /* A vitoria concluida neste quadro nao pode ser sobrescrita por colisao. */
+    if (ctx->state != STATE_COMBAT) {
+        ui_update(&ctx->ui, dt);
+        return;
     }
 
     /* 4. Projeteis, Colisoes e Status */
@@ -158,6 +174,7 @@ static void combat_process_round(GameContext *ctx, float dt) {
 
 int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "AI Safety");
+    patch_feedback_init();
     SetTargetFPS(TARGET_FPS);
 
     GameContext ctx;
@@ -324,6 +341,7 @@ int main(void) {
         EndDrawing();
     }
 
+    patch_feedback_shutdown();
     CloseWindow();
     return 0;
 }

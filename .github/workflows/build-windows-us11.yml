@@ -1,0 +1,83 @@
+name: AURA-67 Windows executable (US11)
+
+on:
+  push:
+    branches:
+      - feature/PI2-180-patches-alinhamento-us11
+  pull_request:
+    paths:
+      - ".github/workflows/build-windows-us11.yml"
+      - "src/**"
+      - "include/**"
+      - "tests/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install GCC and Raylib for Windows (UCRT64)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-raylib
+
+      - name: Build and run typing engine tests
+        run: |
+          set -euo pipefail
+          mkdir -p bin
+          gcc -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc \
+              tests/test_typing_engine.c src/typing_engine.c \
+              -o bin/test_typing_engine.exe
+          ./bin/test_typing_engine.exe
+
+      - name: Compile Windows game
+        run: |
+          set -euo pipefail
+          mkdir -p dist/AURA-67-Windows
+          # Use os headers da raylib instalada via MSYS2 (6.x), nao os vendorizados (5.0).
+          gcc -Wall -Wextra -std=c99 -pedantic -Isrc -I/ucrt64/include \
+              src/main.c src/player.c src/boss.c src/bullet.c \
+              src/typing_engine.c src/ui.c src/save.c src/game_state.c \
+              src/ranking.c src/patch_feedback.c \
+              -L/ucrt64/lib -lraylib -lopengl32 -lgdi32 -lwinmm -lm \
+              -o dist/AURA-67-Windows/jogo.exe
+          test -f dist/AURA-67-Windows/jogo.exe
+          for file in libraylib.dll glfw3.dll libgcc_s_seh-1.dll libwinpthread-1.dll libstdc++-6.dll; do
+            if [ -f "/ucrt64/bin/$file" ]; then
+              cp "/ucrt64/bin/$file" dist/AURA-67-Windows/
+            fi
+          done
+          cat > dist/AURA-67-Windows/LEIA-ME.txt <<'EOF'
+          AURA-67 - Teste da US11 (Windows 64 bits)
+
+          1. Extraia TODOS os arquivos do ZIP para uma mesma pasta.
+          2. Abra jogo.exe nessa pasta.
+          3. Teste digitacao, penalidades, sons e vitoria com 100% de alinhamento.
+
+          Executavel de teste gerado pelo GitHub Actions a partir da branch da US11.
+          Nao distribua como versao final antes de revisar e validar o jogo.
+          O programa nao possui assinatura digital: o Windows pode bloquea-lo.
+          Nao desligue as protecoes do Windows para executar o arquivo.
+          EOF
+
+      - name: Upload downloadable Windows game
+        uses: actions/upload-artifact@v4
+        with:
+          name: AURA-67-US11-Windows
+          path: dist/AURA-67-Windows/
+          if-no-files-found: error
+          retention-days: 14

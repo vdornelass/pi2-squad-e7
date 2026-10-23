@@ -63,6 +63,7 @@
 #define SCORE_PERFECT          150
 #define SCORE_STABLE           100
 #define SCORE_PATCHED          50
+#define SCORE_ERROR_PENALTY     5
 #define BOSS_DAMAGE_PER_PHRASE 100
 #define BOSS_ALIGNMENT_STEP    10
 #define TOTAL_DIRECTIVES       10
