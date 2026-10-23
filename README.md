@@ -387,7 +387,7 @@ A Squad E7 selecionou e validou **7 Histórias de Usuário** no ciclo de entrega
 
 * **Link Oficial do Board:** [Acessar Board do Projeto PI2 - Squad E7](https://csprj-adsr-2p-e7.atlassian.net/jira/software/c/projects/PI2/boards/2)
 * **Equivalência de Nomenclatura:** A "Sprint 01" avaliada na Entrega 03 de FDS corresponde ao ciclo de desenvolvimento da Unidade 2, ativo no Board do Jira como **Week 12 - Protótipo** (Sprint ID 82, período 19/10/2026 a 24/10/2026).
-* **Meta da Sprint (*Sprint Goal*):** *"PIF: protótipo jogável integrado C + Haskell, patches de alinhamento e playtesting + Entrega 03 FDS: testes de sistema, screencasts, rastreabilidade e pareamento."*
+* **Meta da Sprint (*Sprint Goal*):** *"PIF: protótipo jogável integrado em C99, persistencia binaria, ranking, patches de alinhamento e playtesting + Entrega 03 FDS: testes de sistema, screencasts, rastreabilidade e pareamento."*
 * **Status das Colunas:** O Board reflete rigorosamente a realidade do repositório:
   * **Concluído (Done):** Histórias finalizadas, casos de testes de sistema elaborados e executados, convenção de versionamento e definição de duplas.
   * **Em andamento (In Progress):** Playtesting do protótipo e evidências finais.
@@ -413,115 +413,94 @@ Os testes de sistema da Sprint 01 estão em [`docs/casos_de_teste_sprint01.md`](
   * O jogo não emite som (CT-US06-01 e CT-US07-05): [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3).
 
 
-### 9.4. Colaboração e evidências
+### 9.4. Colaboracao e evidencias (Pair Programming - PI2-195 / PI2-207 / PI2-208 / PI2-209)
 
-Nesta seção, registramos a colaboração entre os integrantes durante a Sprint 02 (U2), identificando as histórias de usuário, os cards do Jira e os módulos trabalhados por cada dupla. Também descrevemos a experiência com a programação em pares (*Pair Programming*), destacando a divisão de responsabilidades, os desafios encontrados e os aprendizados obtidos.
+* Documento completo: [docs/relatorio_pair_programming_sprint01.md](./docs/relatorio_pair_programming_sprint01.md)
 
-#### Sprint 02 (U2) — Programação em Pares (*Pair Programming*)
+# Relatório de Programação em Pares (*Pair Programming*) — Entrega 03 (FDS / PIF)
+## Projeto: AI Safety — Alinhamento Ético da AURA-67
+### Squad E7 | CESAR School — Projeto Integrador 2 (PI2)
 
-##### 1. Dupla: Matheus Chaves e Caio Brayner
+> **Sprint de Referência:** Sprint 01 - U2 (`Week 12e13 - Protótipo` — ID 82 no Jira)  
+> **Cards Relacionados (FDS):** [PI2-195](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-195), [PI2-207](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-207), [PI2-208](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-208) e [PI2-209](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-209)  
+> **Linguagem & Stack:** C99 Puro (`-Wall -Wextra -std=c99 -pedantic`) + Raylib 5.0  
 
-**Área:** Persistência Binária e Arquitetura de Estado em C.
+---
 
-**Histórias e módulos implementados:**
+## 1. Estrutura das Duplas e Alocação RACI
 
-- **PI2-80 (US14):** Implementação da persistência de dados por meio de arquivos binários (`save.bin`), permitindo salvar e carregar o progresso do jogo.
-- **PI2-175:** Desenvolvimento do módulo `save.c/h`, responsável pelas operações de salvamento e carregamento.
-- **PI2-178:** Refatoração dos módulos `game_state.c/h` para melhorar a organização e a sincronização do estado do jogo.
-- **PI2-179:** Integração do fluxo completo de execução, incluindo as funcionalidades de menu, salvamento e carregamento.
+| Dupla | Integrantes | Papel RACI | Cards no Jira | Foco Técnico e Módulos | Carga / Agenda |
+| :---: | :--- | :--- | :--- | :--- | :--- |
+| **Dupla 1** | **Matheus Chaves** & **Caio Brayner** | Motor em C / PIF | `PI2-80` (US14), `PI2-175`, `PI2-178`, `PI2-179` | Persistência binária (`src/save.c/h`), refatoração de estado (`src/game_state.c/h`) e fluxo completo de telas | Terça e Sexta (2h/sessão via Discord & VS Code Live Share) |
+| **Dupla 2** | **Julio Cesar** & **João Gabriel** | LMC / Motor em C & Ranking | `PI2-77` (US11), `PI2-180`, `PI2-177`, `PI2-181` | Patches de alinhamento no console (`src/typing_engine.c/h`), ordenação de ranking e estatísticas em C (`src/ranking.c/h`) e unificação do loop (`src/main.c`) | Quarta e Sábado (2h/sessão via Discord) |
+| **Dupla 3** | **Larissa Almeida** & **Theo Monteiro** | Engenharia FDS / QA & Testes | `PI2-194`, `PI2-202`, `PI2-203`, `PI2-204`, `PI2-205`, `PI2-206` | Especificação e execução dos 27 casos de teste de sistema, gravação de screencasts e gestão do Issue Tracker | Segunda e Quarta (2h30/sessão) |
+| **Facilitação** | **Mateus Lacerda** | Scrum Master / Governança | `PI2-192`, `PI2-196`, `PI2-197`, `PI2-198`, `PI2-207`, `PI2-210` | Coordenação do cronograma, atualização do Jira Board e consolidação das evidências visuais no `README.md` | Acompanhamento contínuo na Sprint |
 
-**Experiência com a programação em pares:**
+---
 
-Durante o desenvolvimento, alternamos os papéis de *Driver* e *Navigator* para que ambos participassem da implementação e da revisão do código. Na primeira sessão, Matheus ficou responsável pela serialização binária, enquanto Caio acompanhou a implementação e verificou a sincronização dos dados do `GameState`. Na segunda sessão, Caio assumiu a implementação das refatorações e a correção de *warnings*, enquanto Matheus auxiliou na revisão e nos testes das funcionalidades de menu e salvamento.
+## 2. Detalhamento das Sessões por Dupla (Driver / Navigator)
 
-Um dos principais desafios foi garantir que os dados fossem gravados e recuperados corretamente, sem comprometer o estado do jogo. A revisão conjunta ajudou a identificar possíveis inconsistências e a compreender melhor a integração entre os módulos.
+---
 
-Como aprendizado, percebemos que a programação em pares facilita a identificação de erros, melhora a comunicação e contribui para a organização do código. A alternância de papéis também permitiu que os dois integrantes compreendessem melhor as diferentes partes da implementação.
+### 2.1. Dupla 1: Persistência Binária & Arquitetura de Estado em C
+* **Integrantes:** Matheus Chaves & Caio Brayner (*RACI: Motor em C / PIF*)
+* **Cards / Histórias no Board:**
+  * [PI2-80](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-80) (*US14: Persistência de Progresso — Save/Load binário `bin/savegame.dat`*)
+  * [PI2-175](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-175) (*Módulo `src/save.c` e `src/save.h`*)
+  * [PI2-178](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-178) (*Refatoração de estado global `src/game_state.c` e `src/game_state.h`*)
+  * [PI2-179](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-179) (*Integração do fluxo completo: menu, combate, vitória/derrota, save e ranking*)
+* **Horários / Carga:** Terça-feira e Sexta-feira (2h por sessão via Discord e VS Code Live Share).
+* **Dinâmica de Papéis:**
+  * **Sessão 1:** **Matheus Chaves** (*Driver* — implementação da serialização binária `fwrite`/`fread` com validação de *magic number* `0x41555241` e exportação CSV de partidas) / **Caio Brayner** (*Navigator* — revisão de ponteiros e sincronização dos campos de `SaveData` com o estado da partida).
+  * **Sessão 2:** **Caio Brayner** (*Driver* — encapsulamento do contexto global na struct `GameContext` em `src/game_state.c/h` e eliminação de warnings de compilação) / **Matheus Chaves** (*Navigator* — revisão e testes funcionais das opções de menu `[C] Continuar Jogo Salvo` e `[K] Ver Ranking`).
+* **Desafios e Aprendizados:**
+  * O principal desafio técnico foi garantir que a leitura binária restaurasse com exatidão a fase da AURA-67, o HP do jogador e o índice da diretriz ética sem corromper o buffer de entrada do Raylib. A revisão em par permitiu detectar rapidamente a necessidade de limpar a fila de caracteres (`GetCharPressed()`) ao reiniciar ou carregar uma partida.
 
-##### 2. Dupla: Julio Cesar e João Gabriel
+---
 
-**Área:** Patches de Alinhamento e Pipeline Funcional Haskell.
+### 2.2. Dupla 2: Patches de Alinhamento & Módulo de Ranking e Estatísticas em C
+* **Integrantes:** Julio Cesar & João Gabriel (*RACI: LMC / Motor em C & Ranking*)
+* **Cards / Histórias no Board:**
+  * [PI2-77](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-77) (*US11: Inserção de Patches de Alinhamento no Núcleo da AURA-67*)
+  * [PI2-180](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-180) (*Console central de diretrizes e métricas de precisão em tempo real*)
+  * [PI2-177](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-177) (*Módulo em C de ranking ordenado e estatísticas das partidas — `src/ranking.c` e `src/ranking.h`*)
+  * [PI2-181](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-181) (*Unificação dos módulos `game_state`, `save` e `ranking` no loop principal em C e build Windows*)
+* **Horários / Carga:** Quarta-feira e Sábado (2h por sessão via Discord).
+* **Dinâmica de Papéis:**
+  * **Sessão 1:** **Julio Cesar** (*Driver* — lógica de validação de patches no console central, cálculo de precisão percentual `typing_engine_get_accuracy()` e desacoplamento das teclas de movimentação `WASD` / barra de espaço `[_]`) / **João Gabriel** (*Navigator* — verificação das regras de transição de alinhamento e formatação dos dados exportados para o histórico).
+  * **Sessão 2:** **João Gabriel** (*Driver* — implementação do módulo `src/ranking.c/h` com ordenação decrescente via `qsort`, agregação de estatísticas de `bin/matches.csv` e unificação final no `src/main.c`) / **Julio Cesar** (*Navigator* — inspeção de tipos em C99 estrito e validação da tela de Ranking e Estatísticas de Auditoria).
+* **Desafios e Aprendizados:**
+  * O maior desafio foi resolver a colisão entre as teclas de movimentação (`WASD`) e o motor de digitação em tempo real, além do disparo duplicado da barra de espaço entre `GetCharPressed()` e `IsKeyPressed(KEY_SPACE)`. O pareamento permitiu desenhar uma solução limpa em C99 puro e padronizar a interface entre `save.c`, `ranking.c` e `game_state.c`.
 
-**Histórias e módulos implementados:**
+---
 
-- **PI2-77 (US11):** Implementação de patches de alinhamento no núcleo do sistema, seguindo as regras definidas para o funcionamento da aplicação.
-- **PI2-180:** Desenvolvimento do console central para apoiar a interação e a integração das funcionalidades.
-- **PI2-177:** Implementação do módulo `Ranking.hs`, responsável pela lógica relacionada ao ranking.
-- **PI2-181:** Integração do pipeline de comunicação entre os módulos desenvolvidos em C e Haskell.
+### 2.3. Dupla 3: Engenharia de Qualidade, Testes de Sistema e Rastreabilidade
+* **Integrantes:** Larissa Almeida & Theo Monteiro (*RACI: Engenharia FDS / QA & Testes*)
+* **Cards / Histórias no Board:**
+  * [PI2-194](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-194) (*3. Qualidade e testes — Entrega 03 FDS*)
+  * [PI2-202](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-202) (*Elaboração dos 27 Casos de Teste de Sistema em `docs/casos_de_teste_sprint01.md`*)
+  * [PI2-203](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-203) (*Execução dos testes de sistema e registro dos resultados*)
+  * [PI2-204](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-204) / [PI2-205](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-205) (*Gravação e anexação dos screencasts dos testes de sistema*)
+  * [PI2-206](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-206) (*Registro e atualização dos bugs no Issue Tracker do GitHub — Issues #1, #2 e #3*)
+* **Horários / Carga:** Segunda-feira e Quarta-feira (2h30 por sessão).
+* **Dinâmica de Papéis:**
+  * **Larissa Almeida** (*Driver* — estruturação e redação formal dos 27 cenários de teste com pré-condições, entradas, resultados esperados e minutagem nos vídeos) / **Theo Monteiro** (*Navigator* — conferência cruzada contra os critérios de confirmação 3Cs no Jira, catalogação das Issues no GitHub e documentação colaborativa no `README.md`).
+* **Desafios e Aprendizados:**
+  * Transformar os critérios de aceitação de cada história em casos de teste reproduzíveis e sincronizados por minutagem com os vídeos exigiu alto rigor metodológico. A atuação em dupla garantiu que falhas reais de input fossem isoladas, documentadas em Issues formais e imediatamente repassadas para correção no código C.
 
-**Experiência com a programação em pares:**
+---
 
-Organizamos o trabalho em duas sessões, alternando as responsabilidades conforme as necessidades de cada etapa. Na primeira sessão, Julio ficou responsável pela lógica dos patches e pelas regras de funcionamento, enquanto João acompanhou o desenvolvimento e verificou a formatação dos dados exportados. Na segunda sessão, João assumiu a implementação do módulo Haskell, enquanto Julio auxiliou na verificação dos tipos e na validação dos resultados.
+### 2.4. Facilitação Ágil (Scrum Master)
+* **Responsável:** Mateus Lacerda
+* **Atuação:** Coordenação do cronograma da Sprint, organização e higienização do Jira Board (`PI2-192`, `PI2-196` a `PI2-198`), consolidação da matriz de duplas (`PI2-207`) e publicação das evidências visuais do quadro (`PI2-210`).
 
-O principal desafio foi garantir a comunicação correta entre os componentes desenvolvidos em linguagens diferentes. Precisamos observar a estrutura dos dados compartilhados, os tipos utilizados e o formato esperado por cada parte do sistema. A revisão conjunta ajudou a identificar possíveis incompatibilidades antes da integração completa.
+---
 
-A experiência mostrou a importância de definir interfaces claras entre os módulos e validar os dados durante a comunicação entre linguagens. Também percebemos que a colaboração permite discutir diferentes soluções e reduzir erros que poderiam passar despercebidos durante uma implementação individual.
+## 3. Rastreabilidade de Commits e Pull Requests por Dupla
 
-##### 3. Dupla: Larissa Almeida e Theo Monteiro
-
-**Área:** Engenharia de Qualidade, Testes de Sistema e Rastreabilidade.
-
-**Histórias e atividades implementadas:**
-
-- **PI2-194:** Organização das atividades de qualidade e definição da estratégia de testes do sistema.
-- **PI2-202:** Elaboração e documentação de 27 casos de teste de sistema.
-- **PI2-203:** Execução dos testes para verificar o comportamento das funcionalidades implementadas.
-- **PI2-204/205:** Produção de *screencasts* para registrar a execução e demonstrar as funcionalidades testadas.
-- **PI2-206:** Organização do registro de bugs por meio de um *Issue Tracker*, permitindo documentar os problemas identificados durante os testes.
-
-**Experiência com a programação em pares:**
-
-Nosso trabalho foi concentrado na qualidade do sistema, na elaboração dos cenários de teste e na produção de evidências que demonstrassem o funcionamento das funcionalidades. Durante as sessões, Larissa ficou responsável pela elaboração e formatação dos casos de teste, enquanto Theo atuou como *Navigator*, revisando os cenários, verificando os critérios de aceitação e organizando o registro dos problemas encontrados.
-
-Ao longo do trabalho, discutimos como transformar os requisitos em situações práticas de teste, considerando tanto os comportamentos esperados quanto possíveis falhas. Um dos desafios foi garantir que os casos de teste fossem claros, objetivos e rastreáveis aos requisitos, além de registrar os resultados de maneira organizada.
-
-A produção dos *screencasts* e a catalogação dos bugs também exigiram atenção para que as evidências fossem compreensíveis e úteis para a equipe. A revisão conjunta ajudou a melhorar a descrição dos cenários e a tornar os registros mais consistentes.
-
-Como aprendizado, entendemos que qualidade de software não significa apenas verificar se o programa funciona, mas também documentar os resultados, identificar falhas e fornecer evidências que permitam reproduzir os problemas. A colaboração contribuiu para uma análise mais cuidadosa e para a divisão das responsabilidades.
-
-##### 4. Facilitação Ágil — Mateus Lacerda
-
-**Responsabilidades:**
-
-- Coordenação do cronograma da Sprint 02.
-- Acompanhamento e atualização do Jira Board.
-- Organização das atividades e acompanhamento dos cards das duplas.
-- Verificação da documentação e das evidências registradas no README.
-
-**Relato de colaboração:**
-
-A facilitação ágil teve como objetivo manter as atividades organizadas e facilitar o acompanhamento do progresso das duplas. O Jira Board foi utilizado para visualizar as tarefas, acompanhar os cards e verificar as entregas previstas. A organização das evidências no README também contribuiu para documentar o trabalho realizado durante a sprint.
-
-Essa experiência reforçou a importância da comunicação entre os integrantes, do acompanhamento contínuo das tarefas e da transparência na documentação. A facilitação ajudou a manter uma visão geral das atividades e a relacionar as implementações às entregas esperadas.
-
-##### 5. Rastreabilidade das atividades da Sprint 02
-
-Para manter a rastreabilidade entre as atividades planejadas e o trabalho desenvolvido, utilizamos os cards do Jira como referência para identificar as histórias de usuário, os módulos e as responsabilidades de cada dupla.
-
-| Dupla / Responsáveis | Cards do Jira | Área de atuação |
-| :--- | :--- | :--- |
-| Matheus Chaves e Caio Brayner | PI2-80, PI2-175, PI2-178, PI2-179 | Persistência binária e estado do jogo |
-| Julio Cesar e João Gabriel | PI2-77, PI2-177, PI2-180, PI2-181 | Patches de alinhamento e integração C/Haskell |
-| Larissa Almeida e Theo Monteiro | PI2-194, PI2-202, PI2-203, PI2-204, PI2-205, PI2-206 | Qualidade, testes e evidências |
-| Mateus Lacerda | Facilitação transversal | Coordenação e acompanhamento da sprint |
-
-A rastreabilidade completa deve relacionar cada história de usuário ao card correspondente e às evidências disponíveis no repositório, incluindo branches, commits e Pull Requests.
-
-**Padrão de versionamento adotado:**
-
-- Uma branch por card, criada a partir da `main` atualizada, seguindo o padrão `feature/PI2-XXX-nome-da-tarefa`.
-- Commits no padrão Conventional Commits, incluindo a chave do card ao final da mensagem, como `feat(pif): implementar modulo save.c (PI2-175)`.
-- Pull Requests direcionados à `main`, preenchidos com o template do projeto e revisados por pelo menos um colega antes do *merge*.
-- Referência à chave do card correspondente nos commits e Pull Requests, facilitando a ligação entre o Jira e o GitHub.
-
-Os registros de branches, commits e Pull Requests devem ser preenchidos com os identificadores reais do histórico do GitHub. A descrição das atividades, isoladamente, não comprova a autoria de cada alteração.
-
-##### 6. Conclusão da Sprint 02
-
-A experiência de programação em pares permitiu dividir responsabilidades, revisar decisões técnicas e compartilhar conhecimentos entre os integrantes. A alternância dos papéis de *Driver* e *Navigator* favoreceu a participação conjunta e ajudou a identificar problemas durante o desenvolvimento.
-
-Além da implementação das funcionalidades, a sprint destacou a importância dos testes, da integração entre módulos, da rastreabilidade das tarefas e da documentação das evidências. Concluímos que o trabalho colaborativo contribui para melhorar a qualidade do software e torna o processo de desenvolvimento mais organizado e transparente.
-
-_A preencher pela equipe._
-
-
+| Dupla / Responsável | Cards no Jira | Módulos / Arquivos Principais | Commits / PRs no GitHub |
+| :--- | :--- | :--- | :--- |
+| **Dupla 1:** Matheus Chaves & Caio Brayner | `PI2-80`, `PI2-175`, `PI2-178`, `PI2-179` | `src/save.c`, `src/save.h`, `src/game_state.c`, `src/game_state.h`, `src/main.c` | [`1b0e96f`](https://github.com/vdornelass/pi2-squad-e7/commit/1b0e96f), [`61206dd`](https://github.com/vdornelass/pi2-squad-e7/commit/61206dd), [`d671026`](https://github.com/vdornelass/pi2-squad-e7/commit/d671026) |
+| **Dupla 2:** Julio Cesar & João Gabriel | `PI2-77`, `PI2-180`, `PI2-177`, `PI2-181`, `PI2-27`, `PI2-28` | `src/ranking.c`, `src/ranking.h`, `src/typing_engine.c`, `src/ui.c`, `src/main.c`, `Makefile` | [`b296cb2`](https://github.com/vdornelass/pi2-squad-e7/commit/b296cb2), [`5b80d72`](https://github.com/vdornelass/pi2-squad-e7/commit/5b80d72), [`2483c92`](https://github.com/vdornelass/pi2-squad-e7/commit/2483c92) |
+| **Dupla 3:** Larissa Almeida & Theo Monteiro | `PI2-193`, `PI2-194`, `PI2-195`, `PI2-202` a `PI2-206`, `PI2-209`, `PI2-211` | `docs/casos_de_teste_sprint01.md`, `docs/roteiro-screencast-entrega03.md`, `README.md` | [`254dbcc`](https://github.com/vdornelass/pi2-squad-e7/commit/254dbcc), [`b8d01e2`](https://github.com/vdornelass/pi2-squad-e7/commit/b8d01e2), [`7e8f110`](https://github.com/vdornelass/pi2-squad-e7/commit/7e8f110), [`343d3ae`](https://github.com/vdornelass/pi2-squad-e7/commit/343d3ae) (PR #4) |
+| **Scrum Master:** Mateus Lacerda | `PI2-192`, `PI2-196` a `PI2-198`, `PI2-207`, `PI2-210` | `README.md` (Seção 9.2), `docs/img/print_board_sprint2_completo.png` | [`15dbcb1`](https://github.com/vdornelass/pi2-squad-e7/commit/15dbcb1), [`487d1d3`](https://github.com/vdornelass/pi2-squad-e7/commit/487d1d3) (PR #5) |
