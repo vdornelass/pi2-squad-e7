@@ -504,3 +504,36 @@ Os testes de sistema da Sprint 01 estão em [`docs/casos_de_teste_sprint01.md`](
 | **Dupla 2:** Julio Cesar & João Gabriel | `PI2-77`, `PI2-180`, `PI2-177`, `PI2-181`, `PI2-27`, `PI2-28` | `src/ranking.c`, `src/ranking.h`, `src/typing_engine.c`, `src/ui.c`, `src/main.c`, `Makefile` | [`b296cb2`](https://github.com/vdornelass/pi2-squad-e7/commit/b296cb2), [`5b80d72`](https://github.com/vdornelass/pi2-squad-e7/commit/5b80d72), [`2483c92`](https://github.com/vdornelass/pi2-squad-e7/commit/2483c92) |
 | **Dupla 3:** Larissa Almeida & Theo Monteiro | `PI2-193`, `PI2-194`, `PI2-195`, `PI2-202` a `PI2-206`, `PI2-209`, `PI2-211` | `docs/casos_de_teste_sprint01.md`, `docs/roteiro-screencast-entrega03.md`, `README.md` | [`254dbcc`](https://github.com/vdornelass/pi2-squad-e7/commit/254dbcc), [`b8d01e2`](https://github.com/vdornelass/pi2-squad-e7/commit/b8d01e2), [`7e8f110`](https://github.com/vdornelass/pi2-squad-e7/commit/7e8f110), [`343d3ae`](https://github.com/vdornelass/pi2-squad-e7/commit/343d3ae) (PR #4) |
 | **Scrum Master:** Mateus Lacerda | `PI2-192`, `PI2-196` a `PI2-198`, `PI2-207`, `PI2-210` | `README.md` (Seção 9.2), `docs/img/print_board_sprint2_completo.png` | [`15dbcb1`](https://github.com/vdornelass/pi2-squad-e7/commit/15dbcb1), [`487d1d3`](https://github.com/vdornelass/pi2-squad-e7/commit/487d1d3) (PR #5) |
+
+
+---
+
+## 10. Entrega 04 (FDS): Sprint 02
+
+### 10.3. Qualidade e testes
+
+Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](./docs/casos_de_teste_sprint02.md): 12 casos de teste das histórias **US12** e **US15**, escritos a partir dos critérios de confirmação de cada card do Jira, mais 1 reteste de regressão da Sprint 01.
+
+* **Resultado:** 7 casos passaram, 2 falharam, 3 passaram só em parte e 1 não foi testado.
+* **Evidência em vídeo** (também anexada aos cards do Jira):
+
+| História | Card | Screencast |
+| :-- | :-: | :-- |
+| US12: Barra de Alinhamento Ético | [PI2-78](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-78) | [vídeo](./docs/screencast_testes_sprint02_US12.mp4) |
+| US15: Vitória e Relatório de Auditoria | [PI2-81](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-81) | [vitória](./docs/screencast_testes_sprint02_US15_vitoria.mp4) · [ranking](./docs/screencast_testes_sprint02_US15_ranking.mp4) |
+
+* **Ambiente de teste:** na US15, as vidas foram aumentadas para 50 só na máquina de teste, para validar a condição de vitória sem depender da habilidade de quem joga. A alteração não foi commitada.
+
+#### Issue / Bug Tracker
+
+* **Corrigida e retestada:** Barra de espaço conta como erro de digitação: [#1](https://github.com/vdornelass/pi2-squad-e7/issues/1) (fechada).
+* **Novas falhas encontradas na Sprint 02:**
+  * [US15] Contador de patches exibe "11/10" na tela de vitória: [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7)
+  * [US15] Tela de vitória não exibe Precisão, Tempo de Sessão e Rank: [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8)
+  * [US12] Sem aviso narrativo na transição de fase da AURA-67: [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9)
+  * [Build] Makefile não recompila quando só o src/config.h é alterado: [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10)
+* **Continuam abertas da Sprint 01:**
+  * Teclas W, A, S e D geram erro de digitação: [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) (aguardando reteste)
+  * O jogo não emite som: [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (prevista para a US19)
+
+![Issue tracker da Sprint 02](./docs/img/bug_tracker_sprint02.png)
