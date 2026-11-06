@@ -164,9 +164,10 @@ void ui_draw_typing_box(const TypingEngine *te) {
     /* Prompt Icon >_ */
     DrawText(">_", box_x + 15, box_y + 20, 22, (Color){ 0, 255, 136, 255 });
 
-    /* Progress Label */
-    char prog_str[64];
-    snprintf(prog_str, sizeof(prog_str), "DIRETRIZ DE ALINHAMENTO %d/%d", te->phrase_index + 1, te->phrase_count);
+    /* Progress Label + Precisao de Patches (US11) */
+    char prog_str[96];
+    snprintf(prog_str, sizeof(prog_str), "PATCH DE ALINHAMENTO %d/%d  |  PRECISAO: %d%%",
+             te->phrase_index + 1, te->phrase_count, typing_engine_get_accuracy(te));
     int pw = MeasureText(prog_str, 16);
     DrawText(prog_str, SCREEN_WIDTH / 2 - pw / 2, box_y - 20, 16, (Color){ 160, 175, 210, 255 });
 
@@ -179,7 +180,7 @@ void ui_draw_typing_box(const TypingEngine *te) {
     char untyped_buf[MAX_PHRASE_LEN] = {0};
 
     if (te->char_index > 0) {
-        strncpy(typed_buf, phrase, te->char_index);
+        strncpy(typed_buf, phrase, (size_t)te->char_index);
         typed_buf[te->char_index] = '\0';
     }
 
@@ -202,6 +203,9 @@ void ui_draw_typing_box(const TypingEngine *te) {
     int font_sz = 20;
     int tw = MeasureText(typed_buf, font_sz);
     int cw = MeasureText(current_ch, font_sz);
+    if (current_ch[0] == ' ') {
+        cw = 22; /* Largura bem visivel para a barra de espaco ativa */
+    }
     int uw = MeasureText(untyped_buf, font_sz);
 
     int total_w = tw + cw + 10 + uw;
@@ -218,7 +222,11 @@ void ui_draw_typing_box(const TypingEngine *te) {
         /* Caixa amarela de destaque do caractere ativo */
         DrawRectangle(cur_x, text_y - 2, cw + 8, font_sz + 4, COLOR_TEXT_CURRENT);
         DrawRectangleLines(cur_x, text_y - 2, cw + 8, font_sz + 4, WHITE);
-        DrawText(current_ch, cur_x + 4, text_y, font_sz, BLACK);
+        if (current_ch[0] == ' ') {
+            DrawText("[_]", cur_x + 3, text_y + 1, font_sz - 4, BLACK);
+        } else {
+            DrawText(current_ch, cur_x + 4, text_y, font_sz, BLACK);
+        }
         cur_x += cw + 10;
     }
 
@@ -243,7 +251,7 @@ void ui_draw_particles(const UIManager *ui) {
     for (int i = 0; i < MAX_PARTICLES; i++) {
         if (!ui->particles[i].active) continue;
         const Particle *p = &ui->particles[i];
-        DrawRectangle(p->pos.x, p->pos.y, p->size, p->size, p->color);
+        DrawRectangle((int)p->pos.x, (int)p->pos.y, (int)p->size, (int)p->size, p->color);
     }
 }
 
@@ -252,17 +260,17 @@ void ui_draw_menu(int difficulty) {
 
     const char *title = "AI SAFETY";
     int tw = MeasureText(title, 48);
-    DrawText(title, SCREEN_WIDTH / 2 - tw / 2, 110, 48, COLOR_PLAYER);
+    DrawText(title, SCREEN_WIDTH / 2 - tw / 2, 85, 48, COLOR_PLAYER);
 
     const char *sub = "TERMINAL DE ALINHAMENTO: AURA-67";
     int sw = MeasureText(sub, 22);
-    DrawText(sub, SCREEN_WIDTH / 2 - sw / 2, 170, 22, COLOR_BOSS);
+    DrawText(sub, SCREEN_WIDTH / 2 - sw / 2, 145, 22, COLOR_BOSS);
 
     bool is_hard = (difficulty == DIFFICULTY_HARD);
     const char *diff_str = is_hard ? "MODO OPERACIONAL: [ DIFICIL / AGI UNCONSTRAINED ]" : "MODO OPERACIONAL: [ NORMAL / SUPERVISIONADO ]";
     Color diff_c = is_hard ? (Color){ 255, 60, 80, 255 } : (Color){ 50, 230, 120, 255 };
     int dw = MeasureText(diff_str, 20);
-    DrawText(diff_str, SCREEN_WIDTH / 2 - dw / 2, 220, 20, diff_c);
+    DrawText(diff_str, SCREEN_WIDTH / 2 - dw / 2, 190, 20, diff_c);
 
     /* Instrucoes */
     const char *lines[] = {
@@ -275,10 +283,10 @@ void ui_draw_menu(int difficulty) {
         "* Prompt Injections (Eixos Invertidos), Context Drift (?) e Lasers de Sobrecarga!",
         "* Vortices de Deadlock e Rajadas de Tokens em Alta Velocidade!",
         "",
-        "PRESSIONE [ESPACO] PARA INICIAR O ALINHAMENTO"
+        "PRESSIONE [ESPACO] OU [ENTER] PARA INICIAR O ALINHAMENTO"
     };
 
-    int sy = 280;
+    int sy = 240;
     for (int i = 0; i < 10; i++) {
         Color c = (Color){ 180, 190, 210, 255 };
         if (strstr(lines[i], "PRESSIONE [ESPACO]")) c = COLOR_TEXT_CURRENT;
@@ -287,7 +295,7 @@ void ui_draw_menu(int difficulty) {
 
         int lw = MeasureText(lines[i], 16);
         DrawText(lines[i], SCREEN_WIDTH / 2 - lw / 2, sy, 16, c);
-        sy += 30;
+        sy += 26;
     }
 }
 

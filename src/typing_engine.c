@@ -31,6 +31,8 @@ void typing_engine_reset(TypingEngine *te) {
     te->blind_timer = 0.0f;
     te->current_phrase_errors = 0;
     te->total_completed = 0;
+    te->total_typed = 0;
+    te->total_errors = 0;
 }
 
 void typing_engine_update(TypingEngine *te, float dt) {
@@ -52,6 +54,7 @@ void typing_engine_on_player_hit(TypingEngine *te) {
         if (te->char_index < 0) te->char_index = 0;
         te->error_flash_timer = 0.4f;
         te->current_phrase_errors++;
+        te->total_errors++;
     }
 }
 
@@ -66,14 +69,22 @@ bool typing_engine_is_finished(const TypingEngine *te) {
     return te->phrase_index >= te->phrase_count;
 }
 
+int typing_engine_get_accuracy(const TypingEngine *te) {
+    int attempts = te->total_typed + te->total_errors;
+    if (attempts <= 0) return 100;
+    return (te->total_typed * 100) / attempts;
+}
+
+static bool is_movement_key(int key) {
+    int k = toupper((unsigned char)key);
+    if (k == 'W' || k == 'A' || k == 'S' || k == 'D') return true;
+    if (key == KEY_W || key == KEY_A || key == KEY_S || key == KEY_D) return true;
+    if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT) return true;
+    return false;
+}
+
 const char *typing_engine_handle_key(TypingEngine *te, int key, int *errors_out) {
     if (typing_engine_is_finished(te)) return NULL;
-
-    /* Ignora teclas de movimentacao (WASD e setas) para permitir esquiva sem erro */
-    if (key == KEY_W || key == KEY_A || key == KEY_S || key == KEY_D ||
-        key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT) {
-        return NULL;
-    }
 
     const char *target = typing_engine_get_current_phrase(te);
     if (!target || target[0] == '\0') return NULL;
@@ -85,8 +96,11 @@ const char *typing_engine_handle_key(TypingEngine *te, int key, int *errors_out)
         typed = ' ';
     }
 
+    /* 1. Se coincidir com o caractere esperado da diretriz (case-insensitive):
+     * Conta como digito correto e avanca o progresso. */
     if (toupper((unsigned char)typed) == toupper((unsigned char)expected)) {
         te->char_index++;
+        te->total_typed++;
         if (te->char_index >= (int)strlen(target)) {
             if (errors_out) *errors_out = te->current_phrase_errors;
             te->phrase_index++;
@@ -96,9 +110,17 @@ const char *typing_engine_handle_key(TypingEngine *te, int key, int *errors_out)
             return "COMPLETED";
         }
         return "CORRECT";
-    } else {
-        te->error_flash_timer = 0.25f;
-        te->current_phrase_errors++;
-        return "ERROR";
     }
+
+    /* 2. Se nao coincidir, mas for tecla de movimento (WASD ou setas):
+     * O jogador esta apenas se movimentando/esquivando na arena. */
+    if (is_movement_key(key)) {
+        return NULL;
+    }
+
+    /* 3. Se for tecla incorreta que nao e de movimento: conta como erro de sintaxe */
+    te->error_flash_timer = 0.25f;
+    te->current_phrase_errors++;
+    te->total_errors++;
+    return "ERROR";
 }

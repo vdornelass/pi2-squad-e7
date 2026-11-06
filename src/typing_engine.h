@@ -15,6 +15,8 @@ typedef struct {
     float blind_timer;
     int current_phrase_errors;
     int total_completed;
+    int total_typed;
+    int total_errors;
 } TypingEngine;
 
 void typing_engine_init(TypingEngine *te);
@@ -25,5 +27,6 @@ void typing_engine_on_player_hit(TypingEngine *te);
 void typing_engine_apply_blindness(TypingEngine *te, float duration);
 const char *typing_engine_get_current_phrase(const TypingEngine *te);
 bool typing_engine_is_finished(const TypingEngine *te);
+int typing_engine_get_accuracy(const TypingEngine *te);
 
 #endif /* TYPING_ENGINE_H */
