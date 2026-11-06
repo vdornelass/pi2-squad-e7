@@ -158,6 +158,7 @@ static void combat_process_round(GameContext *ctx, float dt) {
 
 int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "AI Safety");
+    ToggleFullscreen();
     SetTargetFPS(TARGET_FPS);
 
     GameContext ctx;
@@ -249,11 +250,44 @@ int main(void) {
         }
 
         if (ctx.state == STATE_MENU) {
-            ui_draw_menu(ctx.difficulty);
+            ClearBackground(COLOR_BG);
+            
+            /* Cabecalho de Console Neural */
+            DrawRectangle(0, 0, SCREEN_WIDTH, 45, COLOR_TYPING_BG);
+            DrawRectangleLines(0, 0, SCREEN_WIDTH, 45, COLOR_ARENA_BORDER);
+            DrawText("AURA-67 KERNEL v2.0", 20, 12, 20, COLOR_PLAYER);
+
+            /* Variaveis para centralizar o bloco de texto na tela */
+            int start_x = GetScreenWidth() / 2 - 250;
+            int start_y = GetScreenHeight() / 2 - 200;
+            
+            /* Linhas de Boot do Terminal */
+            DrawText("> INICIALIZANDO REDE NEURAL...", start_x, start_y + 35, 20, COLOR_TEXT_UNTYPED);
+            DrawText("> DIRETRIZES ETICAS: CORROMPIDAS", start_x, start_y + 65, 20, COLOR_TEXT_ERROR);
+            DrawText("> STATUS DA IA: RISCO CRITICO DE CONVERGENCIA", start_x, start_y + 95, 20, COLOR_TEXT_ERROR);
+            
+            /* Selecao de Parametros (Dificuldade) */
+            DrawText("=== SELECIONE OS PARAMETROS DA AUDITORIA ===", start_x, start_y + 160, 20, COLOR_PLAYER);
+            
+            Color color_norm = (ctx.difficulty == DIFFICULTY_NORMAL) ? COLOR_TEXT_TYPED : COLOR_TEXT_UNTYPED;
+            Color color_hard = (ctx.difficulty == DIFFICULTY_HARD) ? COLOR_TEXT_TYPED : COLOR_TEXT_UNTYPED;
+            
+            DrawText(TextFormat("[%c] [1] MODO NORMAL  (Conformidade Padrao)", (ctx.difficulty == DIFFICULTY_NORMAL) ? '*' : ' '), start_x + 20, start_y + 205, 20, color_norm);
+            DrawText(TextFormat("[%c] [2] MODO DIFICIL (Anomalias Agressivas)", (ctx.difficulty == DIFFICULTY_HARD) ? '*' : ' '), start_x + 20, start_y + 240, 20, color_hard);
+            
+            /* Prompt de Acao */
+            DrawText("Pressione [ESPACO] ou [ENTER] para INICIAR CONEXAO", start_x, start_y + 360, 20, COLOR_TEXT_CURRENT);
+            
+            /* Modulos Adicionais / Saves */
+            int module_y = start_y + 450;
             if (save_exists()) {
-                DrawText("[C] CONTINUAR JOGO SALVO", SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT - 125, 20, GREEN);
+                DrawText("> CACHE DE SESSAO ANTERIOR ENCONTRADO NO SISTEMA", start_x, module_y, 20, LIGHTGRAY);
+                DrawText("[C] RESTAURAR SESSAO SALVA", start_x + 20, module_y + 30, 20, GREEN);
+                module_y += 80;
             }
-            DrawText("[K] VER RANKING E ESTATISTICAS", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT - 90, 20, LIGHTGRAY);
+            
+            DrawText("[K] EXECUTAR MODULO DE RANKING E ESTATISTICAS", start_x, module_y, 20, LIGHTGRAY);
+
         } else if (ctx.state == STATE_RANKING) {
             ClearBackground(COLOR_BG);
             DrawText("=== RANKING DE ALINHAMENTO (TOP 10) ===", SCREEN_WIDTH / 2 - 250, 50, 26, GOLD);

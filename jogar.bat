@@ -8,11 +8,14 @@ echo   CESAR School - Projeto Integrador 2 (PI2)
 echo ========================================================
 echo.
 
-:: 1. Compila as alteracoes mais recentes para Windows via WSL se disponivel
-echo [1/2] Verificando compilacao e atualizacoes de codigo...
-wsl bash -c "cd /mnt/c/Users/Lenovo-Gabriel/Documents/pi2-squad-e7 && make windows" 2>nul
+:: Obtém o caminho da pasta atual convertido dinamicamente para o WSL
+for /f "tokens=*" %%a in ('wsl wslpath -u "%CD%" 2^>nul') do set "WSL_PATH=%%a"
 
-:: 2. Se o executavel nativo do Windows existir, executa diretamente
+:: 1. Compila as alterações para Windows através do WSL
+echo [1/2] Verificando compilacao e atualizacoes de codigo...
+wsl bash -c "cd '%WSL_PATH%' && make windows" 2>nul
+
+:: 2. Se o executável nativo do Windows existir, executa-o
 if exist "bin\jogo.exe" (
     echo [OK] Executavel Windows atualizado: bin\jogo.exe
     if exist "lib\raylib.dll" copy /y "lib\raylib.dll" "bin\" >nul
@@ -21,10 +24,10 @@ if exist "bin\jogo.exe" (
     goto fim
 )
 
-:: 3. Se nao conseguir compilar o .exe, executa bin/jogo no WSL
+:: 3. Caso contrário, executa o binário Linux no WSL
 echo.
 echo [INFO] Executando binario Linux via WSL...
-wsl bash -c "cd /mnt/c/Users/Lenovo-Gabriel/Documents/pi2-squad-e7 && make && (test -n \"$DISPLAY\" || export DISPLAY=:0) && ./bin/jogo"
+wsl bash -c "cd '%WSL_PATH%' && make && (test -n \"$DISPLAY\" || export DISPLAY=:0) && ./bin/jogo"
 
 :fim
 echo.

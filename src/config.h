@@ -4,14 +4,14 @@
 #include "raylib.h"
 
 /* Dimensoes da Tela */
-#define SCREEN_WIDTH 900
-#define SCREEN_HEIGHT 700
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
 #define TARGET_FPS 60
 
-/* Limites da Arena de Combate */
-#define ARENA_MARGIN_X 40
-#define ARENA_MARGIN_TOP 70
-#define ARENA_MARGIN_BOTTOM 130
+/* Limites da Arena de Combate (Margens redimensionadas proporcionalmente para 720p) */
+#define ARENA_MARGIN_X 80
+#define ARENA_MARGIN_TOP 80
+#define ARENA_MARGIN_BOTTOM 150
 
 /* Paleta de Cores Neon / Cyberpunk */
 #define COLOR_BG            (Color){ 15, 17, 26, 255 }
@@ -59,7 +59,7 @@
 #define DURATION_BLIND 3.5f
 #define DURATION_CONFUSE 4.0f
 
-/* Regras de Pontuacao e Alinhamento Etico (Caio Brayner - PI2-90) */
+/* Regras de Pontuacao e Alinhamento Etico */
 #define SCORE_PERFECT          150
 #define SCORE_STABLE           100
 #define SCORE_PATCHED          50
