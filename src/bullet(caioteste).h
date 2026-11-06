@@ -1,0 +1,9 @@
+typedef enum {
+    BULLET_NORMAL,
+    BULLET_HOMING,
+    BULLET_BLIND,
+    BULLET_CONFUSE,
+    BULLET_SPIRAL,
+    BULLET_RAIN,
+    BULLET_SPREAD
+} BulletType;
