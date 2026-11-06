@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc
 TARGET = bin/jogo
-SRCS = src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c
+SRCS = src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c
 
 # Deteccao de Sistema Operacional
 UNAME_S := $(shell uname -s 2>/dev/null || echo Windows)
