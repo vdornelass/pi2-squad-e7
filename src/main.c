@@ -13,6 +13,7 @@
 #include <math.h>
 #include <string.h>
 #include <stddef.h>
+#include <tutorial.h>
 
 /* =========================================================================
  * Processamento de Rodadas e Game Loop (PI2-89 - Julio Cesar)
