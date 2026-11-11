@@ -44,6 +44,10 @@
 * **Arquivo Oficial em PDF para Submissão:** [Download do PDF da AV1 (docs/Relatorio_LMC_Projeto_Integrador_AV1.pdf)](./docs/Relatorio_LMC_Projeto_Integrador_AV1.pdf)
 * **Atividade Prática Anterior (Refatoração de Condicionais via Lógica Clássica):** [Relatório em PDF](./docs/Relatorio_LMC_Refatoracao_Logica_23_09.pdf)
 
+### 1.5. Lógica Matemática para Computação (LMC — Validação da Unidade 2 · PI2-31)
+* **Relatório de validação lógica do motor em C99:** [docs/relatorio_lmc_unidade2.md](./docs/relatorio_lmc_unidade2.md) (máquina de estados, tabelas-verdade, invariantes das fases da AURA-67 e análise do game loop a 60 FPS)
+* **Testes automatizados da validação:** [`tests/test_logica_lmc.c`](./tests/test_logica_lmc.c). Rode com `make test-lmc` (181 verificações)
+
 ---
 
 ## 2. Visão do Produto & Sinopse do Jogo (FDS)
@@ -537,3 +541,14 @@ Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](
   * O jogo não emite som: [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (prevista para a US19)
 
 ![Issue tracker da Sprint 02](./docs/img/bug_tracker_sprint02.png)
+
+---
+
+## 11. Entrega 05 (FDS): Sprint 03 e Apresentação Final
+
+### 11.4. Colaboração e evidências (Pair Programming · PI2-242)
+* Relatório do Sprint 03: [docs/relatorio_pair_programming_sprint03.md](./docs/relatorio_pair_programming_sprint03.md)
+
+### 11.5. Apresentação Final (PI2-243 / PI2-244)
+* Slides (PDF): [docs/apresentacao_final/apresentacao_final_squad_e7.pdf](./docs/apresentacao_final/apresentacao_final_squad_e7.pdf)
+* Arquivo editável (PowerPoint): [docs/apresentacao_final/apresentacao_final_squad_e7.pptx](./docs/apresentacao_final/apresentacao_final_squad_e7.pptx)

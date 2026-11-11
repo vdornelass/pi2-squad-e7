@@ -34,8 +34,13 @@ windows: $(SRCS)
 	@cp lib/raylib.dll bin/ 2>/dev/null || true
 	@echo "Compilacao nativa para Windows (bin/jogo.exe) concluida com sucesso!"
 
+test-lmc:
+	@mkdir -p bin
+	$(CC) $(CFLAGS) tests/test_logica_lmc.c src/typing_engine.c src/boss.c src/bullet.c src/player.c $(LDFLAGS) -o bin/test_lmc
+	LD_LIBRARY_PATH=lib:$$LD_LIBRARY_PATH ./bin/test_lmc
+
 clean:
-	rm -f bin/jogo bin/*.o bin/*.exe
+	rm -f bin/jogo bin/test_lmc bin/*.o bin/*.exe
 	@echo "Limpeza concluida."
 
-.PHONY: all run clean windows
+.PHONY: all run clean windows test-lmc
