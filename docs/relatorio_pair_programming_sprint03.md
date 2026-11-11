@@ -73,7 +73,7 @@ Duplas montadas a partir dos responsáveis pelos cards do Sprint 03 no Jira.
 | :--- | :--- | :--- |
 | Dupla 1 — João & Caio | `src/audio.c/h`, `src/boss.c`, `src/bullet.c`, `jogar.bat`, `Makefile` | [`6a8a9d4`](https://github.com/vdornelass/pi2-squad-e7/commit/6a8a9d4), [`f4c9023`](https://github.com/vdornelass/pi2-squad-e7/commit/f4c9023) · ⟨demais commits do sprint⟩ |
 | Dupla 2 — Matheus & Julio | `src/config.h`, `src/main.c`, `src/ui.c` | [`a9c8bb4`](https://github.com/vdornelass/pi2-squad-e7/commit/a9c8bb4) · ⟨demais commits do sprint⟩ |
-| Dupla 3 — Theo & Larissa | `docs/relatorio_lmc_unidade2.md`, `tests/test_logica_lmc.c`, `docs/casos_de_teste_*.md`, `README.md` | ⟨hash do commit do relatório LMC⟩ · ⟨demais commits do sprint⟩ |
+| Dupla 3 — Theo & Larissa | `docs/relatorio_lmc_unidade2.md`, `tests/test_logica_lmc.c`, `docs/casos_de_teste_*.md`, `README.md` | [`aedc993`](https://github.com/theo1996-dot/pi2-squad-e7/commit/aedc993) · ⟨demais commits do sprint⟩ |
 | Mateus Lacerda | `README.md`, `CONTRIBUTING.md` | ⟨preencher⟩ |
 
 ---
