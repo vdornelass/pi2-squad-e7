@@ -547,9 +547,8 @@ Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](
 ## 11. Entrega 05 (FDS): Sprint 03 e Apresentação Final
 
 ### 11.4. Colaboração e evidências (Pair Programming · PI2-242)
-* Relatório do Sprint 03 (rascunho, em preenchimento pelas duplas): [docs/relatorio_pair_programming_sprint03.md](./docs/relatorio_pair_programming_sprint03.md)
+* Relatório do Sprint 03: [docs/relatorio_pair_programming_sprint03.md](./docs/relatorio_pair_programming_sprint03.md)
 
 ### 11.5. Apresentação Final (PI2-243 / PI2-244)
 * Slides (PDF): [docs/apresentacao_final/apresentacao_final_squad_e7.pdf](./docs/apresentacao_final/apresentacao_final_squad_e7.pdf)
 * Arquivo editável (PowerPoint): [docs/apresentacao_final/apresentacao_final_squad_e7.pptx](./docs/apresentacao_final/apresentacao_final_squad_e7.pptx)
-* Os campos entre colchetes (`[...]`) nos slides individuais são preenchidos por cada integrante.
