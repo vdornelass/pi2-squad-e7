@@ -4,6 +4,8 @@ void game_state_init(GameContext *ctx) {
     ctx->state = STATE_MENU;
     ctx->difficulty = DIFFICULTY_NORMAL;
     ctx->score = 0;
+    ctx->session_time = 0.0f;
+    ctx->end_screen_lock = 0.0f;
 
     player_init(&ctx->player, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 200.0f);
     boss_init(&ctx->boss, SCREEN_WIDTH / 2.0f, 130.0f, ctx->difficulty);
@@ -19,6 +21,8 @@ void game_state_reset_combat(GameContext *ctx) {
     typing_engine_reset(&ctx->typing_engine);
     ui_init(&ctx->ui);
     ctx->score = 0;
+    ctx->session_time = 0.0f;
+    ctx->end_screen_lock = 0.0f;
 
     /* Descarta caracteres que ainda estao na fila do raylib (ex.: o 'R' ou o
        ESPACO usado para iniciar). Sem isso eles viram "erro de sintaxe" no

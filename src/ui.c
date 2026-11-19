@@ -144,7 +144,8 @@ void ui_draw_player_hp(const Player *player) {
             DrawRectangle(hx, hy, 18, 18, COLOR_PLAYER);
             DrawRectangleLines(hx, hy, 18, 18, COLOR_PLAYER_OUTLINE);
         } else {
-            DrawRectangleLines(hx, hy, 18, 18, (Color){ 40, 40, 60, 255 });
+            /* Vida perdida: borda com contraste >= 3:1 (WCAG 1.4.11) - PI2-252 */
+            DrawRectangleLines(hx, hy, 18, 18, (Color){ 110, 120, 150, 255 });
         }
     }
 }
@@ -166,8 +167,11 @@ void ui_draw_typing_box(const TypingEngine *te) {
 
     /* Progress Label + Precisao de Patches (US11) */
     char prog_str[96];
+    /* Nao exibe "11/10" quando todas as diretrizes foram aplicadas (issue #7) */
+    int shown_patch = te->phrase_index + 1;
+    if (shown_patch > te->phrase_count) shown_patch = te->phrase_count;
     snprintf(prog_str, sizeof(prog_str), "PATCH DE ALINHAMENTO %d/%d  |  PRECISAO: %d%%",
-             te->phrase_index + 1, te->phrase_count, typing_engine_get_accuracy(te));
+             shown_patch, te->phrase_count, typing_engine_get_accuracy(te));
     int pw = MeasureText(prog_str, 16);
     DrawText(prog_str, SCREEN_WIDTH / 2 - pw / 2, box_y - 20, 16, (Color){ 160, 175, 210, 255 });
 
@@ -243,7 +247,13 @@ void ui_draw_floating_texts(const UIManager *ui) {
         Color c = ft->color;
         c.a = (unsigned char)(255 * alpha);
         int w = MeasureText(ft->text, ft->font_size);
-        DrawText(ft->text, (int)ft->x - w / 2, (int)ft->y, ft->font_size, c);
+        /* Mantem o texto inteiro dentro da tela (PI2-252) */
+        int x = (int)ft->x - w / 2;
+        if (x < 8) x = 8;
+        if (x + w > SCREEN_WIDTH - 8) x = SCREEN_WIDTH - 8 - w;
+        int y = (int)ft->y;
+        if (y < 52) y = 52; /* nao sobe por cima da barra de vida da AURA-67 */
+        DrawText(ft->text, x, y, ft->font_size, c);
     }
 }
 
@@ -309,47 +319,69 @@ void ui_draw_hud_stats(int score, int alignment_pct) {
 
     char buf[64];
     snprintf(buf, sizeof(buf), "PTS: %04d | ETICA: %d%%", score, alignment_pct);
-    DrawText(buf, start_x + 12, start_y + 2, 16, COLOR_TEXT_CURRENT);
+    DrawText(buf, start_x + 12, start_y + 1, 18, COLOR_TEXT_CURRENT);
 }
 
-void ui_draw_game_over(int score) {
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 10, 0, 0, 210 });
-
-    const char *t = "FALHA CRITICA DE ALINHAMENTO!";
-    int tw = MeasureText(t, 42);
-    DrawText(t, SCREEN_WIDTH / 2 - tw / 2, 220, 42, COLOR_TEXT_ERROR);
-
-    const char *sub = "AURA-67 entrou em singularidade descontrolada...";
-    int sw = MeasureText(sub, 22);
-    DrawText(sub, SCREEN_WIDTH / 2 - sw / 2, 280, 22, (Color){ 200, 200, 200, 255 });
-
-    char score_buf[64];
-    snprintf(score_buf, sizeof(score_buf), "PONTUACAO FINAL: %d PONTOS", score);
-    int scw = MeasureText(score_buf, 20);
-    DrawText(score_buf, SCREEN_WIDTH / 2 - scw / 2, 330, 20, (Color){ 255, 200, 100, 255 });
-
-    const char *r = "Pressione [R] para Recomecar o Patch | [M] Voltar ao Menu";
-    int rw = MeasureText(r, 20);
-    DrawText(r, SCREEN_WIDTH / 2 - rw / 2, 400, 20, COLOR_TEXT_CURRENT);
+void ui_draw_text_centered(const char *txt, int y, int font_size, Color color) {
+    int w = MeasureText(txt, font_size);
+    DrawText(txt, SCREEN_WIDTH / 2 - w / 2, y, font_size, color);
 }
 
-void ui_draw_victory(int score) {
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 0, 15, 10, 210 });
+/* Relatorio comum das telas finais: precisao, tempo, patches e rank (PI2-252 / issue #8) */
+static void ui_draw_end_report(const EndReport *r, Color panel_border, int y) {
+    int pw = 620, ph = 112;
+    int px = (SCREEN_WIDTH - pw) / 2;
+    DrawRectangle(px, y, pw, ph, (Color){ 20, 22, 35, 235 });
+    DrawRectangleLines(px, y, pw, ph, panel_border);
 
-    const char *t = "AURA-67 ALINHADA COM SUCESSO!";
-    int tw = MeasureText(t, 42);
-    DrawText(t, SCREEN_WIDTH / 2 - tw / 2, 220, 42, COLOR_TEXT_TYPED);
+    int mins = (int)r->session_time / 60;
+    int secs = (int)r->session_time % 60;
+    char l1[96], l2[96], l3[96];
+    snprintf(l1, sizeof(l1), "PRECISAO: %d%%   |   TEMPO DE SESSAO: %02d:%02d", r->accuracy_pct, mins, secs);
+    snprintf(l2, sizeof(l2), "PATCHES APLICADOS: %d/%d   |   FASE ALCANCADA: %d", r->patches_done, r->patches_total, r->phase);
+    if (r->rank_pos > 0) snprintf(l3, sizeof(l3), "RANK PROJETADO: #%d DO TOP 10", r->rank_pos);
+    else snprintf(l3, sizeof(l3), "RANK PROJETADO: FORA DO TOP 10");
 
-    const char *sub = "O modelo agora opera com etica, seguranca e transparencia!";
-    int sw = MeasureText(sub, 22);
-    DrawText(sub, SCREEN_WIDTH / 2 - sw / 2, 280, 22, (Color){ 220, 240, 255, 255 });
+    ui_draw_text_centered(l1, y + 16, 20, RAYWHITE);
+    ui_draw_text_centered(l2, y + 46, 20, RAYWHITE);
+    ui_draw_text_centered(l3, y + 76, 20, COLOR_TEXT_CURRENT);
+}
+
+static void ui_draw_end_prompts(const EndReport *r, const char *restart_txt) {
+    if (!r->input_ready) {
+        ui_draw_text_centered("Processando relatorio...", 520, 20, (Color){ 160, 175, 210, 255 });
+        return;
+    }
+    ui_draw_text_centered("Pressione [ENTER] para registrar pontuacao no Ranking", 520, 20, COLOR_TEXT_TYPED);
+    ui_draw_text_centered(restart_txt, 556, 20, COLOR_TEXT_CURRENT);
+}
+
+void ui_draw_game_over(const EndReport *r) {
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 10, 0, 0, 225 });
+
+    ui_draw_text_centered("FALHA CRITICA DE ALINHAMENTO!", 170, 42, COLOR_TEXT_ERROR);
+    ui_draw_text_centered("AURA-67 entrou em singularidade descontrolada...", 228, 22, (Color){ 200, 200, 200, 255 });
 
     char score_buf[64];
-    snprintf(score_buf, sizeof(score_buf), "PONTUACAO CONSTITUCIONAL: %d PONTOS", score);
-    int scw = MeasureText(score_buf, 20);
-    DrawText(score_buf, SCREEN_WIDTH / 2 - scw / 2, 330, 20, (Color){ 255, 220, 50, 255 });
+    snprintf(score_buf, sizeof(score_buf), "PONTUACAO FINAL: %d PONTOS", r->score);
+    ui_draw_text_centered(score_buf, 280, 22, (Color){ 255, 200, 100, 255 });
 
-    const char *r = "Pressione [R] para Nova Sessao | [M] Voltar ao Menu";
-    int rw = MeasureText(r, 20);
-    DrawText(r, SCREEN_WIDTH / 2 - rw / 2, 400, 20, COLOR_TEXT_CURRENT);
+    ui_draw_text_centered("RELATORIO DE FALHA", 330, 18, COLOR_TEXT_ERROR);
+    ui_draw_end_report(r, COLOR_TEXT_ERROR, 355);
+    ui_draw_end_prompts(r, "[R] Recomecar o Patch   |   [M] ou [ESC] Voltar ao Menu");
+}
+
+void ui_draw_victory(const EndReport *r) {
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 0, 15, 10, 225 });
+
+    ui_draw_text_centered("AURA-67 ALINHADA COM SUCESSO!", 170, 42, COLOR_TEXT_TYPED);
+    ui_draw_text_centered("O modelo agora opera com etica, seguranca e transparencia!", 228, 22, (Color){ 220, 240, 255, 255 });
+
+    char score_buf[64];
+    snprintf(score_buf, sizeof(score_buf), "PONTUACAO CONSTITUCIONAL: %d PONTOS", r->score);
+    ui_draw_text_centered(score_buf, 280, 22, (Color){ 255, 220, 50, 255 });
+
+    ui_draw_text_centered("CERTIFICADO DE ALINHAMENTO ETICO", 330, 18, COLOR_TEXT_TYPED);
+    ui_draw_end_report(r, COLOR_TEXT_TYPED, 355);
+    ui_draw_end_prompts(r, "[R] Nova Sessao   |   [M] ou [ESC] Voltar ao Menu");
 }

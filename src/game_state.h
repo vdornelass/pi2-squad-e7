@@ -23,6 +23,10 @@ typedef struct {
     int difficulty;
     int score;
 
+    /* Consistencia visual das telas finais (PI2-252 - Matheus Chaves) */
+    float session_time;      /* Tempo de sessao do combate, em segundos */
+    float end_screen_lock;   /* Ignora teclas logo ao entrar na Vitoria/Game Over */
+
     Player player;
     Boss boss;
     BulletManager bullet_mgr;

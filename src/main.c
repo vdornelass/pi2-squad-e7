@@ -19,7 +19,39 @@
  * Integracao de Pontuacao e Alinhamento Etico (PI2-90 - Caio Brayner)
  * Integracao de Persistencia, Ranking e Audio em C (PI2-175 / PI2-181 / PI2-214)
  * ========================================================================= */
+/* =========================================================================
+ * Consistencia visual e de interacao (PI2-252 - Matheus Chaves)
+ * ========================================================================= */
+#define END_SCREEN_LOCK_TIME 1.0f   /* trava de teclas ao entrar na tela final */
+#define FADE_TIME 0.25f             /* duracao do fade entre telas */
+
+static int g_end_rank_pos = 0;      /* posicao projetada no ranking */
+
+static int ranking_projected_position(int score) {
+    RankingEntry entries[MAX_RANKING_ENTRIES];
+    int count = ranking_load(entries, MAX_RANKING_ENTRIES);
+    int pos = 1;
+    for (int i = 0; i < count; i++) {
+        if (entries[i].score > score) pos++;
+    }
+    return (pos <= MAX_RANKING_ENTRIES) ? pos : 0;
+}
+
+/* Entra na Vitoria/Game Over: trava as teclas por 1s para que letras da frase
+   (ex.: R de "GARANTIR" ou M de "MODELO") nao pulem a tela final. */
+static void enter_end_state(GameContext *ctx, GameState st) {
+    ctx->state = st;
+    ctx->end_screen_lock = END_SCREEN_LOCK_TIME;
+    g_end_rank_pos = ranking_projected_position(ctx->score);
+    /* Limpa textos e particulas do combate para nao ficarem congelados atras da tela final */
+    for (int i = 0; i < MAX_FLOATING_TEXTS; i++) ctx->ui.texts[i].active = false;
+    for (int i = 0; i < MAX_PARTICLES; i++) ctx->ui.particles[i].active = false;
+    while (GetCharPressed() > 0) { }
+}
+
 static void combat_process_round(GameContext *ctx, float dt) {
+    ctx->session_time += dt;
+
     /* 1. Movimentacao do Jogador */
     player_handle_input(&ctx->player);
     player_update(&ctx->player, dt);
@@ -78,10 +110,10 @@ static void combat_process_round(GameContext *ctx, float dt) {
                 }
 
                 ui_spawn_floating_text(&ctx->ui, rating_txt, ctx->boss.rect.x + ctx->boss.rect.width / 2.0f,
-                                       ctx->boss.rect.y - 30.0f, rating_c, font_sz, 1.2f);
+                                       ctx->boss.rect.y + ctx->boss.rect.height + 20.0f, rating_c, font_sz, 1.2f);
 
                 if (ctx->boss.hp <= 0 || typing_engine_is_finished(&ctx->typing_engine)) {
-                    ctx->state = STATE_VICTORY;
+                    enter_end_state(ctx, STATE_VICTORY);
                     audio_play_victory();
                     save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 1);
                 }
@@ -90,7 +122,7 @@ static void combat_process_round(GameContext *ctx, float dt) {
             } else if (strcmp(res, "ERROR") == 0) {
                 audio_play_key_error();
                 ui_spawn_floating_text(&ctx->ui, "ERRO DE SINTAXE!", SCREEN_WIDTH / 2.0f,
-                                       SCREEN_HEIGHT - 130.0f, (Color){ 255, 60, 60, 255 }, 24, 0.5f);
+                                       SCREEN_HEIGHT - 175.0f, (Color){ 255, 60, 60, 255 }, 24, 0.5f);
             }
         }
         char_pressed = GetCharPressed();
@@ -112,7 +144,7 @@ static void combat_process_round(GameContext *ctx, float dt) {
                 ui_trigger_shake(&ctx->ui, 0.35f, 9.0f);
 
                 if (ctx->boss.hp <= 0 || typing_engine_is_finished(&ctx->typing_engine)) {
-                    ctx->state = STATE_VICTORY;
+                    enter_end_state(ctx, STATE_VICTORY);
                     audio_play_victory();
                     save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 1);
                 }
@@ -121,7 +153,7 @@ static void combat_process_round(GameContext *ctx, float dt) {
             } else if (strcmp(res, "ERROR") == 0) {
                 audio_play_key_error();
                 ui_spawn_floating_text(&ctx->ui, "ERRO DE SINTAXE!", SCREEN_WIDTH / 2.0f,
-                                       SCREEN_HEIGHT - 130.0f, (Color){ 255, 60, 60, 255 }, 24, 0.5f);
+                                       SCREEN_HEIGHT - 175.0f, (Color){ 255, 60, 60, 255 }, 24, 0.5f);
             }
         }
     }
@@ -132,9 +164,9 @@ static void combat_process_round(GameContext *ctx, float dt) {
 
     if (status_applied != NULL) {
         if (strcmp(status_applied, "BLIND") == 0) {
-            ui_spawn_floating_text(&ctx->ui, "CONTEXT DRIFT!", p_pos.x, p_pos.y - 30.0f, (Color){ 180, 70, 255, 255 }, 26, 1.0f);
+            ui_spawn_floating_text(&ctx->ui, "CONTEXT DRIFT!", p_pos.x, p_pos.y - 90.0f, (Color){ 180, 70, 255, 255 }, 26, 1.0f);
         } else if (strcmp(status_applied, "CONFUSE") == 0) {
-            ui_spawn_floating_text(&ctx->ui, "PROMPT INJECTION!", p_pos.x, p_pos.y - 30.0f, (Color){ 255, 0, 180, 255 }, 26, 1.0f);
+            ui_spawn_floating_text(&ctx->ui, "PROMPT INJECTION!", p_pos.x, p_pos.y - 90.0f, (Color){ 255, 0, 180, 255 }, 26, 1.0f);
         }
     }
 
@@ -142,11 +174,11 @@ static void combat_process_round(GameContext *ctx, float dt) {
         audio_play_player_hit();
         ui_spawn_particle_burst(&ctx->ui, p_pos.x, p_pos.y, COLOR_PLAYER, 16);
         ui_trigger_shake(&ctx->ui, 0.2f, 6.0f);
-        ui_spawn_floating_text(&ctx->ui, "DANO!", p_pos.x, p_pos.y - 30.0f, (Color){ 255, 60, 60, 255 }, 26, 0.8f);
+        ui_spawn_floating_text(&ctx->ui, "DANO!", p_pos.x, p_pos.y - 60.0f, (Color){ 255, 60, 60, 255 }, 26, 0.8f);
         typing_engine_on_player_hit(&ctx->typing_engine);
 
         if (!ctx->player.is_alive) {
-            ctx->state = STATE_GAME_OVER;
+            enter_end_state(ctx, STATE_GAME_OVER);
             audio_play_game_over();
             save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 0);
         }
@@ -174,6 +206,7 @@ int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "AI Safety");
     ToggleFullscreen();
     SetTargetFPS(TARGET_FPS);
+    SetExitKey(KEY_NULL); /* ESC passa a ser tratado por tela (PI2-252) */
     audio_init();
 
     GameContext ctx;
@@ -181,8 +214,11 @@ int main(void) {
 
     char player_name[MAX_NAME_LEN] = "";
     int letter_count = 0;
+    bool quit_requested = false;
+    GameState prev_state = ctx.state;
+    float fade = 0.0f;
 
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose() && !quit_requested) {
         float dt = GetFrameTime();
         if (dt > 0.05f) dt = 0.05f; /* Clamp dt contra picos de frametime */
 
@@ -219,18 +255,29 @@ int main(void) {
             } else if (IsKeyPressed(KEY_K)) {
                 audio_play_key_ok();
                 ctx.state = STATE_RANKING;
+            } else if (IsKeyPressed(KEY_ESCAPE)) {
+                quit_requested = true;
             }
         } else if (ctx.state == STATE_COMBAT) {
-            combat_process_round(&ctx, dt);
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                /* Pausa a auditoria: a sessao fica salva e pode ser restaurada com [C] */
+                while (GetCharPressed() > 0) { }
+                ctx.state = STATE_MENU;
+            } else {
+                combat_process_round(&ctx, dt);
+            }
         } else if (ctx.state == STATE_GAME_OVER || ctx.state == STATE_VICTORY) {
-            if (IsKeyPressed(KEY_ENTER)) {
+            if (ctx.end_screen_lock > 0.0f) {
+                ctx.end_screen_lock -= dt;
+                while (GetCharPressed() > 0) { }
+            } else if (IsKeyPressed(KEY_ENTER)) {
                 while (GetCharPressed() > 0) { }
                 player_name[0] = '\0';
                 letter_count = 0;
                 ctx.state = STATE_NAME_INPUT;
             } else if (IsKeyPressed(KEY_R)) {
                 game_state_reset_combat(&ctx);
-            } else if (IsKeyPressed(KEY_M)) {
+            } else if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
                 ctx.state = STATE_MENU;
             }
         } else if (ctx.state == STATE_NAME_INPUT) {
@@ -257,11 +304,25 @@ int main(void) {
                 player_name[0] = '\0';
                 letter_count = 0;
                 ctx.state = STATE_RANKING;
+            } else if (IsKeyPressed(KEY_ESCAPE)) {
+                /* Cancela o registro e volta ao menu */
+                player_name[0] = '\0';
+                letter_count = 0;
+                ctx.state = STATE_MENU;
             }
         } else if (ctx.state == STATE_RANKING) {
             if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
                 ctx.state = STATE_MENU;
             }
+        }
+
+        /* Transicao suave: fade curto a cada troca de tela (PI2-252) */
+        if (ctx.state != prev_state) {
+            fade = 1.0f;
+            prev_state = ctx.state;
+        } else if (fade > 0.0f) {
+            fade -= dt / FADE_TIME;
+            if (fade < 0.0f) fade = 0.0f;
         }
 
         /* --- RENDER --- */
@@ -302,10 +363,10 @@ int main(void) {
             DrawText(TextFormat("[%c] [2] MODO DIFICIL (Anomalias Agressivas)", (ctx.difficulty == DIFFICULTY_HARD) ? '*' : ' '), start_x + 20, start_y + 240, 20, color_hard);
 
             /* Prompt de Acao */
-            DrawText("Pressione [ESPACO] ou [ENTER] para INICIAR CONEXAO", start_x, start_y + 360, 20, COLOR_TEXT_CURRENT);
+            DrawText("Pressione [ESPACO] ou [ENTER] para INICIAR CONEXAO", start_x, start_y + 300, 20, COLOR_TEXT_CURRENT);
 
-            /* Modulos Adicionais / Saves */
-            int module_y = start_y + 450;
+            /* Modulos Adicionais / Saves (bloco compacto para caber em 720p com o save) */
+            int module_y = start_y + 350;
             if (save_exists()) {
                 DrawText("> CACHE DE SESSAO ANTERIOR ENCONTRADO NO SISTEMA", start_x, module_y, 20, LIGHTGRAY);
                 DrawText("[C] RESTAURAR SESSAO SALVA", start_x + 20, module_y + 30, 20, GREEN);
@@ -313,42 +374,61 @@ int main(void) {
             }
 
             DrawText("[K] EXECUTAR MODULO DE RANKING E ESTATISTICAS", start_x, module_y, 20, LIGHTGRAY);
+            DrawText("[ESC] ENCERRAR TERMINAL (SAIR DO JOGO)", start_x, module_y + 35, 20, COLOR_TEXT_UNTYPED);
 
         } else if (ctx.state == STATE_RANKING) {
             ClearBackground(COLOR_BG);
-            DrawText("=== RANKING DE ALINHAMENTO (TOP 10) ===", SCREEN_WIDTH / 2 - 250, 50, 26, GOLD);
+            ui_draw_text_centered("=== RANKING DE ALINHAMENTO (TOP 10) ===", 50, 26, GOLD);
 
             RankingEntry entries[MAX_RANKING_ENTRIES];
             int count = ranking_load(entries, MAX_RANKING_ENTRIES);
 
+            /* Tabela em colunas fixas e centralizada (PI2-252) */
+            const int table_w = 480;
+            const int col_pos = SCREEN_WIDTH / 2 - table_w / 2;
+            const int col_name = col_pos + 52;
+            const int col_pts_right = col_pos + table_w;
             for (int i = 0; i < count; i++) {
                 Color row_c = (i == 0) ? GOLD : ((i < 3) ? GREEN : RAYWHITE);
-                DrawText(TextFormat("%02d. %-15s - %06d PTS", i + 1, entries[i].name, entries[i].score),
-                         SCREEN_WIDTH / 2 - 190, 105 + (i * 32), 20, row_c);
+                int row_y = 105 + (i * 32);
+                DrawText(TextFormat("%02d.", i + 1), col_pos, row_y, 20, row_c);
+                DrawText(entries[i].name, col_name, row_y, 20, row_c);
+                const char *pts = TextFormat("%06d PTS", entries[i].score);
+                DrawText(pts, col_pts_right - MeasureText(pts, 20), row_y, 20, row_c);
             }
 
             if (count == 0) {
-                DrawText("NENHUMA PONTUACAO REGISTRADA", SCREEN_WIDTH / 2 - 170, 200, 20, GRAY);
+                ui_draw_text_centered("NENHUMA PONTUACAO REGISTRADA", 200, 20, COLOR_TEXT_UNTYPED);
             }
 
             /* Estatisticas agregadas das partidas (PI2-177) */
             MatchStats stats;
             ranking_compute_stats(&stats);
-            DrawRectangle(SCREEN_WIDTH / 2 - 310, SCREEN_HEIGHT - 185, 620, 75, (Color){ 20, 24, 38, 255 });
-            DrawRectangleLines(SCREEN_WIDTH / 2 - 310, SCREEN_HEIGHT - 185, 620, 75, COLOR_TYPING_BORDER);
-            DrawText("ESTATISTICAS GERAIS DE AUDITORIA:", SCREEN_WIDTH / 2 - 290, SCREEN_HEIGHT - 175, 16, COLOR_PLAYER);
-            DrawText(TextFormat("Partidas: %d  |  Vitorias: %d (%d%%)  |  Precisao Media: %d%%  |  Recorde: %d",
-                                stats.total_matches, stats.victories, stats.win_rate_pct,
-                                stats.avg_accuracy_pct, stats.highest_score),
-                     SCREEN_WIDTH / 2 - 290, SCREEN_HEIGHT - 145, 16, RAYWHITE);
+            const int box_w = 760;
+            DrawRectangle(SCREEN_WIDTH / 2 - box_w / 2, SCREEN_HEIGHT - 185, box_w, 75, (Color){ 20, 24, 38, 255 });
+            DrawRectangleLines(SCREEN_WIDTH / 2 - box_w / 2, SCREEN_HEIGHT - 185, box_w, 75, COLOR_TYPING_BORDER);
+            ui_draw_text_centered("ESTATISTICAS GERAIS DE AUDITORIA:", SCREEN_HEIGHT - 173, 16, COLOR_PLAYER);
+            ui_draw_text_centered(TextFormat("Partidas: %d  |  Vitorias: %d (%d%%)  |  Precisao Media: %d%%  |  Recorde: %d",
+                                             stats.total_matches, stats.victories, stats.win_rate_pct,
+                                             stats.avg_accuracy_pct, stats.highest_score),
+                                  SCREEN_HEIGHT - 143, 16, RAYWHITE);
 
-            DrawText("Pressione [M] para voltar ao menu", SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT - 75, 20, GRAY);
+            ui_draw_text_centered("Pressione [M] ou [ESC] para voltar ao menu", SCREEN_HEIGHT - 75, 20, COLOR_TEXT_UNTYPED);
         } else if (ctx.state == STATE_NAME_INPUT) {
             ClearBackground(COLOR_BG);
-            DrawText("DIGITE SEU NOME PARA O RANKING:", SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2 - 60, 20, RAYWHITE);
+            ui_draw_text_centered("DIGITE SEU NOME PARA O RANKING:", SCREEN_HEIGHT / 2 - 60, 20, RAYWHITE);
+            DrawRectangle(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 20, 300, 40, COLOR_TYPING_BG);
             DrawRectangleLines(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 20, 300, 40, RAYWHITE);
             DrawText(player_name, SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 10, 20, GREEN);
-            DrawText("Pressione [ENTER] para confirmar", SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 + 40, 18, GRAY);
+            /* Cursor piscando no fim do texto */
+            if (((int)(GetTime() * 2.0)) % 2 == 0 && letter_count < MAX_NAME_LEN - 1) {
+                int cx = SCREEN_WIDTH / 2 - 140 + MeasureText(player_name, 20) + 2;
+                DrawText("_", cx, SCREEN_HEIGHT / 2 - 10, 20, GREEN);
+            }
+            const char *counter = TextFormat("%d/%d", letter_count, MAX_NAME_LEN - 1);
+            DrawText(counter, SCREEN_WIDTH / 2 + 150 - MeasureText(counter, 16), SCREEN_HEIGHT / 2 + 26, 16,
+                     (letter_count >= MAX_NAME_LEN - 1) ? COLOR_TEXT_CURRENT : COLOR_TEXT_UNTYPED);
+            ui_draw_text_centered("[ENTER] Confirmar   |   [ESC] Cancelar", SCREEN_HEIGHT / 2 + 56, 18, COLOR_TEXT_UNTYPED);
         } else {
             /* Aplica shake nas entidades de jogo */
             Camera2D camera = { 0 };
@@ -370,15 +450,29 @@ int main(void) {
             ui_draw_boss_hp(&ctx.boss);
             ui_draw_player_hp(&ctx.player);
             ui_draw_hud_stats(ctx.score, ctx.boss.alignment_pct);
-            ui_draw_typing_box(&ctx.typing_engine);
-
-            if (ctx.state == STATE_GAME_OVER) {
-                ui_draw_game_over(ctx.score);
-                DrawText("Pressione [ENTER] para registrar pontuacao no Ranking", SCREEN_WIDTH / 2 - 260, SCREEN_HEIGHT - 100, 20, YELLOW);
-            } else if (ctx.state == STATE_VICTORY) {
-                ui_draw_victory(ctx.score);
-                DrawText("Pressione [ENTER] para registrar pontuacao no Ranking", SCREEN_WIDTH / 2 - 260, SCREEN_HEIGHT - 100, 20, GREEN);
+            if (ctx.state == STATE_COMBAT) {
+                ui_draw_typing_box(&ctx.typing_engine);
+            } else {
+                /* Relatorio das telas finais (PI2-252 / issue #8) */
+                int done = ctx.typing_engine.phrase_index;
+                if (done > ctx.typing_engine.phrase_count) done = ctx.typing_engine.phrase_count;
+                EndReport report = {
+                    .score = ctx.score,
+                    .accuracy_pct = typing_engine_get_accuracy(&ctx.typing_engine),
+                    .session_time = ctx.session_time,
+                    .patches_done = done,
+                    .patches_total = ctx.typing_engine.phrase_count,
+                    .phase = boss_get_phase(&ctx.boss),
+                    .rank_pos = g_end_rank_pos,
+                    .input_ready = (ctx.end_screen_lock <= 0.0f)
+                };
+                if (ctx.state == STATE_GAME_OVER) ui_draw_game_over(&report);
+                else ui_draw_victory(&report);
             }
+        }
+
+        if (fade > 0.0f) {
+            DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 0, 0, 0, (unsigned char)(fade * 200) });
         }
 
         EndDrawing();

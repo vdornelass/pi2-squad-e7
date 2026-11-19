@@ -134,7 +134,11 @@ void player_draw(const Player *p) {
     /* Indicador textual acima da cabeca quando confuso */
     if (p->confuse_timer > 0.0f) {
         const char *txt = "PROMPT INJECTION! [EIXOS INVERTIDOS]";
-        int w = MeasureText(txt, 14);
-        DrawText(txt, p->rect.x + p->rect.width / 2.0f - w / 2.0f, p->rect.y - 20, 14, COLOR_BULLET_CONFUSE);
+        int w = MeasureText(txt, 16);
+        /* Mantem o aviso inteiro dentro da tela mesmo com o jogador na borda (PI2-252) */
+        int tx = (int)(p->rect.x + p->rect.width / 2.0f) - w / 2;
+        if (tx < 8) tx = 8;
+        if (tx + w > SCREEN_WIDTH - 8) tx = SCREEN_WIDTH - 8 - w;
+        DrawText(txt, tx, (int)p->rect.y - 22, 16, COLOR_BULLET_CONFUSE);
     }
 }
