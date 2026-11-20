@@ -16,7 +16,7 @@ set "CC="
 
 set "SRCS="
 for /f "usebackq tokens=1,* delims==" %%a in (`findstr /b /c:"SRCS =" Makefile`) do set "SRCS=%%b"
-if not defined SRCS set "SRCS=src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c"
+if not defined SRCS set "SRCS=src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c src/report.c"
 
 
 where x86_64-w64-mingw32-gcc >nul 2>nul
@@ -89,4 +89,4 @@ exit /b
 if not exist "%~1\gcc.exe" exit /b
 set "PATH=%~1;%PATH%"
 set "CC=gcc"
-exit /b
+exit /b
