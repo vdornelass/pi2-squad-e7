@@ -1,4 +1,5 @@
 CC = gcc
+WIN_CC ?= x86_64-w64-mingw32-gcc
 CFLAGS = -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc
 TARGET = bin/jogo
 SRCS = src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c
@@ -30,7 +31,7 @@ endif
 
 windows: $(SRCS)
 	@mkdir -p bin
-	x86_64-w64-mingw32-gcc $(CFLAGS) $(SRCS) -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o bin/jogo.exe
+	$(WIN_CC) $(CFLAGS) $(SRCS) -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o bin/jogo.exe
 	@cp lib/raylib.dll bin/ 2>/dev/null || true
 	@echo "Compilacao nativa para Windows (bin/jogo.exe) concluida com sucesso!"
 
