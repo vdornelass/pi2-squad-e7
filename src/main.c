@@ -247,6 +247,7 @@ int main(void)
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "AI Safety");
     ToggleFullscreen();
     SetTargetFPS(TARGET_FPS);
+    ui_load_fonts();      /* Fonte TrueType com acentos (PI2-259) */
     SetExitKey(KEY_NULL); /* ESC passa a ser tratado por tela (PI2-252) */
     audio_init();
 
@@ -502,44 +503,42 @@ int main(void)
             /* Cabecalho de Console Neural */
             DrawRectangle(0, 0, SCREEN_WIDTH, 45, COLOR_TYPING_BG);
             DrawRectangleLines(0, 0, SCREEN_WIDTH, 45, COLOR_ARENA_BORDER);
-            DrawText("AURA-67 KERNEL v2.0", 20, 12, 20, COLOR_PLAYER);
+            ui_draw_text("AURA-67 KERNEL v2.0", 20, 12, 20, COLOR_PLAYER);
 
             /* Variaveis para centralizar o bloco de texto na tela */
             int start_x = GetScreenWidth() / 2 - 250;
             int start_y = GetScreenHeight() / 2 - 200;
 
             /* Linhas de Boot do Terminal */
-            DrawText("> INICIALIZANDO REDE NEURAL...", start_x, start_y + 35, 20, COLOR_TEXT_UNTYPED);
-            DrawText("> DIRETRIZES ETICAS: CORROMPIDAS", start_x, start_y + 65, 20, COLOR_TEXT_ERROR);
-            DrawText("> STATUS DA IA: RISCO CRITICO DE CONVERGENCIA", start_x, start_y + 95, 20, COLOR_TEXT_ERROR);
+            ui_draw_text("> INICIALIZANDO REDE NEURAL...", start_x, start_y + 35, 20, COLOR_TEXT_UNTYPED);
+            ui_draw_text("> DIRETRIZES ÉTICAS: CORROMPIDAS", start_x, start_y + 65, 20, COLOR_TEXT_ERROR);
+            ui_draw_text("> STATUS DA IA: RISCO CRÍTICO DE CONVERGÊNCIA", start_x, start_y + 95, 20, COLOR_TEXT_ERROR);
 
             /* Selecao de Parametros (Dificuldade) */
-            DrawText("=== SELECIONE OS PARAMETROS DA AUDITORIA ===", start_x, start_y + 160, 20, COLOR_PLAYER);
+            ui_draw_text("=== SELECIONE OS PARÂMETROS DA AUDITORIA ===", start_x, start_y + 160, 20, COLOR_PLAYER);
 
             Color color_norm = (ctx.difficulty == DIFFICULTY_NORMAL) ? COLOR_TEXT_TYPED : COLOR_TEXT_UNTYPED;
             Color color_hard = (ctx.difficulty == DIFFICULTY_HARD) ? COLOR_TEXT_TYPED : COLOR_TEXT_UNTYPED;
 
-            DrawText(TextFormat("[%c] [1] MODO NORMAL  (Conformidade Padrao)", (ctx.difficulty == DIFFICULTY_NORMAL) ? '*' : ' '), start_x + 20, start_y + 205, 20, color_norm);
-            DrawText(TextFormat("[%c] [2] MODO DIFICIL (Anomalias Agressivas)", (ctx.difficulty == DIFFICULTY_HARD) ? '*' : ' '), start_x + 20, start_y + 240, 20, color_hard);
+            ui_draw_text(TextFormat("[%c] [1] MODO NORMAL  (Conformidade Padrão)", (ctx.difficulty == DIFFICULTY_NORMAL) ? '*' : ' '), start_x + 20, start_y + 205, 20, color_norm);
+            ui_draw_text(TextFormat("[%c] [2] MODO DIFÍCIL (Anomalias Agressivas)", (ctx.difficulty == DIFFICULTY_HARD) ? '*' : ' '), start_x + 20, start_y + 240, 20, color_hard);
 
             /* Prompt de Acao */
-            DrawText("Pressione [ESPACO] ou [ENTER] para INICIAR CONEXAO", start_x, start_y + 300, 20, COLOR_TEXT_CURRENT);
+            ui_draw_text("Pressione [ESPAÇO] ou [ENTER] para INICIAR CONEXÃO", start_x, start_y + 300, 20, COLOR_TEXT_CURRENT);
 
             /* Modulos Adicionais / Saves (bloco compacto para caber em 720p com o save) */
             int module_y = start_y + 350;
-            if (save_exists())
-            {
-                DrawText("> CACHE DE SESSAO ANTERIOR ENCONTRADO NO SISTEMA", start_x, module_y, 20, LIGHTGRAY);
-                DrawText("[C] RESTAURAR SESSAO SALVA", start_x + 20, module_y + 30, 20, GREEN);
+            if (save_exists()) {
+                ui_draw_text("> CACHE DE SESSÃO ANTERIOR ENCONTRADO NO SISTEMA", start_x, module_y, 20, LIGHTGRAY);
+                ui_draw_text("[C] RESTAURAR SESSÃO SALVA", start_x + 20, module_y + 30, 20, GREEN);
                 module_y += 80;
             }
 
-            DrawText("[K] EXECUTAR MODULO DE RANKING E ESTATISTICAS", start_x, module_y, 20, LIGHTGRAY);
-            DrawText("[T] INICIAR TUTORIAL GUIADO", start_x, module_y + 35, 20, COLOR_PLAYER);
-            DrawText("[ESC] ENCERRAR TERMINAL (SAIR DO JOGO)", start_x, module_y + 70, 20, COLOR_TEXT_UNTYPED);
-        }
-        else if (ctx.state == STATE_RANKING)
-        {
+            ui_draw_text("[K] EXECUTAR MÓDULO DE RANKING E ESTATÍSTICAS", start_x, module_y, 20, LIGHTGRAY);
+            ui_draw_text("[T] INICIAR TUTORIAL GUIADO", start_x, module_y + 35, 20, COLOR_PLAYER);
+            ui_draw_text("[ESC] ENCERRAR TERMINAL (SAIR DO JOGO)", start_x, module_y + 70, 20, COLOR_TEXT_UNTYPED);
+                         
+        } else if (ctx.state == STATE_RANKING) {
             ClearBackground(COLOR_BG);
             ui_draw_text_centered("=== RANKING DE ALINHAMENTO (TOP 10) ===", 50, 26, GOLD);
 
@@ -555,15 +554,14 @@ int main(void)
             {
                 Color row_c = (i == 0) ? GOLD : ((i < 3) ? GREEN : RAYWHITE);
                 int row_y = 105 + (i * 32);
-                DrawText(TextFormat("%02d.", i + 1), col_pos, row_y, 20, row_c);
-                DrawText(entries[i].name, col_name, row_y, 20, row_c);
+                ui_draw_text(TextFormat("%02d.", i + 1), col_pos, row_y, 20, row_c);
+                ui_draw_text(entries[i].name, col_name, row_y, 20, row_c);
                 const char *pts = TextFormat("%06d PTS", entries[i].score);
-                DrawText(pts, col_pts_right - MeasureText(pts, 20), row_y, 20, row_c);
+                ui_draw_text(pts, col_pts_right - ui_measure_text(pts, 20), row_y, 20, row_c);
             }
 
-            if (count == 0)
-            {
-                ui_draw_text_centered("NENHUMA PONTUACAO REGISTRADA", 200, 20, COLOR_TEXT_UNTYPED);
+            if (count == 0) {
+                ui_draw_text_centered("NENHUMA PONTUAÇÃO REGISTRADA", 200, 20, COLOR_TEXT_UNTYPED);
             }
 
             /* Estatisticas agregadas das partidas (PI2-177) */
@@ -572,8 +570,8 @@ int main(void)
             const int box_w = 760;
             DrawRectangle(SCREEN_WIDTH / 2 - box_w / 2, SCREEN_HEIGHT - 185, box_w, 75, (Color){20, 24, 38, 255});
             DrawRectangleLines(SCREEN_WIDTH / 2 - box_w / 2, SCREEN_HEIGHT - 185, box_w, 75, COLOR_TYPING_BORDER);
-            ui_draw_text_centered("ESTATISTICAS GERAIS DE AUDITORIA:", SCREEN_HEIGHT - 173, 16, COLOR_PLAYER);
-            ui_draw_text_centered(TextFormat("Partidas: %d  |  Vitorias: %d (%d%%)  |  Precisao Media: %d%%  |  Recorde: %d",
+            ui_draw_text_centered("ESTATÍSTICAS GERAIS DE AUDITORIA:", SCREEN_HEIGHT - 173, 16, COLOR_PLAYER);
+            ui_draw_text_centered(TextFormat("Partidas: %d  |  Vitórias: %d (%d%%)  |  Precisão Média: %d%%  |  Recorde: %d",
                                              stats.total_matches, stats.victories, stats.win_rate_pct,
                                              stats.avg_accuracy_pct, stats.highest_score),
                                   SCREEN_HEIGHT - 143, 16, RAYWHITE);
@@ -586,15 +584,14 @@ int main(void)
             ui_draw_text_centered("DIGITE SEU NOME PARA O RANKING:", SCREEN_HEIGHT / 2 - 60, 20, RAYWHITE);
             DrawRectangle(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 20, 300, 40, COLOR_TYPING_BG);
             DrawRectangleLines(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 20, 300, 40, RAYWHITE);
-            DrawText(player_name, SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 10, 20, GREEN);
+            ui_draw_text(player_name, SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 10, 20, GREEN);
             /* Cursor piscando no fim do texto */
-            if (((int)(GetTime() * 2.0)) % 2 == 0 && letter_count < MAX_NAME_LEN - 1)
-            {
-                int cx = SCREEN_WIDTH / 2 - 140 + MeasureText(player_name, 20) + 2;
-                DrawText("_", cx, SCREEN_HEIGHT / 2 - 10, 20, GREEN);
+            if (((int)(GetTime() * 2.0)) % 2 == 0 && letter_count < MAX_NAME_LEN - 1) {
+                int cx = SCREEN_WIDTH / 2 - 140 + ui_measure_text(player_name, 20) + 2;
+                ui_draw_text("_", cx, SCREEN_HEIGHT / 2 - 10, 20, GREEN);
             }
             const char *counter = TextFormat("%d/%d", letter_count, MAX_NAME_LEN - 1);
-            DrawText(counter, SCREEN_WIDTH / 2 + 150 - MeasureText(counter, 16), SCREEN_HEIGHT / 2 + 26, 16,
+            ui_draw_text(counter, SCREEN_WIDTH / 2 + 150 - ui_measure_text(counter, 16), SCREEN_HEIGHT / 2 + 26, 16,
                      (letter_count >= MAX_NAME_LEN - 1) ? COLOR_TEXT_CURRENT : COLOR_TEXT_UNTYPED);
             ui_draw_text_centered("[ENTER] Confirmar   |   [ESC] Cancelar", SCREEN_HEIGHT / 2 + 56, 18, COLOR_TEXT_UNTYPED);
                     } else if (ctx.state == STATE_CERTIFICATE) {
@@ -656,6 +653,7 @@ int main(void)
     }
 
     audio_close();
+    ui_unload_fonts();
     CloseWindow();
     return 0;
 }

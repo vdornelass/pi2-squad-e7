@@ -7,6 +7,8 @@ Os casos abaixo cobrem as cinco histórias da Sprint 03: **US16, US17, US18, US1
 Card de referência: [PI2-237](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-237) · subtarefas [PI2-238](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-238) e [PI2-239](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-239)
 
 > **Status:** 1ª rodada de testes em **19/11/2026**, na branch `main` (commit `2a82daa`). As histórias que ainda não estão na `main` (US16, US17 e US20) ficaram como **Não testado** e serão testadas numa 2ª rodada, assim que forem integradas.
+>
+> **Atualização 20/11:** a US19 (áudio) foi testada com a versão Windows (`bin/jogo.exe`, commit `ef37f30`) no computador do Caio Brayner, porque na máquina de teste o jogo roda sem som (ver observação da US19).
 
 ## Resumo dos resultados (1ª rodada, 19/11)
 
@@ -15,10 +17,10 @@ Card de referência: [PI2-237](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2
 | US16 | 4 | 0 | 0 | 0 | 4 |
 | US17 | 4 | 0 | 1 | 0 | 3 |
 | US18 | 4 | 3 | 1 | 0 | 0 |
-| US19 | 6 | 0 | 0 | 0 | 6 |
+| US19 | 6 | 5 | 0 | 1 | 0 |
 | US20 | 4 | 0 | 0 | 1 | 3 |
 | Regressão (Issues #2, #7, #8, #9, #10) | 5 | 3 | 1 | 0 | 1 |
-| **Total** | **27** | **6** | **3** | **1** | **17** |
+| **Total** | **27** | **11** | **3** | **2** | **11** |
 
 ## Como executar
 
@@ -37,8 +39,9 @@ Card de referência: [PI2-237](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2
 | Vídeo | Data | Duração | Conteúdo |
 | :-- | :-: | :-: | :-- |
 | [`screencast_testes_sprint03_rodada1.mp4`](./screencast_testes_sprint03_rodada1.mp4) | 19/11 | 1:27 | Ranking → menu → partida completa (dano desligado) → tela de vitória |
+| [`screencast_testes_sprint03_US19_audio.mp4`](./screencast_testes_sprint03_US19_audio.mp4) | 20/11 | 0:37 | US19 **com áudio**, no `bin/jogo.exe` (PC do Caio): digitação, erro, dano, patch concluído e Game Over |
 
-*O vídeo de 19/11 foi gravado **sem áudio**: a faixa de som do arquivo é silêncio total. Os vídeos da 2ª rodada vão ser adicionados nesta tabela.*
+*O vídeo de 19/11 foi gravado **sem áudio** (a faixa de som do arquivo é silêncio total) e foi **acelerado na edição**. Por isso o "Tempo de Sessão" na tela de vitória (02:21) é maior que a duração do vídeo. O vídeo da US19 está em velocidade normal e com o som do jogo.*
 
 ## US16: Identidade Visual e Ícone Personalizado ([PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217))
 
@@ -75,14 +78,14 @@ Card de referência: [PI2-237](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2
 
 | ID | Critério (Jira) | Passos | Resultado esperado | Resultado obtido | Evidência |
 | :-- | :-: | :-- | :-- | :-: | :-: |
-| CT-US19-01 | CA01 | Iniciar a partida e digitar caracteres corretos. | Cada acerto emite um som curto de confirmação. | Não testado | Ambiente sem saída de som (ver observação) |
-| CT-US19-02 | CA02 | Digitar um caractere errado. | Toca um alerta sonoro diferente do som de acerto. | Não testado | Idem |
-| CT-US19-03 | CA02 | Deixar um projétil acertar o jogador. | Toca um som de dano. | Não testado | Idem |
-| CT-US19-04 | CA03 | Concluir uma diretriz completa. | Toca o som de patch concluído (convergência positiva). | Não testado | Idem |
-| CT-US19-05 | Conversation | (a) Vencer a partida. (b) Perder todas as vidas. | (a) Toca o som de vitória. (b) Toca o som de Game Over. | Não testado | Idem |
-| CT-US19-06 | CA04 | Reexecutar CT-US06-01 e CT-US07-05 da Sprint 01. | Os dois passam e a Issue [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) pode ser fechada. | Não testado | Idem. A Issue #3 foi fechada pelo commit `6a8a9d4` ("closes #3") sem reteste |
+| CT-US19-01 | CA01 | Iniciar a partida e digitar caracteres corretos. | Cada acerto emite um som curto de confirmação. | Passou | Vídeo US19 (20/11), `0:00 – 0:17`: um bip agudo e curto a cada letra certa |
+| CT-US19-02 | CA02 | Digitar um caractere errado. | Toca um alerta sonoro diferente do som de acerto. | Passou | Vídeo US19 (20/11), `~0:04`: som grave e descendente, diferente do bip de acerto |
+| CT-US19-03 | CA02 | Deixar um projétil acertar o jogador. | Toca um som de dano. | Passou | Vídeo US19 (20/11), `~0:12 – 0:13`: som grave e áspero quando o projétil acerta e a vida cai |
+| CT-US19-04 | CA03 | Concluir uma diretriz completa. | Toca o som de patch concluído (convergência positiva). | Passou | Vídeo US19 (20/11), `~0:17`: som ascendente ao concluir "CONSTITUICAO DE SEGURANCA ATIVADA" (patch 1/10) |
+| CT-US19-05 | Conversation | (a) Vencer a partida. (b) Perder todas as vidas. | (a) Toca o som de vitória. (b) Toca o som de Game Over. | **Parcial** | Vídeo US19 (20/11), `~0:29 – 0:30`: (b) som de Game Over na tela "FALHA CRITICA DE ALINHAMENTO". (a) A vitória não aparece no vídeo |
+| CT-US19-06 | CA04 | Reexecutar CT-US06-01 e CT-US07-05 da Sprint 01. | Os dois passam e a Issue [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) pode ser fechada. | Passou | Vídeo US19 (20/11): o jogo emite som ao digitar corretamente (CT-US06-01) e ao concluir a frase (CT-US07-05). A Issue #3 continua fechada, agora com reteste |
 
-**Observação (ambiente):** no teste de 19/11 o jogo rodou pelo WSL (o `jogar.bat` também caiu no WSL, porque a máquina de teste não tem o compilador `x86_64-w64-mingw32-gcc` para gerar o `bin/jogo.exe`). O log da Raylib mostra `AUDIO: Device initialized successfully` com `Backend: miniaudio / Null`, ou seja, o WSL não tem dispositivo de som e o áudio é descartado. Por isso a US19 não pôde ser validada nesse ambiente. Os casos serão executados na versão Windows nativa (`bin/jogo.exe`) na 2ª rodada.
+**Observação (ambiente):** na máquina de teste (Larissa), o jogo rodou pelo WSL, e o `jogar.bat` também caiu no WSL. O log da Raylib mostra `AUDIO: Device initialized successfully` com `Backend: miniaudio / Null`: o WSL não tem dispositivo de som e o áudio é descartado. A versão Windows (`bin/jogo.exe`) foi bloqueada pelo Controle de Aplicativo do Windows nessa máquina, por não ter assinatura digital. Por isso o teste da US19 foi feito no computador do Caio Brayner, com o `bin/jogo.exe`, e o som foi conferido ouvindo o vídeo.
 
 ## US20: Relatório de Auditoria e Certificado ([PI2-246](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-246))
 
@@ -106,6 +109,6 @@ Card de referência: [PI2-237](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2
 ## Falhas registradas no Issue Tracker
 
 * **Corrigidas e retestadas na 1ª rodada:** [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) (W/A/S/D), [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7) (contador 11/10) e [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) (relatório da vitória).
-* **Aguardando reteste:** [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (sem som). Foi fechada pelo commit `6a8a9d4`, mas ainda não foi retestada: o ambiente WSL não tem saída de som (ver observação da US19).
-* **Nova:** [US18] Textos sem acento: fonte não suporta caracteres do português (CT-US18-03).
+* **Retestada em 20/11:** [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (sem som). Foi fechada pelo commit `6a8a9d4` e passou no reteste com o `bin/jogo.exe` (CT-US19-01 a CT-US19-06). No WSL o jogo continua sem som, por limitação do ambiente.
+* **Nova:** [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12) [US18] Textos sem acento: fonte não suporta caracteres do português (CT-US18-03).
 * **Continuam abertas:** [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) (aviso narrativo na troca de fase) e [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) (Makefile).
