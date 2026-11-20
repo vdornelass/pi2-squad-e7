@@ -512,6 +512,27 @@ Os testes de sistema da Sprint 01 estão em [`docs/casos_de_teste_sprint01.md`](
 
 ## 10. Entrega 04 (FDS): Sprint 02
 
+### 10.1. Implementação e Board (Sprint 02)
+
+No Jira, a Sprint 02 corresponde à sprint **"Week 13 e 14"** (26/10/2026 a 09/11/2026), finalizada pelo Scrum Master Mateus Lacerda.
+
+**Meta da sprint:** *"Concluir 100% das Histórias de Usuário restantes (US12 e US15), aplicar os ajustes de usabilidade e interface (IHC), validar a lógica formal no código em C (LMC) e reexecutar os testes de sistema solucionando as Issues abertas (FDS/PIF)."*
+
+#### Histórias de usuário entregues
+
+| US | Card no Jira | Descrição | Arquivos em C | Testes de sistema |
+| :---: | :---: | :--- | :--- | :---: |
+| **US12** | [PI2-78](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-78) | Barra de Alinhamento Ético e mudança de comportamento da AURA-67 por fase | `src/boss.c`, `src/ui.c` (`ui_draw_boss_hp`, `ui_draw_hud_stats`) | 6 CTs: 3 passaram, 2 falharam, 1 não testado ([seção 10.3](#103-qualidade-e-testes)) |
+| **US15** | [PI2-81](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-81) | Condição de sucesso (AURA-67 alinhada) e relatório de auditoria | `src/ui.c` (`ui_draw_victory`), `src/ranking.c`, `src/main.c` | 6 CTs: 3 passaram, 3 parciais ([seção 10.3](#103-qualidade-e-testes)) |
+
+#### Relatório da sprint no Jira
+
+* **Concluídos (8 itens):** as histórias US12 ([PI2-78](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-78)) e US15 ([PI2-81](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-81)), as entregas semanais [PI2-32](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-32) (W13-Testes, FDS) e [PI2-33](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-33) (W15-Versão final, PIF), e os cards dos critérios da Entrega 04: [PI2-223](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-223) (Implementação), [PI2-224](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-224) (Qualidade e testes), [PI2-229](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-229) (Produto em produção) e [PI2-230](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-230) (Processo).
+* **Não completados (2 itens):** [PI2-30](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-30) (W13-Ajustes, IHC) e [PI2-31](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-31) (Validação lógica, LMC), que seguiram para a sprint seguinte.
+* **Removidos e replanejados (4 itens):** US16 ([PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217)), US17 ([PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218)), US18 ([PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219)) e US19 ([PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220)) saíram da Sprint 02 e foram replanejadas para a Sprint 03 ("Week 15 e 16").
+
+![Relatório da Sprint 02 no Jira](./docs/img/print_sprint02_relatorio.png)
+
 ### 10.3. Qualidade e testes
 
 Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](./docs/casos_de_teste_sprint02.md): 12 casos de teste das histórias **US12** e **US15**, escritos a partir dos critérios de confirmação de cada card do Jira, mais 1 reteste de regressão da Sprint 01.
