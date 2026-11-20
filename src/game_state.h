@@ -14,7 +14,8 @@ typedef enum {
     STATE_GAME_OVER,
     STATE_VICTORY,
     STATE_NAME_INPUT,
-    STATE_RANKING
+    STATE_RANKING,
+    STATE_CERTIFICATE
 } GameState;
 
 /* Contexto central: agrupa todos os modulos do jogo (PI2-178 - Caio Brayner) */
