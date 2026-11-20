@@ -8,6 +8,7 @@ void game_state_init(GameContext *ctx) {
     ctx->end_screen_lock = 0.0f;
 
     player_init(&ctx->player, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 200.0f);
+    tutorial_init(&ctx->tutorial);
     boss_init(&ctx->boss, SCREEN_WIDTH / 2.0f, 130.0f, ctx->difficulty);
     bullet_mgr_init(&ctx->bullet_mgr);
     typing_engine_init(&ctx->typing_engine);
@@ -16,6 +17,7 @@ void game_state_init(GameContext *ctx) {
 
 void game_state_reset_combat(GameContext *ctx) {
     player_init(&ctx->player, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 200.0f);
+    tutorial_init(&ctx->tutorial);
     boss_init(&ctx->boss, SCREEN_WIDTH / 2.0f, 130.0f, ctx->difficulty);
     bullet_mgr_clear(&ctx->bullet_mgr);
     typing_engine_reset(&ctx->typing_engine);
