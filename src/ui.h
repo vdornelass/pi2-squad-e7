@@ -64,6 +64,13 @@ void ui_draw_hud_stats(int score, int alignment_pct);
 void ui_draw_game_over(const EndReport *r);
 void ui_draw_victory(const EndReport *r);
 
+/* Fonte TrueType com acentos do portugues e fallback seguro (PI2-259) */
+void ui_load_fonts(void);
+void ui_unload_fonts(void);
+bool ui_font_is_custom(void);
+void ui_draw_text(const char *txt, int x, int y, int size, Color color);
+int  ui_measure_text(const char *txt, int size);
+
 /* Texto centralizado horizontalmente (PI2-252) */
 void ui_draw_text_centered(const char *txt, int y, int font_size, Color color);
 
