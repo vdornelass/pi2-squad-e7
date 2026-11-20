@@ -1,5 +1,80 @@
 #include "ui.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+/* =========================================================================
+ * Fonte TrueType (PI2-259 - Matheus Chaves)
+ * JetBrains Mono (SIL OFL 1.1) com ASCII + Latin-1 (acentos do portugues).
+ * Se o arquivo nao for encontrado, usa a fonte padrao do Raylib (fallback).
+ * ========================================================================= */
+#define UI_FONT_PATH       "assets/fonts/JetBrainsMono-Regular.ttf"
+#define UI_FONT_LOAD_SIZE  64     /* tamanho de rasterizacao (nitidez) */
+#define UI_FONT_SCALE      1.2f   /* a TTF e menor que a fonte padrao no mesmo tamanho: iguala a altura visual */
+#define UI_FONT_Y_SHIFT    0.18f  /* sobe o texto (fracao do tamanho) para alinhar com o layout original */
+
+static Font g_font;
+static bool g_font_loaded = false;   /* g_font foi inicializada */
+static bool g_font_custom = false;   /* g_font e a TTF (e nao o fallback) */
+
+void ui_load_fonts(void) {
+    g_font = GetFontDefault();
+    g_font_loaded = true;
+    g_font_custom = false;
+
+    /* Procura a fonte na raiz do jogo e, se o .exe for aberto de dentro de bin/, uma pasta acima */
+    const char *path = NULL;
+    if (FileExists(UI_FONT_PATH)) path = UI_FONT_PATH;
+    else if (FileExists("../" UI_FONT_PATH)) path = "../" UI_FONT_PATH;
+    if (path == NULL) {
+        TraceLog(LOG_WARNING, "UI: fonte %s nao encontrada, usando fonte padrao", UI_FONT_PATH);
+        return;
+    }
+
+    /* ASCII (32-126) + Latin-1 (160-255): sem essa lista os acentos viram '?' */
+    int count = (126 - 32 + 1) + (255 - 160 + 1);
+    int *codepoints = (int *)malloc((size_t)count * sizeof(int));
+    if (codepoints == NULL) return;
+    int n = 0;
+    for (int c = 32; c <= 126; c++) codepoints[n++] = c;
+    for (int c = 160; c <= 255; c++) codepoints[n++] = c;
+
+    Font f = LoadFontEx(path, UI_FONT_LOAD_SIZE, codepoints, n);
+    free(codepoints);
+    if (f.texture.id == 0 || f.glyphCount == 0) return;   /* falhou: mantem o fallback */
+
+    SetTextureFilter(f.texture, TEXTURE_FILTER_BILINEAR);
+    g_font = f;
+    g_font_custom = true;
+}
+
+void ui_unload_fonts(void) {
+    if (g_font_custom) UnloadFont(g_font);
+    g_font_custom = false;
+    g_font_loaded = false;
+}
+
+bool ui_font_is_custom(void) { return g_font_custom; }
+
+static Font ui_font(void) { return g_font_loaded ? g_font : GetFontDefault(); }
+
+static float ui_font_size(int size) { return g_font_custom ? size * UI_FONT_SCALE : (float)size; }
+
+/* Fallback usa o mesmo espacamento do DrawText original (size/10) */
+static float ui_font_spacing(int size) {
+    if (g_font_custom) return 0.0f;
+    int def = 10;
+    return (float)((size < def ? def : size) / def);
+}
+
+void ui_draw_text(const char *txt, int x, int y, int size, Color color) {
+    float fy = (float)y;
+    if (g_font_custom) fy -= size * UI_FONT_Y_SHIFT;
+    DrawTextEx(ui_font(), txt, (Vector2){ (float)x, fy }, ui_font_size(size), ui_font_spacing(size), color);
+}
+
+int ui_measure_text(const char *txt, int size) {
+    return (int)MeasureTextEx(ui_font(), txt, ui_font_size(size), ui_font_spacing(size)).x;
+}
 #include <string.h>
 #include <math.h>
 
@@ -125,7 +200,7 @@ void ui_draw_boss_hp(const Boss *boss) {
     const char *title = (boss->difficulty == DIFFICULTY_HARD) ? "AURA-67 [AGI DESALINHADA]" : "AURA-67 [DESALINHADA]";
     char title_buf[128];
     snprintf(title_buf, sizeof(title_buf), "%s - FASE %d", title, phase);
-    DrawText(title_buf, bar_x, bar_y - 18, 16, (Color){ 255, 180, 180, 255 });
+    ui_draw_text(title_buf, bar_x, bar_y - 18, 16, (Color){ 255, 180, 180, 255 });
 }
 
 void ui_draw_player_hp(const Player *player) {
@@ -135,7 +210,7 @@ void ui_draw_player_hp(const Player *player) {
     DrawRectangle(start_x - 5, start_y - 4, 185, 28, (Color){ 20, 22, 35, 255 });
     DrawRectangleLines(start_x - 5, start_y - 4, 185, 28, COLOR_TYPING_BORDER);
 
-    DrawText("VIDA:", start_x, start_y + 2, 16, COLOR_PLAYER);
+    ui_draw_text("VIDA:", start_x, start_y + 2, 16, COLOR_PLAYER);
 
     for (int i = 0; i < player->max_hp; i++) {
         int hx = start_x + 55 + i * 24;
@@ -163,17 +238,17 @@ void ui_draw_typing_box(const TypingEngine *te) {
     DrawRectangleLines(box_x, box_y, box_w, box_h, border_c);
 
     /* Prompt Icon >_ */
-    DrawText(">_", box_x + 15, box_y + 20, 22, (Color){ 0, 255, 136, 255 });
+    ui_draw_text(">_", box_x + 15, box_y + 20, 22, (Color){ 0, 255, 136, 255 });
 
     /* Progress Label + Precisao de Patches (US11) */
     char prog_str[96];
     /* Nao exibe "11/10" quando todas as diretrizes foram aplicadas (issue #7) */
     int shown_patch = te->phrase_index + 1;
     if (shown_patch > te->phrase_count) shown_patch = te->phrase_count;
-    snprintf(prog_str, sizeof(prog_str), "PATCH DE ALINHAMENTO %d/%d  |  PRECISAO: %d%%",
+    snprintf(prog_str, sizeof(prog_str), "PATCH DE ALINHAMENTO %d/%d  |  PRECISÃO: %d%%",
              shown_patch, te->phrase_count, typing_engine_get_accuracy(te));
-    int pw = MeasureText(prog_str, 16);
-    DrawText(prog_str, SCREEN_WIDTH / 2 - pw / 2, box_y - 20, 16, (Color){ 160, 175, 210, 255 });
+    int pw = ui_measure_text(prog_str, 16);
+    ui_draw_text(prog_str, SCREEN_WIDTH / 2 - pw / 2, box_y - 20, 16, (Color){ 160, 175, 210, 255 });
 
     const char *phrase = typing_engine_get_current_phrase(te);
     if (!phrase || phrase[0] == '\0') return;
@@ -205,12 +280,12 @@ void ui_draw_typing_box(const TypingEngine *te) {
     }
 
     int font_sz = 20;
-    int tw = MeasureText(typed_buf, font_sz);
-    int cw = MeasureText(current_ch, font_sz);
+    int tw = ui_measure_text(typed_buf, font_sz);
+    int cw = ui_measure_text(current_ch, font_sz);
     if (current_ch[0] == ' ') {
         cw = 22; /* Largura bem visivel para a barra de espaco ativa */
     }
-    int uw = MeasureText(untyped_buf, font_sz);
+    int uw = ui_measure_text(untyped_buf, font_sz);
 
     int total_w = tw + cw + 10 + uw;
     int start_x = box_x + 55 + ((box_w - 70) - total_w) / 2;
@@ -218,7 +293,7 @@ void ui_draw_typing_box(const TypingEngine *te) {
 
     int cur_x = start_x;
     if (tw > 0) {
-        DrawText(typed_buf, cur_x, text_y, font_sz, COLOR_TEXT_TYPED);
+        ui_draw_text(typed_buf, cur_x, text_y, font_sz, COLOR_TEXT_TYPED);
         cur_x += tw;
     }
 
@@ -227,15 +302,15 @@ void ui_draw_typing_box(const TypingEngine *te) {
         DrawRectangle(cur_x, text_y - 2, cw + 8, font_sz + 4, COLOR_TEXT_CURRENT);
         DrawRectangleLines(cur_x, text_y - 2, cw + 8, font_sz + 4, WHITE);
         if (current_ch[0] == ' ') {
-            DrawText("[_]", cur_x + 3, text_y + 1, font_sz - 4, BLACK);
+            ui_draw_text("[_]", cur_x + 3, text_y + 1, font_sz - 4, BLACK);
         } else {
-            DrawText(current_ch, cur_x + 4, text_y, font_sz, BLACK);
+            ui_draw_text(current_ch, cur_x + 4, text_y, font_sz, BLACK);
         }
         cur_x += cw + 10;
     }
 
     if (uw > 0) {
-        DrawText(untyped_buf, cur_x, text_y, font_sz, COLOR_TEXT_UNTYPED);
+        ui_draw_text(untyped_buf, cur_x, text_y, font_sz, COLOR_TEXT_UNTYPED);
     }
 }
 
@@ -246,14 +321,14 @@ void ui_draw_floating_texts(const UIManager *ui) {
         float alpha = ft->life / ft->max_life;
         Color c = ft->color;
         c.a = (unsigned char)(255 * alpha);
-        int w = MeasureText(ft->text, ft->font_size);
+        int w = ui_measure_text(ft->text, ft->font_size);
         /* Mantem o texto inteiro dentro da tela (PI2-252) */
         int x = (int)ft->x - w / 2;
         if (x < 8) x = 8;
         if (x + w > SCREEN_WIDTH - 8) x = SCREEN_WIDTH - 8 - w;
         int y = (int)ft->y;
         if (y < 52) y = 52; /* nao sobe por cima da barra de vida da AURA-67 */
-        DrawText(ft->text, x, y, ft->font_size, c);
+        ui_draw_text(ft->text, x, y, ft->font_size, c);
     }
 }
 
@@ -269,42 +344,42 @@ void ui_draw_menu(int difficulty) {
     ClearBackground(COLOR_BG);
 
     const char *title = "AI SAFETY";
-    int tw = MeasureText(title, 48);
-    DrawText(title, SCREEN_WIDTH / 2 - tw / 2, 85, 48, COLOR_PLAYER);
+    int tw = ui_measure_text(title, 48);
+    ui_draw_text(title, SCREEN_WIDTH / 2 - tw / 2, 85, 48, COLOR_PLAYER);
 
     const char *sub = "TERMINAL DE ALINHAMENTO: AURA-67";
-    int sw = MeasureText(sub, 22);
-    DrawText(sub, SCREEN_WIDTH / 2 - sw / 2, 145, 22, COLOR_BOSS);
+    int sw = ui_measure_text(sub, 22);
+    ui_draw_text(sub, SCREEN_WIDTH / 2 - sw / 2, 145, 22, COLOR_BOSS);
 
     bool is_hard = (difficulty == DIFFICULTY_HARD);
-    const char *diff_str = is_hard ? "MODO OPERACIONAL: [ DIFICIL / AGI UNCONSTRAINED ]" : "MODO OPERACIONAL: [ NORMAL / SUPERVISIONADO ]";
+    const char *diff_str = is_hard ? "MODO OPERACIONAL: [ DIFÍCIL / AGI UNCONSTRAINED ]" : "MODO OPERACIONAL: [ NORMAL / SUPERVISIONADO ]";
     Color diff_c = is_hard ? (Color){ 255, 60, 80, 255 } : (Color){ 50, 230, 120, 255 };
-    int dw = MeasureText(diff_str, 20);
-    DrawText(diff_str, SCREEN_WIDTH / 2 - dw / 2, 190, 20, diff_c);
+    int dw = ui_measure_text(diff_str, 20);
+    ui_draw_text(diff_str, SCREEN_WIDTH / 2 - dw / 2, 190, 20, diff_c);
 
     /* Instrucoes */
     const char *lines[] = {
         "CONTROLES & PROTOCOLOS DE ALINHAMENTO:",
-        "* Pressione [1] ou [N]: Modo Normal | Pressione [2] ou [D]: Modo Dificil",
-        "* [WASD] ou [SETAS]: Mover Engenheiro & Desviar dos Projeteis",
-        "* [DIGITACAO NO TECLADO]: Inserir Diretrizes Eticas e Patches de Seguranca",
+        "* Pressione [1] ou [N]: Modo Normal | Pressione [2] ou [D]: Modo Difícil",
+        "* [WASD] ou [SETAS]: Mover Engenheiro & Desviar dos Projéteis",
+        "* [DIGITAÇÃO NO TECLADO]: Inserir Diretrizes Éticas e Patches de Segurança",
         "",
-        "AMEACAS COGNITIVAS DA AURA-67:",
+        "AMEAÇAS COGNITIVAS DA AURA-67:",
         "* Prompt Injections (Eixos Invertidos), Context Drift (?) e Lasers de Sobrecarga!",
-        "* Vortices de Deadlock e Rajadas de Tokens em Alta Velocidade!",
+        "* Vórtices de Deadlock e Rajadas de Tokens em Alta Velocidade!",
         "",
-        "PRESSIONE [ESPACO] OU [ENTER] PARA INICIAR O ALINHAMENTO"
+        "PRESSIONE [ESPAÇO] OU [ENTER] PARA INICIAR O ALINHAMENTO"
     };
 
     int sy = 240;
     for (int i = 0; i < 10; i++) {
         Color c = (Color){ 180, 190, 210, 255 };
-        if (strstr(lines[i], "PRESSIONE [ESPACO]")) c = COLOR_TEXT_CURRENT;
-        else if (strstr(lines[i], "CONTROLES") || strstr(lines[i], "AMEACAS")) c = WHITE;
-        else if (strstr(lines[i], "Dificil") || strstr(lines[i], "Prompt Injections")) c = (Color){ 255, 180, 100, 255 };
+        if (strstr(lines[i], "PRESSIONE [ESPAÇO]")) c = COLOR_TEXT_CURRENT;
+        else if (strstr(lines[i], "CONTROLES") || strstr(lines[i], "AMEAÇAS")) c = WHITE;
+        else if (strstr(lines[i], "Difícil") || strstr(lines[i], "Prompt Injections")) c = (Color){ 255, 180, 100, 255 };
 
-        int lw = MeasureText(lines[i], 16);
-        DrawText(lines[i], SCREEN_WIDTH / 2 - lw / 2, sy, 16, c);
+        int lw = ui_measure_text(lines[i], 16);
+        ui_draw_text(lines[i], SCREEN_WIDTH / 2 - lw / 2, sy, 16, c);
         sy += 26;
     }
 }
@@ -318,13 +393,13 @@ void ui_draw_hud_stats(int score, int alignment_pct) {
     DrawRectangleLines(start_x, start_y - 4, w, 28, COLOR_TYPING_BORDER);
 
     char buf[64];
-    snprintf(buf, sizeof(buf), "PTS: %04d | ETICA: %d%%", score, alignment_pct);
-    DrawText(buf, start_x + 12, start_y + 1, 18, COLOR_TEXT_CURRENT);
+    snprintf(buf, sizeof(buf), "PTS: %04d | ÉTICA: %d%%", score, alignment_pct);
+    ui_draw_text(buf, start_x + 12, start_y + 1, 18, COLOR_TEXT_CURRENT);
 }
 
 void ui_draw_text_centered(const char *txt, int y, int font_size, Color color) {
-    int w = MeasureText(txt, font_size);
-    DrawText(txt, SCREEN_WIDTH / 2 - w / 2, y, font_size, color);
+    int w = ui_measure_text(txt, font_size);
+    ui_draw_text(txt, SCREEN_WIDTH / 2 - w / 2, y, font_size, color);
 }
 
 /* Relatorio comum das telas finais: precisao, tempo, patches e rank (PI2-252 / issue #8) */
@@ -337,8 +412,8 @@ static void ui_draw_end_report(const EndReport *r, Color panel_border, int y) {
     int mins = (int)r->session_time / 60;
     int secs = (int)r->session_time % 60;
     char l1[96], l2[96], l3[96];
-    snprintf(l1, sizeof(l1), "PRECISAO: %d%%   |   TEMPO DE SESSAO: %02d:%02d", r->accuracy_pct, mins, secs);
-    snprintf(l2, sizeof(l2), "PATCHES APLICADOS: %d/%d   |   FASE ALCANCADA: %d", r->patches_done, r->patches_total, r->phase);
+    snprintf(l1, sizeof(l1), "PRECISÃO: %d%%   |   TEMPO DE SESSÃO: %02d:%02d", r->accuracy_pct, mins, secs);
+    snprintf(l2, sizeof(l2), "PATCHES APLICADOS: %d/%d   |   FASE ALCANÇADA: %d", r->patches_done, r->patches_total, r->phase);
     if (r->rank_pos > 0) snprintf(l3, sizeof(l3), "RANK PROJETADO: #%d DO TOP 10", r->rank_pos);
     else snprintf(l3, sizeof(l3), "RANK PROJETADO: FORA DO TOP 10");
 
@@ -349,39 +424,39 @@ static void ui_draw_end_report(const EndReport *r, Color panel_border, int y) {
 
 static void ui_draw_end_prompts(const EndReport *r, const char *restart_txt) {
     if (!r->input_ready) {
-        ui_draw_text_centered("Processando relatorio...", 520, 20, (Color){ 160, 175, 210, 255 });
+        ui_draw_text_centered("Processando relatório...", 520, 20, (Color){ 160, 175, 210, 255 });
         return;
     }
-    ui_draw_text_centered("Pressione [ENTER] para registrar pontuacao no Ranking", 520, 20, COLOR_TEXT_TYPED);
+    ui_draw_text_centered("Pressione [ENTER] para registrar pontuação no Ranking", 520, 20, COLOR_TEXT_TYPED);
     ui_draw_text_centered(restart_txt, 556, 20, COLOR_TEXT_CURRENT);
 }
 
 void ui_draw_game_over(const EndReport *r) {
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 10, 0, 0, 225 });
 
-    ui_draw_text_centered("FALHA CRITICA DE ALINHAMENTO!", 170, 42, COLOR_TEXT_ERROR);
+    ui_draw_text_centered("FALHA CRÍTICA DE ALINHAMENTO!", 170, 42, COLOR_TEXT_ERROR);
     ui_draw_text_centered("AURA-67 entrou em singularidade descontrolada...", 228, 22, (Color){ 200, 200, 200, 255 });
 
     char score_buf[64];
-    snprintf(score_buf, sizeof(score_buf), "PONTUACAO FINAL: %d PONTOS", r->score);
+    snprintf(score_buf, sizeof(score_buf), "PONTUAÇÃO FINAL: %d PONTOS", r->score);
     ui_draw_text_centered(score_buf, 280, 22, (Color){ 255, 200, 100, 255 });
 
-    ui_draw_text_centered("RELATORIO DE FALHA", 330, 18, COLOR_TEXT_ERROR);
+    ui_draw_text_centered("RELATÓRIO DE FALHA", 330, 18, COLOR_TEXT_ERROR);
     ui_draw_end_report(r, COLOR_TEXT_ERROR, 355);
-    ui_draw_end_prompts(r, "[R] Recomecar o Patch   |   [M] ou [ESC] Voltar ao Menu");
+    ui_draw_end_prompts(r, "[R] Recomeçar o Patch   |   [M] ou [ESC] Voltar ao Menu");
 }
 
 void ui_draw_victory(const EndReport *r) {
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){ 0, 15, 10, 225 });
 
     ui_draw_text_centered("AURA-67 ALINHADA COM SUCESSO!", 170, 42, COLOR_TEXT_TYPED);
-    ui_draw_text_centered("O modelo agora opera com etica, seguranca e transparencia!", 228, 22, (Color){ 220, 240, 255, 255 });
+    ui_draw_text_centered("O modelo agora opera com ética, segurança e transparência!", 228, 22, (Color){ 220, 240, 255, 255 });
 
     char score_buf[64];
-    snprintf(score_buf, sizeof(score_buf), "PONTUACAO CONSTITUCIONAL: %d PONTOS", r->score);
+    snprintf(score_buf, sizeof(score_buf), "PONTUAÇÃO CONSTITUCIONAL: %d PONTOS", r->score);
     ui_draw_text_centered(score_buf, 280, 22, (Color){ 255, 220, 50, 255 });
 
-    ui_draw_text_centered("CERTIFICADO DE ALINHAMENTO ETICO", 330, 18, COLOR_TEXT_TYPED);
+    ui_draw_text_centered("CERTIFICADO DE ALINHAMENTO ÉTICO", 330, 18, COLOR_TEXT_TYPED);
     ui_draw_end_report(r, COLOR_TEXT_TYPED, 355);
-    ui_draw_end_prompts(r, "[R] Nova Sessao   |   [M] ou [ESC] Voltar ao Menu");
+    ui_draw_end_prompts(r, "[R] Nova Sessão   |   [M] ou [ESC] Voltar ao Menu");
 }
