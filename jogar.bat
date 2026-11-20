@@ -10,10 +10,13 @@ echo ========================================================
 echo.
 
 set "EXE=bin\jogo.exe"
+set "TMP_EXE=bin\jogo.new.exe"
 set "CC="
 
 
-set "SRCS=src\main.c src\player.c src\boss.c src\bullet.c src\typing_engine.c src\ui.c src\save.c src\game_state.c src\ranking.c"
+set "SRCS="
+for /f "usebackq tokens=1,* delims==" %%a in (`findstr /b /c:"SRCS =" Makefile`) do set "SRCS=%%b"
+if not defined SRCS set "SRCS=src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c"
 
 
 where x86_64-w64-mingw32-gcc >nul 2>nul
@@ -29,11 +32,14 @@ if not defined CC goto :tentar_wsl
 
 echo [1/2] Compilador encontrado: %CC%. Compilando...
 if not exist bin mkdir bin
-%CC% -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc %SRCS% -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o "%EXE%"
+if exist "%TMP_EXE%" del /q "%TMP_EXE%"
+%CC% -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc %SRCS% -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o "%TMP_EXE%"
 if errorlevel 1 goto :falha_compilacao
+move /y "%TMP_EXE%" "%EXE%" >nul
 goto :executar
 
 :falha_compilacao
+if exist "%TMP_EXE%" del /q "%TMP_EXE%"
 echo.
 echo [AVISO] A compilacao falhou.
 if exist "%EXE%" (

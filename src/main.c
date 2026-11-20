@@ -8,6 +8,7 @@
 #include "game_state.h"
 #include "ranking.h"
 #include "audio.h"
+#include "report.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -257,6 +258,10 @@ int main(void)
     bool quit_requested = false;
     GameState prev_state = ctx.state;
     float fade = 0.0f;
+        Certificate cert;
+    bool cert_exported = false;
+    bool last_end_victory = false;
+    memset(&cert, 0, sizeof(cert));
 
     while (!WindowShouldClose() && !quit_requested)
     {
@@ -380,6 +385,7 @@ int main(void)
                 }
                 player_name[0] = '\0';
                 letter_count = 0;
+                last_end_victory = (ctx.state == STATE_VICTORY);
                 ctx.state = STATE_NAME_INPUT;
             }
             else if (IsKeyPressed(KEY_R))
@@ -418,7 +424,21 @@ int main(void)
             if (IsKeyPressed(KEY_ENTER))
             {
                 audio_play_patch_complete();
-                ranking_add_score(player_name, ctx.score);
+                                ranking_add_score(player_name, ctx.score);
+
+                if (last_end_victory) {
+                    int done = ctx.typing_engine.phrase_index;
+                    if (done > ctx.typing_engine.phrase_count) done = ctx.typing_engine.phrase_count;
+                    report_build(&cert, player_name, ctx.score,
+                                 typing_engine_get_accuracy(&ctx.typing_engine),
+                                 ctx.session_time, done, ctx.typing_engine.phrase_count,
+                                 boss_get_phase(&ctx.boss), ctx.difficulty,
+                                 ctx.boss.alignment_pct);
+                    cert_exported = report_export(&cert);
+                    ctx.state = STATE_CERTIFICATE;
+                } else {
+                    ctx.state = STATE_RANKING;
+                }
                 player_name[0] = '\0';
                 letter_count = 0;
                 ctx.state = STATE_RANKING;
@@ -435,6 +455,13 @@ int main(void)
         {
             if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE))
             {
+                ctx.state = STATE_MENU;
+            }
+        } else if (ctx.state == STATE_CERTIFICATE) {
+            if (IsKeyPressed(KEY_ENTER)) {
+                audio_play_key_ok();
+                ctx.state = STATE_RANKING;
+            } else if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
                 ctx.state = STATE_MENU;
             }
         }
@@ -570,9 +597,10 @@ int main(void)
             DrawText(counter, SCREEN_WIDTH / 2 + 150 - MeasureText(counter, 16), SCREEN_HEIGHT / 2 + 26, 16,
                      (letter_count >= MAX_NAME_LEN - 1) ? COLOR_TEXT_CURRENT : COLOR_TEXT_UNTYPED);
             ui_draw_text_centered("[ENTER] Confirmar   |   [ESC] Cancelar", SCREEN_HEIGHT / 2 + 56, 18, COLOR_TEXT_UNTYPED);
-        }
-        else
-        {
+                    } else if (ctx.state == STATE_CERTIFICATE) {
+            ClearBackground(COLOR_BG);
+            report_draw_certificate(&cert, cert_exported);
+        } else {
             /* Aplica shake nas entidades de jogo */
             Camera2D camera = {0};
             camera.target = (Vector2){-offset_x, -offset_y};
