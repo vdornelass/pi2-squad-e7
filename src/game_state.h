@@ -7,9 +7,11 @@
 #include "bullet.h"
 #include "typing_engine.h"
 #include "ui.h"
+#include "tutorial.h"
 
 typedef enum {
     STATE_MENU,
+    STATE_TUTORIAL,
     STATE_COMBAT,
     STATE_GAME_OVER,
     STATE_VICTORY,
@@ -29,6 +31,7 @@ typedef struct {
 
     Player player;
     Boss boss;
+    Tutorial turorial;
     BulletManager bullet_mgr;
     TypingEngine typing_engine;
     UIManager ui;
