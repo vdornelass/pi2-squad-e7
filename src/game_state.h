@@ -31,7 +31,7 @@ typedef struct {
 
     Player player;
     Boss boss;
-    Tutorial turorial;
+    Tutorial tutorial;
     BulletManager bullet_mgr;
     TypingEngine typing_engine;
     UIManager ui;

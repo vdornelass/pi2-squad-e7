@@ -1,3 +1,4 @@
+
 #ifndef TUTORIAL_H
 #define TUTORIAL_H
 
@@ -6,49 +7,52 @@
 #include "typing_engine.h"
 #include "ui.h"
 
-/* Modo Tutorial Guiado de AI Safety - atalho [T] no menu (PI2-215 / IHC) */
+/* Modo Tutorial Guiado de AI Safety - atalho [T] no menu */
 
-/* Frase de teste digitada no passo 2 (maiusculas, sem acentos, como as diretrizes) */
 #define TUTORIAL_PHRASE "IA SEGURA PROTEGE AS PESSOAS"
 
 #define TUTORIAL_MAX_ORBS 3
 #define TUTORIAL_ORB_RADIUS 12.0f
 #define TUTORIAL_KEY_COUNT 4
 
-/* Passos do treino, em ordem */
+/* Passos do treino */
 typedef enum {
-    TUTORIAL_STEP_MOVE,  /* Passo 1: movimentacao e esquiva (WASD / setas) */
-    TUTORIAL_STEP_TYPE,  /* Passo 2: digitacao de um patch de teste */
-    TUTORIAL_STEP_DONE   /* Treino concluido: ir ao combate ou voltar ao menu */
+    TUTORIAL_STEP_INTRO,
+    TUTORIAL_STEP_BIAS,
+    TUTORIAL_STEP_JAILBREAK,
+    TUTORIAL_STEP_AGI,
+    TUTORIAL_STEP_MOVE,
+    TUTORIAL_STEP_TYPE,
+    TUTORIAL_STEP_DONE
 } TutorialStep;
 
-/* Esfera de treino: simula um projetil, mas NAO causa dano */
+/* Esfera de treino */
 typedef struct {
     Vector2 pos;
     Vector2 vel;
-    float hit_cooldown;  /* Evita repetir o aviso "SEM DANO" a cada frame */
+    float hit_cooldown;
 } TrainingOrb;
 
-/* Estado completo do tutorial (independente do combate real: nao altera score, save nem ranking) */
+/* Estado completo do tutorial */
 typedef struct {
     TutorialStep step;
-    bool key_used[TUTORIAL_KEY_COUNT];  /* Ordem: W, A, S, D (setas contam igual) */
+    bool key_used[TUTORIAL_KEY_COUNT];
     Player player;
     TypingEngine typing_engine;
     UIManager ui;
     TrainingOrb orbs[TUTORIAL_MAX_ORBS];
 } Tutorial;
 
-/* Zera o tutorial: volta ao passo 1, posiciona jogador e esferas, prepara a frase de teste */
+/* Inicializa o tutorial */
 void tutorial_init(Tutorial *t);
 
-/* Atualiza um frame do tutorial (le o teclado: movimento e digitacao) */
+/* Atualiza o tutorial */
 void tutorial_update(Tutorial *t, float dt);
 
-/* Retorna true quando o jogador concluiu os dois passos */
+/* Verifica se foi concluído */
 bool tutorial_is_complete(const Tutorial *t);
 
-/* Desenha a tela inteira do tutorial (arena, instrucoes, HUD e caixa de digitacao) */
+/* Desenha a tela do tutorial */
 void tutorial_draw(const Tutorial *t);
 
 #endif /* TUTORIAL_H */

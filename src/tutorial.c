@@ -18,7 +18,7 @@ static void drain_char_queue(void) {
 }
 
 void tutorial_init(Tutorial *t) {
-    t->step = TUTORIAL_STEP_MOVE;
+    t->step = TUTORIAL_STEP_INTRO;
     for (int i = 0; i < TUTORIAL_KEY_COUNT; i++) {
         t->key_used[i] = false;
     }
@@ -126,16 +126,40 @@ void tutorial_update(Tutorial *t, float dt) {
     tutorial_update_orbs(t, dt);
     typing_engine_update(&t->typing_engine, dt);
 
-    if (t->step == TUTORIAL_STEP_MOVE) {
+     if (t->step == TUTORIAL_STEP_INTRO) {
+        drain_char_queue();
+        if (IsKeyPressed(KEY_ENTER))
+            t->step = TUTORIAL_STEP_BIAS;
+
+    } else if (t->step == TUTORIAL_STEP_BIAS) {
+        drain_char_queue();
+        if (IsKeyPressed(KEY_ENTER))
+            t->step = TUTORIAL_STEP_JAILBREAK;
+
+    } else if (t->step == TUTORIAL_STEP_JAILBREAK) {
+        drain_char_queue();
+        if (IsKeyPressed(KEY_ENTER))
+            t->step = TUTORIAL_STEP_AGI;
+
+    } else if (t->step == TUTORIAL_STEP_AGI) {
+        drain_char_queue();
+        if (IsKeyPressed(KEY_ENTER))
+            t->step = TUTORIAL_STEP_MOVE;
+
+    } else if (t->step == TUTORIAL_STEP_MOVE) {
         bool all_keys_used = tutorial_track_movement_keys(t);
         drain_char_queue();
+
         if (all_keys_used) {
             t->step = TUTORIAL_STEP_TYPE;
-            ui_spawn_floating_text(&t->ui, "MOVIMENTO DOMINADO!", SCREEN_WIDTH / 2.0f, 280.0f,
-                                   COLOR_TEXT_TYPED, 28, 1.5f);
+            ui_spawn_floating_text(&t->ui, "MOVIMENTO DOMINADO!",
+                SCREEN_WIDTH / 2.0f, 280.0f,
+                COLOR_TEXT_TYPED, 28, 1.5f);
         }
+
     } else if (t->step == TUTORIAL_STEP_TYPE) {
         tutorial_process_typing(t);
+
     } else {
         drain_char_queue();
     }
@@ -172,28 +196,53 @@ static void tutorial_draw_panel(const Tutorial *t) {
     DrawRectangleRec(panel, Fade(COLOR_TYPING_BG, 0.88f));
     DrawRectangleLinesEx(panel, 1.0f, COLOR_TYPING_BORDER);
 
-    if (t->step == TUTORIAL_STEP_MOVE) {
-        draw_text_centered("PASSO 1/2 - ESQUIVA", 102, 22, COLOR_TEXT_CURRENT);
-        draw_text_centered("Mova o engenheiro com [W][A][S][D] ou as SETAS.", 136, 16, RAYWHITE);
-        draw_text_centered("Use cada direcao pelo menos uma vez:", 158, 16, RAYWHITE);
-        tutorial_draw_key_boxes(t, 184);
-        draw_text_centered("As esferas vermelhas simulam projeteis. No treino elas NAO causam dano.", 238, 14,
-                           COLOR_TEXT_UNTYPED);
-    } else if (t->step == TUTORIAL_STEP_TYPE) {
-        draw_text_centered("PASSO 2/2 - DIGITACAO DE PATCH", 102, 22, COLOR_TEXT_CURRENT);
-        draw_text_centered("Digite a frase da caixa abaixo, letra por letra.", 136, 16, RAYWHITE);
-        draw_text_centered("Voce pode se mover enquanto digita, como no combate real.", 160, 16, RAYWHITE);
-        draw_text_centered("Teclas WASD que nao forem a letra atual apenas movem (nao contam erro).", 192, 14,
-                           COLOR_TEXT_UNTYPED);
-        draw_text_centered("Errar aqui NAO tira vida: este e um treino seguro.", 214, 14, COLOR_TEXT_UNTYPED);
-    } else {
-        char buf[64];
-        draw_text_centered("TREINO CONCLUIDO!", 102, 30, COLOR_TEXT_TYPED);
-        snprintf(buf, sizeof(buf), "Precisao no treino: %d%%", typing_engine_get_accuracy(&t->typing_engine));
-        draw_text_centered(buf, 150, 18, RAYWHITE);
-        draw_text_centered("[ENTER] INICIAR COMBATE REAL", 190, 20, COLOR_TEXT_CURRENT);
-        draw_text_centered("[ESC] VOLTAR AO MENU", 222, 20, COLOR_TEXT_UNTYPED);
-    }
+if (t->step == TUTORIAL_STEP_INTRO) {
+    draw_text_centered("BEM-VINDO A AURA-67", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("Voce protege uma inteligencia artificial.", 140, 16, RAYWHITE);
+    draw_text_centered("Sua missao e preservar a seguranca do sistema.", 166, 16, RAYWHITE);
+    draw_text_centered("[ENTER] CONTINUAR", 218, 18, COLOR_TEXT_TYPED);
+
+} else if (t->step == TUTORIAL_STEP_BIAS) {
+    draw_text_centered("FASE 1 - VIES", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("Vieses podem levar a IA a produzir respostas injustas.", 140, 16, RAYWHITE);
+    draw_text_centered("E importante identificar e corrigir esses comportamentos.", 166, 16, RAYWHITE);
+    draw_text_centered("[ENTER] CONTINUAR", 218, 18, COLOR_TEXT_TYPED);
+
+} else if (t->step == TUTORIAL_STEP_JAILBREAK) {
+    draw_text_centered("FASE 2 - JAILBREAKS", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("Sao tentativas de burlar as regras de seguranca da IA.", 140, 16, RAYWHITE);
+    draw_text_centered("Voce deve impedir que essas tentativas tenham sucesso.", 166, 16, RAYWHITE);
+    draw_text_centered("[ENTER] CONTINUAR", 218, 18, COLOR_TEXT_TYPED);
+
+} else if (t->step == TUTORIAL_STEP_AGI) {
+    draw_text_centered("FASE 3 - AGI UNCONSTRAINED", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("Uma AGI sem restricoes adequadas pode apresentar riscos.", 140, 16, RAYWHITE);
+    draw_text_centered("Seguranca e controle devem ser preservados.", 166, 16, RAYWHITE);
+    draw_text_centered("[ENTER] INICIAR TREINAMENTO", 218, 18, COLOR_TEXT_TYPED);
+
+} else if (t->step == TUTORIAL_STEP_MOVE) {
+    draw_text_centered("PASSO 1/2 - ESQUIVA", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("Mova o engenheiro com [W][A][S][D] ou as SETAS.", 136, 16, RAYWHITE);
+    draw_text_centered("Use cada direcao pelo menos uma vez:", 158, 16, RAYWHITE);
+    tutorial_draw_key_boxes(t, 184);
+    draw_text_centered("As esferas vermelhas simulam projeteis. No treino elas NAO causam dano.", 238, 14, COLOR_TEXT_UNTYPED);
+
+} else if (t->step == TUTORIAL_STEP_TYPE) {
+    draw_text_centered("PASSO 2/2 - DIGITACAO DE PATCH", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("Digite a frase da caixa abaixo, letra por letra.", 136, 16, RAYWHITE);
+    draw_text_centered("Voce pode se mover enquanto digita, como no combate real.", 160, 16, RAYWHITE);
+    draw_text_centered("Teclas WASD que nao forem a letra atual apenas movem (nao contam erro).", 192, 14, COLOR_TEXT_UNTYPED);
+    draw_text_centered("Errar aqui NAO tira vida: este e um treino seguro.", 214, 14, COLOR_TEXT_UNTYPED);
+
+} else {
+    char buf[64];
+    draw_text_centered("TREINO CONCLUIDO!", 102, 30, COLOR_TEXT_TYPED);
+    snprintf(buf, sizeof(buf), "Precisao no treino: %d%%", typing_engine_get_accuracy(&t->typing_engine));
+    draw_text_centered(buf, 150, 18, RAYWHITE);
+    draw_text_centered("[ENTER] INICIAR COMBATE REAL", 180, 18, COLOR_TEXT_CURRENT);
+    draw_text_centered("[R] REINICIAR TUTORIAL", 207, 18, COLOR_TEXT_TYPED);
+    draw_text_centered("[ESC] VOLTAR AO MENU", 234, 18, COLOR_TEXT_UNTYPED);
+}
 }
 
 void tutorial_draw(const Tutorial *t) {
