@@ -119,9 +119,6 @@ Este checklist garante o cumprimento integral de **`PI2-256` (Projetos 2 — 24/
 - [x] **Roteiro estruturado em 4 blocos e dividido entre os 8 integrantes** até `22/11` ([este documento](./roteiro_apresentacao_final_pi2.md))
 - [x] **Deck de slides oficial no repositório** cobre os 4 blocos e contém **1 slide por integrante** ([PDF](./apresentacao_final/apresentacao_final_squad_e7.pdf) · [PPTX](./apresentacao_final/apresentacao_final_squad_e7.pptx))
 - [x] **Evidências de Processo organizadas para 24/11 (Peso 4 — Prof. Robson Godoi):** Board do Jira atualizado, 9 sprints rastreadas, Matriz RACI no `README.md`, histórico de commits semanais e `CONTRIBUTING.md` autossuficiente
-- [ ] **Atualização pontual pré-banca no PPTX/PDF (`22/11–23/11`):**
-  1. Atualizar Slide 11 com **11 módulos `.c/.h`** (incluindo `report.c` adicionado em `ef37f30`/`9c9b832`) e contagem final de commits pós-*code freeze*;
-  2. Atualizar Slide 7 caso mencionemos explicitamente a adoção dos *Story Points* nas Sprints 02 e 03 (Sprint `Week 15 e 16` tem `59.0 SP` balanceados);
-  3. Confirmar no Slide 19/20/22 pequenas atualizações do que já entrou na `main` entre `19/11` e `21/11` (remoção dos `*(caioteste).*`, `jogar.bat` portátil, `src/report.c`, fonte TrueType UTF-8).
+- [x] **Slide 11 atualizado no PPTX/PDF (`~2.600 linhas`, `11 módulos .c/.h`, `91 commits`, incluindo `report.c`)**; para revisão final antes do *Code Freeze* (`23/11`), confirmar apenas se o time deseja ajustar o Slide 7 (*Story Points* adotados na U2) e atualizar o total pós-*freeze* nos Slides 17–24.
 - [ ] **Code Freeze do build Windows (`23/11`):** Conferir `make clean && make && make test-lmc` + `.\jogar.bat` rodando liso na máquina de apresentação (incluindo áudio da `US19`).
 - [ ] **Ensaio Geral Cronometrado com os 8 Integrantes (`23/11`):** Rodar simulação completa cronometrada confirmando término em até `14:45` antes das apresentações de **24/11 (Projetos 2)** e **26/11 (FDS)**.
