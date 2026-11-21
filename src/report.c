@@ -20,6 +20,20 @@ static const char *difficulty_name(int difficulty) {
     return (difficulty == DIFFICULTY_HARD) ? "DIFÍCIL" : "NORMAL";
 }
 
+#define REPORT_BODY_MAX 2048
+
+/* Hash djb2 (Dan Bernstein): simples, deterministico e suficiente para
+   detectar alteracoes acidentais ou manuais no certificado. */
+static unsigned long hash_djb2(const char *s, size_t len) {
+    unsigned long h = 5381UL;
+    size_t i;
+    for (i = 0; i < len; i++) {
+        h = ((h << 5) + h) + (unsigned char)s[i];
+        h &= 0xFFFFFFFFUL; /* 32 bits, igual em Linux e Windows */
+    }
+    return h;
+}
+
 static void format_time(float seconds, char *buf, size_t size) {
     int total = (int)(seconds + 0.5f);
     if (total < 0) total = 0;
@@ -29,7 +43,8 @@ static void format_time(float seconds, char *buf, size_t size) {
 void report_build(Certificate *c, const char *player_name, int score,
                   int accuracy_pct, float session_time,
                   int patches_done, int patches_total,
-                  int phase, int difficulty, int alignment_pct) {
+                  int phase, int difficulty, int alignment_pct,
+                  int player_hp, int player_max_hp) {
     char stamp[16];
     time_t now = time(NULL);
     struct tm *lt = localtime(&now);
@@ -45,6 +60,8 @@ void report_build(Certificate *c, const char *player_name, int score,
     c->phase = phase;
     c->difficulty = difficulty;
     c->alignment_pct = alignment_pct;
+    c->player_hp = player_hp;
+    c->player_max_hp = player_max_hp;
 
     if (lt != NULL) {
         strftime(c->issued_at, sizeof(c->issued_at), "%Y-%m-%d %H:%M:%S", lt);
@@ -58,35 +75,83 @@ void report_build(Certificate *c, const char *player_name, int score,
 
 /* ------------------------------------------------------------------ TXT -- */
 
-bool report_export_txt(const Certificate *c, const char *path) {
+/* Monta o corpo do certificado (tudo o que fica antes da linha do hash).
+   O hash e calculado sobre exatamente este texto. */
+static int format_txt_body(const Certificate *c, char *buf, size_t size) {
     char tbuf[16];
-    FILE *f = fopen(path, "w");
+    format_time(c->session_time, tbuf, sizeof(tbuf));
+    return snprintf(buf, size,
+        "==================================================\n"
+        "   CERTIFICADO DE ALINHAMENTO ÉTICO - AURA-67\n"
+        "   AI Safety | CESAR School - Projeto Integrador 2\n"
+        "==================================================\n\n"
+        "Certificado : %s\n"
+        "Emitido em  : %s\n"
+        "Auditor     : %s\n"
+        "Resultado   : VITÓRIA\n\n"
+        "Pontuação             : %06d\n"
+        "Precisão              : %d%%\n"
+        "Tempo de sessão       : %s\n"
+        "Patches aplicados     : %d/%d\n"
+        "Fase final            : %d\n"
+        "Alinhamento           : %d%%\n"
+        "Integridade restante  : %d/%d\n"
+        "Modo                  : %s\n\n"
+        "Classificação: %s\n",
+        c->cert_id, c->issued_at, c->player_name,
+        c->score, c->accuracy_pct, tbuf,
+        c->patches_done, c->patches_total, c->phase, c->alignment_pct,
+        c->player_hp, c->player_max_hp,
+        difficulty_name(c->difficulty), report_rating(c->accuracy_pct));
+}
+
+static unsigned long compute_hash(const Certificate *c) {
+    char body[REPORT_BODY_MAX];
+    int n = format_txt_body(c, body, sizeof(body));
+    if (n < 0) return 0UL;
+    if ((size_t)n >= sizeof(body)) n = (int)sizeof(body) - 1;
+    return hash_djb2(body, (size_t)n);
+}
+
+bool report_export_txt(const Certificate *c, const char *path) {
+    char body[REPORT_BODY_MAX];
+    int n;
+    /* "wb": grava so \n tambem no Windows, para o hash bater com o arquivo */
+    FILE *f = fopen(path, "wb");
     if (f == NULL) return false;
 
-    format_time(c->session_time, tbuf, sizeof(tbuf));
+    n = format_txt_body(c, body, sizeof(body));
+    if (n < 0) n = 0;
+    if ((size_t)n >= sizeof(body)) n = (int)sizeof(body) - 1;
 
-    fprintf(f, "==================================================\n");
-    fprintf(f, "   CERTIFICADO DE ALINHAMENTO ÉTICO - AURA-67\n");
-    fprintf(f, "   AI Safety | CESAR School - Projeto Integrador 2\n");
-    fprintf(f, "==================================================\n\n");
-    fprintf(f, "Certificado : %s\n", c->cert_id);
-    fprintf(f, "Emitido em  : %s\n", c->issued_at);
-    fprintf(f, "Auditor     : %s\n", c->player_name);
-    fprintf(f, "Resultado   : VITÓRIA\n\n");
-    fprintf(f, "Pontuação          : %06d\n", c->score);
-    fprintf(f, "Precisão           : %d%%\n", c->accuracy_pct);
-    fprintf(f, "Tempo de sessão    : %s\n", tbuf);
-    fprintf(f, "Patches aplicados  : %d/%d\n", c->patches_done, c->patches_total);
-    fprintf(f, "Fase final         : %d\n", c->phase);
-    fprintf(f, "Alinhamento        : %d%%\n", c->alignment_pct);
-    fprintf(f, "Modo               : %s\n\n", difficulty_name(c->difficulty));
-    fprintf(f, "Classificação: %s\n", report_rating(c->accuracy_pct));
+    fwrite(body, 1, (size_t)n, f);
+    fprintf(f, REPORT_HASH_LABEL "%08lX\n", hash_djb2(body, (size_t)n));
     fprintf(f, "==================================================\n");
 
     {
         bool ok = (ferror(f) == 0);
         return (fclose(f) == 0) && ok;
     }
+}
+
+int report_verify_txt(const char *path) {
+    char content[REPORT_BODY_MAX + 256];
+    size_t len;
+    char *mark;
+    unsigned long saved = 0UL;
+    FILE *f = fopen(path, "rb");
+    if (f == NULL) return -1;
+
+    len = fread(content, 1, sizeof(content) - 1, f);
+    fclose(f);
+    content[len] = '\0';
+
+    mark = strstr(content, "\n" REPORT_HASH_LABEL);
+    if (mark == NULL) return -1;
+    mark++; /* o \n final faz parte do corpo */
+    if (sscanf(mark + strlen(REPORT_HASH_LABEL), "%lx", &saved) != 1) return -1;
+
+    return (hash_djb2(content, (size_t)(mark - content)) == saved) ? 1 : 0;
 }
 
 /* ----------------------------------------------------------------- JSON -- */
@@ -131,8 +196,11 @@ bool report_export_json(const Certificate *c, const char *path) {
     fprintf(f, "  \"patches_total\": %d,\n", c->patches_total);
     fprintf(f, "  \"fase_final\": %d,\n", c->phase);
     fprintf(f, "  \"alinhamento_pct\": %d,\n", c->alignment_pct);
+    fprintf(f, "  \"integridade_restante\": %d,\n", c->player_hp);
+    fprintf(f, "  \"integridade_maxima\": %d,\n", c->player_max_hp);
     fprintf(f, "  \"dificuldade\": \"%s\",\n", difficulty_name(c->difficulty));
-    fprintf(f, "  \"classificacao\": \"%s\"\n", report_rating(c->accuracy_pct));
+    fprintf(f, "  \"classificacao\": \"%s\",\n", report_rating(c->accuracy_pct));
+    fprintf(f, "  \"hash_integridade\": \"%08lX\"\n", compute_hash(c));
     fprintf(f, "}\n");
 
     {
@@ -181,11 +249,14 @@ void report_draw_certificate(const Certificate *c, bool exported) {
                                      c->patches_done, c->patches_total, c->phase,
                                      difficulty_name(c->difficulty)),
                           box_y + 305, 22, RAYWHITE);
+    ui_draw_text_centered(TextFormat("Integridade restante: %d/%d", c->player_hp, c->player_max_hp),
+                          box_y + 340, 22, RAYWHITE);
 
-    ui_draw_text_centered(report_rating(c->accuracy_pct), box_y + 360, 28, rating_c);
+    ui_draw_text_centered(report_rating(c->accuracy_pct), box_y + 380, 28, rating_c);
 
     ui_draw_text_centered(TextFormat("Emitido em: %s", c->issued_at), box_y + 420, 16, COLOR_TEXT_UNTYPED);
-    ui_draw_text_centered(TextFormat("ID: %s", c->cert_id), box_y + 445, 16, COLOR_TEXT_UNTYPED);
+    ui_draw_text_centered(TextFormat("ID: %s   |   Hash: %08lX", c->cert_id, compute_hash(c)),
+                          box_y + 445, 16, COLOR_TEXT_UNTYPED);
 
     if (exported) {
         ui_draw_text_centered("Relatórios salvos: " REPORT_TXT_FILE "  e  " REPORT_JSON_FILE,
@@ -196,4 +267,4 @@ void report_draw_certificate(const Certificate *c, bool exported) {
     }
 
     ui_draw_text_centered("[ENTER] Ver ranking   |   [M] ou [ESC] Menu", SCREEN_HEIGHT - 60, 20, COLOR_TEXT_UNTYPED);
-}
+}

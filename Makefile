@@ -42,8 +42,13 @@ test-lmc:
 	$(CC) $(CFLAGS) tests/test_logica_lmc.c src/typing_engine.c src/boss.c src/bullet.c src/player.c src/ui.c $(LDFLAGS) -o bin/test_lmc
 	LD_LIBRARY_PATH=lib:$$LD_LIBRARY_PATH ./bin/test_lmc
 
+verificar-certificado:
+	@mkdir -p bin
+	$(CC) $(CFLAGS) tests/verificar_certificado.c src/report.c src/ui.c src/typing_engine.c src/boss.c src/bullet.c src/player.c $(LDFLAGS) -o bin/verificar_certificado
+	LD_LIBRARY_PATH=lib:$$LD_LIBRARY_PATH ./bin/verificar_certificado
+
 clean:
-	rm -f bin/jogo bin/test_lmc bin/*.o bin/*.exe
+	rm -f bin/jogo bin/test_lmc bin/verificar_certificado bin/*.o bin/*.exe
 	@echo "Limpeza concluida."
 
-.PHONY: all run clean windows test-lmc
+.PHONY: all run clean windows test-lmc verificar-certificado

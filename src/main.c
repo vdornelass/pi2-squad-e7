@@ -921,7 +921,8 @@ int main(int argc, char **argv)
                                      typing_engine_get_accuracy(&ctx.typing_engine),
                                      ctx.session_time, done, ctx.typing_engine.phrase_count,
                                      boss_get_phase(&ctx.boss), ctx.difficulty,
-                                     ctx.boss.alignment_pct);
+                                     ctx.boss.alignment_pct,
+                                     ctx.player.hp, ctx.player.max_hp);
                         cert_exported = report_export(&cert);
                         ctx.state = STATE_CERTIFICATE;
                     }
