@@ -35,6 +35,18 @@ typedef struct {
     float shake_intensity;
 } UIManager;
 
+/* Dados exibidos nas telas finais (PI2-252 / issue #8) */
+typedef struct {
+    int score;
+    int accuracy_pct;
+    float session_time;   /* segundos */
+    int patches_done;
+    int patches_total;
+    int phase;            /* fase da AURA-67 ao final */
+    int rank_pos;         /* posicao projetada no ranking (0 = fora do Top 10) */
+    bool input_ready;     /* false durante a trava de teclas */
+} EndReport;
+
 void ui_init(UIManager *ui);
 void ui_trigger_shake(UIManager *ui, float duration, float intensity);
 void ui_spawn_floating_text(UIManager *ui, const char *txt, float x, float y, Color color, int font_size, float lifetime);
@@ -49,7 +61,17 @@ void ui_draw_floating_texts(const UIManager *ui);
 void ui_draw_particles(const UIManager *ui);
 void ui_draw_menu(int difficulty);
 void ui_draw_hud_stats(int score, int alignment_pct);
-void ui_draw_game_over(int score);
-void ui_draw_victory(int score);
+void ui_draw_game_over(const EndReport *r);
+void ui_draw_victory(const EndReport *r);
+
+/* Fonte TrueType com acentos do portugues e fallback seguro (PI2-259) */
+void ui_load_fonts(void);
+void ui_unload_fonts(void);
+bool ui_font_is_custom(void);
+void ui_draw_text(const char *txt, int x, int y, int size, Color color);
+int  ui_measure_text(const char *txt, int size);
+
+/* Texto centralizado horizontalmente (PI2-252) */
+void ui_draw_text_centered(const char *txt, int y, int font_size, Color color);
 
 #endif /* UI_H */

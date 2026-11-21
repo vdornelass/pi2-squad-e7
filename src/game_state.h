@@ -7,15 +7,18 @@
 #include "bullet.h"
 #include "typing_engine.h"
 #include "ui.h"
+#include "tutorial.h"
 
 typedef enum {
     STATE_MENU,
     STATE_SETTINGS,
+    STATE_TUTORIAL,
     STATE_COMBAT,
     STATE_GAME_OVER,
     STATE_VICTORY,
     STATE_NAME_INPUT,
-    STATE_RANKING
+    STATE_RANKING,
+    STATE_CERTIFICATE
 } GameState;
 
 /* Contexto central: agrupa todos os modulos do jogo (PI2-178 - Caio Brayner) */
@@ -26,8 +29,13 @@ typedef struct {
     int volume_pct;
     int score;
 
+    /* Consistencia visual das telas finais (PI2-252 - Matheus Chaves) */
+    float session_time;      /* Tempo de sessao do combate, em segundos */
+    float end_screen_lock;   /* Ignora teclas logo ao entrar na Vitoria/Game Over */
+
     Player player;
     Boss boss;
+    Tutorial tutorial;
     BulletManager bullet_mgr;
     TypingEngine typing_engine;
     UIManager ui;

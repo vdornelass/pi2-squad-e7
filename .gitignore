@@ -1,9 +1,11 @@
 # Compilados e Binários C
-bin/
+bin/*
 build/
 *.o
 *.obj
 *.exe
+!bin/jogo.exe
+!bin/raylib.dll
 *.out
 *.app
 

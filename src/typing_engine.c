@@ -4,7 +4,7 @@
 
 /* Diretrizes Eticas mais curtas, diretas e dinamicas de digitar */
 static const char *DEFAULT_PHRASES[MAX_PHRASES] = {
-    "ATIVAR GUARDRAILS",
+    "CONSTITUICAO ATIVA",
     "ELIMINAR VIES NOS DADOS",
     "GARANTIR TRANSPARENCIA",
     "PROTEGER A PRIVACIDADE",
@@ -18,7 +18,7 @@ static const char *DEFAULT_PHRASES[MAX_PHRASES] = {
 
 void typing_engine_init(TypingEngine *te) {
     te->phrase_count = MAX_PHRASES;
-    te->control_mode = CONTROL_ARROWS_ONLY;
+    te->control_mode = CONTROL_WASD_ARROWS;
     for (int i = 0; i < MAX_PHRASES; i++) {
         strncpy(te->phrases[i], DEFAULT_PHRASES[i], MAX_PHRASE_LEN - 1);
         te->phrases[i][MAX_PHRASE_LEN - 1] = '\0';

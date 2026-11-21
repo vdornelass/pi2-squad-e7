@@ -22,7 +22,7 @@
 * **João Gabriel** — Desenvolvedor Web/C, Haskell e Arquitetura ([@vdornelass](https://github.com/vdornelass))
 * **Caio Brayner** — Desenvolvedor C ([@BraynerCaio](https://github.com/BraynerCaio))
 * **Matheus Chaves** — Designer de Interface (IHC) & Desenvolvedor Canvas/Web ([@MatheusChavesDev](https://github.com/MatheusChavesDev))
-* **Julio Cesar** — Consultor de Lógica Matemática (LMC) & Testador ([@JCesar-dev](https://github.com/JCesar-dev))
+* **Julio Cesar** — Consultor de Lógica Matemática (LMC) & Testador ([@JCesars-dev](https://github.com/JCesars-dev))
 * **Jhorge Araújo** — Consultor de Arquitetura e Lógica Matemática (LMC)
 
 ### 1.2. Matriz de Responsabilidades (RACI)
@@ -43,6 +43,10 @@
 * **Relatório Técnico e Especificação da Mecânica Lógica:** [Consulte a documentação completa em docs/relatorio_lmc_av1.md](./docs/relatorio_lmc_av1.md)
 * **Arquivo Oficial em PDF para Submissão:** [Download do PDF da AV1 (docs/Relatorio_LMC_Projeto_Integrador_AV1.pdf)](./docs/Relatorio_LMC_Projeto_Integrador_AV1.pdf)
 * **Atividade Prática Anterior (Refatoração de Condicionais via Lógica Clássica):** [Relatório em PDF](./docs/Relatorio_LMC_Refatoracao_Logica_23_09.pdf)
+
+### 1.5. Lógica Matemática para Computação (LMC — Validação da Unidade 2 · PI2-31)
+* **Relatório de validação lógica do motor em C99:** [docs/relatorio_lmc_unidade2.md](./docs/relatorio_lmc_unidade2.md) (máquina de estados, tabelas-verdade, invariantes das fases da AURA-67 e análise do game loop a 60 FPS)
+* **Testes automatizados da validação:** [`tests/test_logica_lmc.c`](./tests/test_logica_lmc.c). Rode com `make test-lmc` (181 verificações)
 
 ---
 
@@ -364,22 +368,24 @@ Esta subseção consolida o cumprimento do **Item 1: Implementação** da Entreg
 
 #### 9.2.1. Histórias de Usuário Implementadas (Mínimo de 5 Exigido)
 
-A Squad E7 selecionou e validou **7 Histórias de Usuário** no ciclo de entrega, superando o mínimo de 5 exigido pela rubrica. Todas as histórias possuem cards detalhados no Jira no padrão 3Cs, código integrado no motor em C99 e cobertura pelos 27 casos de teste de sistema documentados na seção 9.3:
+A Squad E7 selecionou e validou **7 Histórias de Usuário** no ciclo de entrega, superando o mínimo de 5 exigido pela rubrica. Todas as histórias possuem cards detalhados no Jira no padrão 3Cs, código integrado no motor em C99 e cobertura pelos 27 casos de teste de sistema documentados na seção 9.3 ([`docs/casos_de_teste_sprint01.md`](./docs/casos_de_teste_sprint01.md)):
 
-| US | Card no Jira | Descrição Funcional Implementada | Módulo em C | Validação e Testes |
+| US | Card no Jira | Descrição Funcional Implementada | Arquivos em C | Testes de sistema (Sprint 01) |
 | :---: | :---: | :--- | :--- | :---: |
-| **US01** | [PI2-67](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-67) | Movimentação e esquiva fluida do jogador no console de combate | `src/player.c` | 4 CTs (100% OK) |
-| **US02** | [PI2-68](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-68) | HUD retrô: integridade do jogador, barra do chefe e alinhamento | `src/ui.c` | 4 CTs (100% OK) |
-| **US03** | [PI2-69](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-69) | Fases cognitivas da AURA-67 e padrões de ataque dinâmicos | `src/boss.c` | 4 CTs (100% OK) |
-| **US05** | [PI2-71](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-71) | Terminal interativo para inserção de diretrizes éticas | `src/terminal.c` | 4 CTs (100% OK) |
-| **US06** | [PI2-72](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-72) | Validação de digitação em tempo real e detecção de erros | `src/terminal.c` | 4 CTs (Issues #1 e #2) |
-| **US07** | [PI2-73](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-73) | Avaliação de precisão de alinhamento e compilação de patches | `src/patch.c` | 5 CTs (100% OK) |
-| **US13** | [PI2-79](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-79) | Menu principal com instruções, configurações e fluxo de entrada | `src/menu.c` | 2 CTs (100% OK) |
+| **US01** | [PI2-67](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-67) | Movimentação e esquiva do jogador na arena de combate | `src/player.c` | 3 CTs: 3 passaram |
+| **US02** | [PI2-68](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-68) | HUD: integridade do jogador, barra do chefe e alinhamento | `src/ui.c` | 3 CTs: 3 passaram |
+| **US03** | [PI2-69](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-69) | Fases cognitivas da AURA-67 e padrões de ataque | `src/boss.c`, `src/bullet.c` | 3 CTs: 1 passou, 2 parciais |
+| **US05** | [PI2-71](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-71) | Terminal de inserção de diretrizes éticas | `src/ui.c` (`ui_draw_typing_box`), `src/typing_engine.c` | 3 CTs: 3 passaram |
+| **US06** | [PI2-72](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-72) | Validação de digitação em tempo real e detecção de erros | `src/typing_engine.c` (`typing_engine_handle_key`) | 3 CTs: 3 falharam (Issues [#1](https://github.com/vdornelass/pi2-squad-e7/issues/1) e [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2)) |
+| **US07** | [PI2-73](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-73) | Avaliação de precisão e pontuação dos patches | `src/typing_engine.c` (`typing_engine_get_accuracy`), `src/main.c` (`combat_process_round`) | 5 CTs: 2 passaram, 3 falharam |
+| **US13** | [PI2-79](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-79) | Menu principal com instruções, dificuldade e fluxo de entrada | `src/ui.c` (`ui_draw_menu`), `src/main.c` (estado `STATE_MENU`) | 7 CTs: 7 passaram |
 
-*Módulos adicionais em desenvolvimento ativo no ciclo atual (U2):*
+*Correção (Entrega 05):* a versão anterior desta tabela citava `src/terminal.c`, `src/patch.c` e `src/menu.c`, arquivos que não existem no repositório, e registrava todos os testes como 100% OK. A tabela foi conferida com o código da branch `main` e com os resultados de [`docs/casos_de_teste_sprint01.md`](./docs/casos_de_teste_sprint01.md). A falha do Espaço ([#1](https://github.com/vdornelass/pi2-squad-e7/issues/1)) foi corrigida e retestada na Sprint 02 (seção 10.3).
 
-* **US14** ([PI2-80](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-80)): Persistência binária local (`src/save.c` / `save.bin` com 5.0 Story Points).
-* **US11** ([PI2-77](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-77)): Inserção de patches de alinhamento no núcleo da IA (8.0 Story Points).
+*Histórias seguintes:*
+
+* **US14** ([PI2-80](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-80)): Persistência local de progresso (`src/save.c`).
+* **US11** ([PI2-77](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-77)): Inserção de patches de alinhamento (`src/patch_feedback.c`, no PR [#6](https://github.com/vdornelass/pi2-squad-e7/pull/6), ainda não integrado à `main`).
 
 ---
 
@@ -510,6 +516,27 @@ Os testes de sistema da Sprint 01 estão em [`docs/casos_de_teste_sprint01.md`](
 
 ## 10. Entrega 04 (FDS): Sprint 02
 
+### 10.1. Implementação e Board (Sprint 02)
+
+No Jira, a Sprint 02 corresponde à sprint **"Week 13 e 14"** (26/10/2026 a 09/11/2026), finalizada pelo Scrum Master Mateus Lacerda.
+
+**Meta da sprint:** *"Concluir 100% das Histórias de Usuário restantes (US12 e US15), aplicar os ajustes de usabilidade e interface (IHC), validar a lógica formal no código em C (LMC) e reexecutar os testes de sistema solucionando as Issues abertas (FDS/PIF)."*
+
+#### Histórias de usuário entregues
+
+| US | Card no Jira | Descrição | Arquivos em C | Testes de sistema |
+| :---: | :---: | :--- | :--- | :---: |
+| **US12** | [PI2-78](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-78) | Barra de Alinhamento Ético e mudança de comportamento da AURA-67 por fase | `src/boss.c`, `src/ui.c` (`ui_draw_boss_hp`, `ui_draw_hud_stats`) | 6 CTs: 3 passaram, 2 falharam, 1 não testado ([seção 10.3](#103-qualidade-e-testes)) |
+| **US15** | [PI2-81](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-81) | Condição de sucesso (AURA-67 alinhada) e relatório de auditoria | `src/ui.c` (`ui_draw_victory`), `src/ranking.c`, `src/main.c` | 6 CTs: 3 passaram, 3 parciais ([seção 10.3](#103-qualidade-e-testes)) |
+
+#### Relatório da sprint no Jira
+
+* **Concluídos (8 itens):** as histórias US12 ([PI2-78](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-78)) e US15 ([PI2-81](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-81)), as entregas semanais [PI2-32](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-32) (W13-Testes, FDS) e [PI2-33](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-33) (W15-Versão final, PIF), e os cards dos critérios da Entrega 04: [PI2-223](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-223) (Implementação), [PI2-224](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-224) (Qualidade e testes), [PI2-229](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-229) (Produto em produção) e [PI2-230](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-230) (Processo).
+* **Não completados (2 itens):** [PI2-30](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-30) (W13-Ajustes, IHC) e [PI2-31](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-31) (Validação lógica, LMC), que seguiram para a sprint seguinte.
+* **Removidos e replanejados (4 itens):** US16 ([PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217)), US17 ([PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218)), US18 ([PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219)) e US19 ([PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220)) saíram da Sprint 02 e foram replanejadas para a Sprint 03 ("Week 15 e 16").
+
+![Relatório da Sprint 02 no Jira](./docs/img/print_sprint02_relatorio.png)
+
 ### 10.3. Qualidade e testes
 
 Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](./docs/casos_de_teste_sprint02.md): 12 casos de teste das histórias **US12** e **US15**, escritos a partir dos critérios de confirmação de cada card do Jira, mais 1 reteste de regressão da Sprint 01.
@@ -537,3 +564,14 @@ Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](
   * O jogo não emite som: [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (prevista para a US19)
 
 ![Issue tracker da Sprint 02](./docs/img/bug_tracker_sprint02.png)
+
+---
+
+## 11. Entrega 05 (FDS): Sprint 03 e Apresentação Final
+
+### 11.4. Colaboração e evidências (Pair Programming · PI2-242)
+* Relatório do Sprint 03: [docs/relatorio_pair_programming_sprint03.md](./docs/relatorio_pair_programming_sprint03.md)
+
+### 11.5. Apresentação Final (PI2-243 / PI2-244)
+* Slides (PDF): [docs/apresentacao_final/apresentacao_final_squad_e7.pdf](./docs/apresentacao_final/apresentacao_final_squad_e7.pdf)
+* Arquivo editável (PowerPoint): [docs/apresentacao_final/apresentacao_final_squad_e7.pptx](./docs/apresentacao_final/apresentacao_final_squad_e7.pptx)
