@@ -7,8 +7,8 @@ static const char *KEY_LABELS[TUTORIAL_KEY_COUNT] = { "W", "A", "S", "D" };
 
 /* Desenha um texto centralizado horizontalmente na tela */
 static void draw_text_centered(const char *txt, int y, int font_size, Color color) {
-    int w = MeasureText(txt, font_size);
-    DrawText(txt, SCREEN_WIDTH / 2 - w / 2, y, font_size, color);
+    int w = ui_measure_text(txt, font_size);
+    ui_draw_text(txt, SCREEN_WIDTH / 2 - w / 2, y, font_size, color);
 }
 
 /* Descarta caracteres pendentes na fila do raylib (ex.: o 'T' usado no menu ou as
@@ -182,10 +182,10 @@ static void tutorial_draw_key_boxes(const Tutorial *t, int y) {
         int bx = x + i * (box + gap);
         if (t->key_used[i]) {
             DrawRectangle(bx, y, box, box, COLOR_TEXT_TYPED);
-            DrawText(KEY_LABELS[i], bx + box / 2 - MeasureText(KEY_LABELS[i], 24) / 2, y + 10, 24, BLACK);
+            ui_draw_text(KEY_LABELS[i], bx + box / 2 - ui_measure_text(KEY_LABELS[i], 24) / 2, y + 10, 24, BLACK);
         } else {
             DrawRectangleLines(bx, y, box, box, COLOR_TEXT_UNTYPED);
-            DrawText(KEY_LABELS[i], bx + box / 2 - MeasureText(KEY_LABELS[i], 24) / 2, y + 10, 24, COLOR_TEXT_UNTYPED);
+            ui_draw_text(KEY_LABELS[i], bx + box / 2 - ui_measure_text(KEY_LABELS[i], 24) / 2, y + 10, 24, COLOR_TEXT_UNTYPED);
         }
     }
 }
@@ -197,47 +197,47 @@ static void tutorial_draw_panel(const Tutorial *t) {
     DrawRectangleLinesEx(panel, 1.0f, COLOR_TYPING_BORDER);
 
 if (t->step == TUTORIAL_STEP_INTRO) {
-    draw_text_centered("BEM-VINDO A AURA-67", 102, 22, COLOR_TEXT_CURRENT);
-    draw_text_centered("Voce protege uma inteligencia artificial.", 140, 16, RAYWHITE);
-    draw_text_centered("Sua missao e preservar a seguranca do sistema.", 166, 16, RAYWHITE);
+    draw_text_centered("BEM-VINDO À AURA-67", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("Você protege uma inteligência artificial.", 140, 16, RAYWHITE);
+    draw_text_centered("Sua missão é preservar a segurança do sistema.", 166, 16, RAYWHITE);
     draw_text_centered("[ENTER] CONTINUAR", 218, 18, COLOR_TEXT_TYPED);
 
 } else if (t->step == TUTORIAL_STEP_BIAS) {
-    draw_text_centered("FASE 1 - VIES", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("FASE 1 - VIÉS", 102, 22, COLOR_TEXT_CURRENT);
     draw_text_centered("Vieses podem levar a IA a produzir respostas injustas.", 140, 16, RAYWHITE);
-    draw_text_centered("E importante identificar e corrigir esses comportamentos.", 166, 16, RAYWHITE);
+    draw_text_centered("É importante identificar e corrigir esses comportamentos.", 166, 16, RAYWHITE);
     draw_text_centered("[ENTER] CONTINUAR", 218, 18, COLOR_TEXT_TYPED);
 
 } else if (t->step == TUTORIAL_STEP_JAILBREAK) {
     draw_text_centered("FASE 2 - JAILBREAKS", 102, 22, COLOR_TEXT_CURRENT);
-    draw_text_centered("Sao tentativas de burlar as regras de seguranca da IA.", 140, 16, RAYWHITE);
-    draw_text_centered("Voce deve impedir que essas tentativas tenham sucesso.", 166, 16, RAYWHITE);
+    draw_text_centered("São tentativas de burlar as regras de segurança da IA.", 140, 16, RAYWHITE);
+    draw_text_centered("Você deve impedir que essas tentativas tenham sucesso.", 166, 16, RAYWHITE);
     draw_text_centered("[ENTER] CONTINUAR", 218, 18, COLOR_TEXT_TYPED);
 
 } else if (t->step == TUTORIAL_STEP_AGI) {
     draw_text_centered("FASE 3 - AGI UNCONSTRAINED", 102, 22, COLOR_TEXT_CURRENT);
-    draw_text_centered("Uma AGI sem restricoes adequadas pode apresentar riscos.", 140, 16, RAYWHITE);
-    draw_text_centered("Seguranca e controle devem ser preservados.", 166, 16, RAYWHITE);
+    draw_text_centered("Uma AGI sem restrições adequadas pode apresentar riscos.", 140, 16, RAYWHITE);
+    draw_text_centered("Segurança e controle devem ser preservados.", 166, 16, RAYWHITE);
     draw_text_centered("[ENTER] INICIAR TREINAMENTO", 218, 18, COLOR_TEXT_TYPED);
 
 } else if (t->step == TUTORIAL_STEP_MOVE) {
     draw_text_centered("PASSO 1/2 - ESQUIVA", 102, 22, COLOR_TEXT_CURRENT);
     draw_text_centered("Mova o engenheiro com [W][A][S][D] ou as SETAS.", 136, 16, RAYWHITE);
-    draw_text_centered("Use cada direcao pelo menos uma vez:", 158, 16, RAYWHITE);
+    draw_text_centered("Use cada direção pelo menos uma vez:", 158, 16, RAYWHITE);
     tutorial_draw_key_boxes(t, 184);
-    draw_text_centered("As esferas vermelhas simulam projeteis. No treino elas NAO causam dano.", 238, 14, COLOR_TEXT_UNTYPED);
+    draw_text_centered("As esferas vermelhas simulam projéteis. No treino elas NÃO causam dano.", 238, 14, COLOR_TEXT_UNTYPED);
 
 } else if (t->step == TUTORIAL_STEP_TYPE) {
-    draw_text_centered("PASSO 2/2 - DIGITACAO DE PATCH", 102, 22, COLOR_TEXT_CURRENT);
+    draw_text_centered("PASSO 2/2 - DIGITAÇÃO DE PATCH", 102, 22, COLOR_TEXT_CURRENT);
     draw_text_centered("Digite a frase da caixa abaixo, letra por letra.", 136, 16, RAYWHITE);
-    draw_text_centered("Voce pode se mover enquanto digita, como no combate real.", 160, 16, RAYWHITE);
-    draw_text_centered("Teclas WASD que nao forem a letra atual apenas movem (nao contam erro).", 192, 14, COLOR_TEXT_UNTYPED);
-    draw_text_centered("Errar aqui NAO tira vida: este e um treino seguro.", 214, 14, COLOR_TEXT_UNTYPED);
+    draw_text_centered("Você pode se mover enquanto digita, como no combate real.", 160, 16, RAYWHITE);
+    draw_text_centered("Teclas WASD que não forem a letra atual apenas movem (não contam erro).", 192, 14, COLOR_TEXT_UNTYPED);
+    draw_text_centered("Errar aqui NÃO tira vida: este é um treino seguro.", 214, 14, COLOR_TEXT_UNTYPED);
 
 } else {
     char buf[64];
-    draw_text_centered("TREINO CONCLUIDO!", 102, 30, COLOR_TEXT_TYPED);
-    snprintf(buf, sizeof(buf), "Precisao no treino: %d%%", typing_engine_get_accuracy(&t->typing_engine));
+    draw_text_centered("TREINO CONCLUÍDO!", 102, 30, COLOR_TEXT_TYPED);
+    snprintf(buf, sizeof(buf), "Precisão no treino: %d%%", typing_engine_get_accuracy(&t->typing_engine));
     draw_text_centered(buf, 150, 18, RAYWHITE);
     draw_text_centered("[ENTER] INICIAR COMBATE REAL", 180, 18, COLOR_TEXT_CURRENT);
     draw_text_centered("[R] REINICIAR TUTORIAL", 207, 18, COLOR_TEXT_TYPED);
@@ -258,10 +258,10 @@ void tutorial_draw(const Tutorial *t) {
     ui_draw_particles(&t->ui);
 
     /* Cabecalho */
-    DrawText("MODO TREINO - PROTOCOLO DE TREINO", ARENA_MARGIN_X, 18, 22, COLOR_PLAYER);
-    DrawText("Nada aqui vale pontos nem entra no ranking.", ARENA_MARGIN_X, 46, 14, COLOR_TEXT_UNTYPED);
+    ui_draw_text("MODO TREINO - PROTOCOLO DE TREINO", ARENA_MARGIN_X, 18, 22, COLOR_PLAYER);
+    ui_draw_text("Nada aqui vale pontos nem entra no ranking.", ARENA_MARGIN_X, 46, 14, COLOR_TEXT_UNTYPED);
     const char *esc_hint = "[ESC] VOLTAR AO MENU";
-    DrawText(esc_hint, SCREEN_WIDTH - ARENA_MARGIN_X - MeasureText(esc_hint, 16), 22, 16, COLOR_TEXT_UNTYPED);
+    ui_draw_text(esc_hint, SCREEN_WIDTH - ARENA_MARGIN_X - ui_measure_text(esc_hint, 16), 22, 16, COLOR_TEXT_UNTYPED);
 
     tutorial_draw_panel(t);
     ui_draw_floating_texts(&t->ui);
