@@ -537,6 +537,20 @@ No Jira, a Sprint 02 corresponde à sprint **"Week 13 e 14"** (26/10/2026 a 09/1
 
 ![Relatório da Sprint 02 no Jira](./docs/img/print_sprint02_relatorio.png)
 
+### 10.2. Processo e Engenharia de Software (Sprint 02 — PI2-230 / PI2-231)
+
+Sob facilitação do Scrum Master **Mateus Lacerda**, esta subseção consolida as evidências de processo exigidas na Entrega 04 de FDS:
+
+* **Cadência Semanal de Commits (Semanas 36 a 44):** Verificada continuamente via `git log`, comprovando entregas incrementais em todas as semanas e participação de **6 autores distintos** na Semana 43 (`20/10` a `23/10`).
+* **Programação em Pares (Sprint 02):** Relato formal das duplas (*Driver* / *Navigator*, horários e aprendizados) documentado em [`docs/relatorio_pair_programming_sprint02.md`](./docs/relatorio_pair_programming_sprint02.md).
+* **Evidências Visuais do Board e Product Backlog (Sprint 02 — `Week 13 e 14`):**
+
+| Visão do Board (Sprint 02) | Visão do Product Backlog (Pós-Sprint 02) |
+| :---: | :---: |
+| ![Print Oficial do Board da Sprint 02](./docs/img/print_board_sprint02.png) | ![Print Oficial do Backlog do Produto](./docs/img/print_backlog_sprint02.png) |
+
+---
+
 ### 10.3. Qualidade e testes
 
 Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](./docs/casos_de_teste_sprint02.md): 12 casos de teste das histórias **US12** e **US15**, escritos a partir dos critérios de confirmação de cada card do Jira, mais 1 reteste de regressão da Sprint 01.
@@ -569,9 +583,80 @@ Os testes de sistema da Sprint 02 estão em [`docs/casos_de_teste_sprint02.md`](
 
 ## 11. Entrega 05 (FDS): Sprint 03 e Apresentação Final
 
-### 11.4. Colaboração e evidências (Pair Programming · PI2-242)
-* Relatório do Sprint 03: [docs/relatorio_pair_programming_sprint03.md](./docs/relatorio_pair_programming_sprint03.md)
+Esta seção consolida os entregáveis de fechamento da **Unidade 2 — Entrega 05 de FDS** ([PI2-233](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-233), [PI2-240](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-240), [PI2-243](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-243)) e da avaliação final de processo de **Projetos 2** ([PI2-256](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-256)).
 
-### 11.5. Apresentação Final (PI2-243 / PI2-244)
-* Slides (PDF): [docs/apresentacao_final/apresentacao_final_squad_e7.pdf](./docs/apresentacao_final/apresentacao_final_squad_e7.pdf)
-* Arquivo editável (PowerPoint): [docs/apresentacao_final/apresentacao_final_squad_e7.pptx](./docs/apresentacao_final/apresentacao_final_squad_e7.pptx)
+---
+
+### 11.1. Implementação e Governança da Sprint 03 (PI2-233 / PI2-234)
+
+No Jira Software, a **Sprint 03** corresponde à sprint ativa **`Week 15 e 16`** (Sprint ID 116, período `09/11/2026` a `23/11/2026`), estruturada sob facilitação do Scrum Master **Mateus Lacerda** com **35 itens no ciclo**, **59.0 Story Points** distribuídos e metas alinhadas à **Matriz RACI**.
+
+> **Meta da Sprint (*Sprint Goal*):** *"Concluir todas as pendências, para entregarmos o jogo rodando em windows, documentação geral do projeto atualizada e regras de lógica aplicadas."*
+
+#### Histórias de Usuário e Entregas Consolidadas na Sprint 03
+
+| US / ID | Card no Jira | Descrição Funcional & Técnica | Módulos / Evidências no Repositório | SP | Situação (Ref. `main` / Jira) |
+| :---: | :---: | :--- | :--- | :---: | :--- |
+| **US16** | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) / [PI2-221](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-221) | Identidade Visual e Ícone Personalizado no Executável (`.exe`) e na Janela do Jogo | Em desenvolvimento / integração final para release Windows | `2.0` | Planejada na Sprint 03 (pendente de integração) |
+| **US17** | [PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218) / [PI2-215](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-215) | Modo Tutorial Guiado de AI Safety (Treinamento de Esquiva e Digitação) | `PI2-215` concluído no Jira; código aguardando PR para `main` | `3.0` | Planejada na Sprint 03 (pendente de merge na `main`) |
+| **US18** | [PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219) / [PI2-216](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-216) | Interface Widescreen HD (`1280x720`), Fonte TrueType UTF-8 e Menu Terminal CLI | `src/config.h`, `src/ui.c`, `src/main.c` ([`a9c8bb4`](https://github.com/vdornelass/pi2-squad-e7/commit/a9c8bb4), [`2a82daa`](https://github.com/vdornelass/pi2-squad-e7/commit/2a82daa), [`a2173ba`](https://github.com/vdornelass/pi2-squad-e7/commit/a2173ba)) | `3.0` | **Integrada na `main`** (inclui acentos PT-BR) |
+| **US19** | [PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220) | Sistema de Feedback Sonoro Sintetizado em C e Efeitos de Combate/Terminal (Issue [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3)) | `src/audio.c`, `src/audio.h`, `src/main.c` ([`6a8a9d4`](https://github.com/vdornelass/pi2-squad-e7/commit/6a8a9d4)) | `3.0` | **Integrada na `main`** e retestada (`bin/jogo.exe`) |
+| **US20** | [PI2-246](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-246) / [PI2-247](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-247) | Exportação de Relatório de Auditoria (`.txt`/`.json`) e Certificado de Alinhamento Ético | `src/report.c`, `src/report.h`, `Makefile` ([`ef37f30`](https://github.com/vdornelass/pi2-squad-e7/commit/ef37f30), [`9c9b832`](https://github.com/vdornelass/pi2-squad-e7/commit/9c9b832)) | `5.0` | **Integrada na `main`** (`bin/certificado.txt` e `.json`) |
+| **PIF-02** | [PI2-254](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-254) | Portabilidade do launcher [`jogar.bat`](./jogar.bat) para execução em qualquer PC Windows | [`jogar.bat`](./jogar.bat) ([`939fe6e`](https://github.com/vdornelass/pi2-squad-e7/commit/939fe6e)) | `3.0` | **Integrada na `main`** |
+| **LMC-02** | [PI2-31](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-31) | Validação lógica formal da Unidade 2 e suíte automatizada (`make test-lmc`) | [`docs/relatorio_lmc_unidade2.md`](./docs/relatorio_lmc_unidade2.md), [`tests/test_logica_lmc.c`](./tests/test_logica_lmc.c) ([`e519ed1`](https://github.com/vdornelass/pi2-squad-e7/commit/e519ed1)) | `5.0` | **Concluída** (`181/181` verificações aprovadas) |
+| **IHC-02** | [PI2-248](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-248) / [PI2-251](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-251) | Comprovação de usabilidade e auditoria visual das telas do produto final | `src/main.c`, `src/ui.c` ([`2a82daa`](https://github.com/vdornelass/pi2-squad-e7/commit/2a82daa)) | `10.0` | Em consolidação final de evidências IHC |
+
+#### Síntese do Acumulado de Histórias de Usuário (Meta da Rubrica: $\ge 15$ Histórias)
+* **Sprint 01 (Entrega 03):** **7 Histórias de Usuário** entregues (`US01`, `US02`, `US03`, `US05`, `US06`, `US07`, `US13`).
+* **Sprint 02 (Entrega 04):** **4 Novas Histórias de Usuário** funcionais consolidadas (`US11`, `US12`, `US14`, `US15`) além das entregas semanais de processo/engenharia.
+* **Sprint 03 (Entrega 05):** **5 Novas Histórias de Usuário** estruturadas e planejadas (`US16`, `US17`, `US18`, `US19`, `US20`) + **4 Entregas Técnicas** (`PI2-31`, `PI2-254`, `PI2-248`, `PI2-251`).
+* **Total Acumulado no Projeto:** **16 Histórias de Usuário** no escopo do produto entregue (`US01–US03`, `US05–US07`, `US11–US20`, além de `US04`, `US08`, `US09`, `US10` especificadas na U1 — totalizando **20 US no Backlog completo do Jira**), superando o mínimo de **15 histórias acumuladas** exigido na Entrega 05.
+
+#### Evidências do Board e Backlog na Sprint 03 (`Week 15 e 16`)
+
+| Quadro da Sprint 03 (`Week 15 e 16`) | Backlog Priorizado no Jira |
+| :---: | :---: |
+| ![Print do Board da Sprint 03](./docs/img/print_board_sprint03.png) | ![Print do Backlog na Sprint 03](./docs/img/print_backlog_sprint03.png) |
+
+---
+
+### 11.4. Sustentabilidade, Frequência de Commits e Colaboração (PI2-240 / PI2-241 / PI2-242)
+
+Em atendimento ao princípio central da **Entrega 05 (Item 4 — Sustentabilidade)**: *"O repositório precisa sustentar o projeto sem a presença da equipe. O GitHub não é o lugar onde se joga o código — é o documento onde o projeto se explica"*.
+
+#### 11.4.1. Auditoria da Frequência Semanal de Commits (Semanas 36 a 47)
+
+Levantamento extraído diretamente do histórico do repositório (`git log origin/main --date=format:'%G-W%V' --pretty='%h|%ad|%an'`):
+
+| Semana ISO | Período Calendário | Commits na `main` | Autores Ativos | Entregas e Marcos Principais |
+| :---: | :---: | :---: | :---: | :--- |
+| **Semana 36** | `01/09 – 03/09` | 9 | 1 | Estrutura inicial do projeto C99 + Raylib 5.0 |
+| **Semana 37** | `13/09` | 2 | 1 | Configuração inicial do `Makefile` e flags estritas |
+| **Semana 38** | `15/09 – 19/09` | 5 | 3 | Sistema de projéteis, boss e movimentação fluida |
+| **Semana 39** | `22/09 – 24/09` | 19 | 3 | Entrega 02 FDS, diagramas UML, protótipos Lo-Fi e MVP 1 |
+| **Semana 40** | `29/09` | 2 | 1 | Relatório formal de LMC (AV1) e redesign visual |
+| **Semana 41** | `05/10 – 07/10` | 2 | 1 | `jogar.bat` inicial, GitHub Actions CI e templates de PR/Issue |
+| **Semana 42** | `13/10 – 18/10` | 13 | 2 | Screencasts, casos de teste Sprint 01 e Seção 9.1 de versionamento |
+| **Semana 43** | `20/10 – 23/10` | 16 | 6 | Persistência binária (`save.c`), ranking (`ranking.c`), PRs #4/#5 e Entrega 03/04 |
+| **Semana 44** | `29/10` | 2 | 1 | Casos de teste Sprint 02 e atualização do Issue Tracker (`PI2-227`, `PI2-228`) |
+| **Semana 45** | `06/11` | 4 | 3 | Áudio sintetizado (`US19`), tela Widescreen HD (`US18`) e refinos de boss/projéteis |
+| **Semana 46** | `11/11` | 3 | 1 | Validação lógica LMC (`PI2-31`), Pair Programming Sprint 03 e deck final (`PR #11`) |
+| **Semana 47** | `19/11 – 21/11` | 14+ | 5 | `jogar.bat` portátil (`PI2-254`), `src/report.c` (`US20`), fonte UTF-8, testes Sprint 03, `CONTRIBUTING.md` e Entrega 05 |
+
+#### 11.4.2. Guia Autossuficiente de Contribuição (`CONTRIBUTING.md` · PI2-241)
+* **Documento Oficial:** [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+* Contém o passo a passo completo para qualquer contribuidor configurar e compilar o projeto de forma autônoma no **Windows (`jogar.bat`, `w64devkit`/MinGW-w64)**, **Linux Ubuntu/Debian** e **WSL2**, além do mapa de módulos em `src/`, comandos do `Makefile` (`make`, `make windows`, `make test-lmc`), convenções C99, fluxo *Feature Branch + Conventional Commits (`PI2-XXX`)*, checklist de *Definition of Done* e guia de *troubleshooting*.
+
+#### 11.4.3. Programação em Pares — Sprint 03 (`PI2-242`)
+* **Relatório Completo (Padrão *Quem, Onde, Quando, O quê e E daí*):** [`docs/relatorio_pair_programming_sprint03.md`](./docs/relatorio_pair_programming_sprint03.md)
+* Detalha a atuação da **Dupla 1** (João Gabriel & Caio Brayner — áudio, certificado e `jogar.bat`), **Dupla 2** (Matheus Chaves & Julio Cesar — widescreen 720p, fonte UTF-8, tutorial e usabilidade), **Dupla 3** (Theo Monteiro & Larissa Almeida — validação lógica LMC `181/181` e testes de sistema) e **Facilitação** (Mateus Lacerda — governança Jira, sustentabilidade e roteiro final).
+
+---
+
+### 11.5. Apresentação Final e Avaliação de Processo (PI2-243 / PI2-244 / PI2-245 / PI2-256)
+
+Apresentação técnica cronometrada de **15 minutos** estruturada rigorosamente nos **4 blocos obrigatórios** (*Produto*, *Processo de Trabalho*, *Engenharia* e *Time — com 1 slide individual por integrante respondendo: O que fez, O que não conseguiu fazer e O que aprendeu*):
+
+* **Roteiro Cronometrado, Divisão de Falas & Dossiê de Processo (Projetos 2 / FDS):** [`docs/roteiro_apresentacao_final_pi2.md`](./docs/roteiro_apresentacao_final_pi2.md)
+* **Slides Oficiais (PDF):** [`docs/apresentacao_final/apresentacao_final_squad_e7.pdf`](./docs/apresentacao_final/apresentacao_final_squad_e7.pdf)
+* **Arquivo Editável (PowerPoint):** [`docs/apresentacao_final/apresentacao_final_squad_e7.pptx`](./docs/apresentacao_final/apresentacao_final_squad_e7.pptx)
