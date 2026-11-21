@@ -30,9 +30,11 @@ endif
 
 windows: $(SRCS)
 	@mkdir -p bin
-	x86_64-w64-mingw32-gcc $(CFLAGS) $(SRCS) -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o bin/jogo.exe
+	@x86_64-w64-mingw32-windres src/icon.rc -O coff -o bin/icon.res 2>/dev/null || true
+	x86_64-w64-mingw32-gcc $(CFLAGS) $(SRCS) bin/icon.res -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -static-libgcc -o bin/jogo.exe
+	@cp bin/jogo.exe AI_Safety.exe 2>/dev/null || true
 	@cp lib/raylib.dll bin/ 2>/dev/null || true
-	@echo "Compilacao nativa para Windows (bin/jogo.exe) concluida com sucesso!"
+	@echo "Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com sucesso!"
 
 clean:
 	rm -f bin/jogo bin/*.o bin/*.exe

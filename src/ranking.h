@@ -20,6 +20,9 @@ typedef struct {
     int highest_score;
 } MatchStats;
 
+/* Verifica se um nome de jogador ja esta registrado no ranking (case-insensitive) */
+bool ranking_name_exists(const char *player_name);
+
 /* Adiciona uma nova pontuacao, ordena em ordem decrescente e persiste o Top 10 */
 void ranking_add_score(const char *player_name, int score);
 

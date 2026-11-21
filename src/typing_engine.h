@@ -17,6 +17,7 @@ typedef struct {
     int total_completed;
     int total_typed;
     int total_errors;
+    int control_mode;
 } TypingEngine;
 
 void typing_engine_init(TypingEngine *te);

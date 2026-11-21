@@ -15,14 +15,20 @@ typedef struct {
     float pulse_timer;
     float hit_flash_timer;
 
-    /* Timers de Ataque */
+    /* Timers de Padroes de Ataque (Fieis ao boss.py) */
     float timer_ring;
     float timer_aimed;
     float timer_spiral;
     float timer_rain;
+    float timer_homing;
+    float timer_cross;
+    float timer_shockwave;
+    float timer_special;
     float timer_laser;
     float timer_vortex;
+
     float spiral_angle;
+    float spiral_angle_2;
     int alignment_pct;
 } Boss;
 

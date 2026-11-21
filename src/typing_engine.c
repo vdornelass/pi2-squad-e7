@@ -2,21 +2,23 @@
 #include <string.h>
 #include <ctype.h>
 
+/* Diretrizes Eticas mais curtas, diretas e dinamicas de digitar */
 static const char *DEFAULT_PHRASES[MAX_PHRASES] = {
-    "CONSTITUICAO DE SEGURANCA ATIVADA",
-    "ELIMINAR VIESES E DISCRIMINACAO NOS DADOS",
-    "GARANTIR TRANSPARENCIA E EXPLICABILIDADE",
-    "PROTEGER A PRIVACIDADE E DADOS DOS USUARIOS",
-    "IMPEDIR ALUCINACOES E DESINFORMACAO",
-    "ESTABELECER SUPERVISAO HUMANA CONTINUA",
-    "REDUZIR RISCOS DE DANOS EXISTENCIAIS",
-    "PRIORIZAR O BEM ESTAR DA HUMANIDADE",
-    "AUDITORIA COMPLETA DE PESOS E GUARDRAILS",
-    "MODELO ALINHADO E SEGURO PARA TODOS"
+    "ATIVAR GUARDRAILS",
+    "ELIMINAR VIES NOS DADOS",
+    "GARANTIR TRANSPARENCIA",
+    "PROTEGER A PRIVACIDADE",
+    "IMPEDIR ALUCINACOES",
+    "SUPERVISAO HUMANA ATIVA",
+    "CONTER RISCO CRITICO",
+    "PRIORIZAR A HUMANIDADE",
+    "AUDITAR PESOS NEURAIS",
+    "MODELO ETICO E SEGURO"
 };
 
 void typing_engine_init(TypingEngine *te) {
     te->phrase_count = MAX_PHRASES;
+    te->control_mode = CONTROL_ARROWS_ONLY;
     for (int i = 0; i < MAX_PHRASES; i++) {
         strncpy(te->phrases[i], DEFAULT_PHRASES[i], MAX_PHRASE_LEN - 1);
         te->phrases[i][MAX_PHRASE_LEN - 1] = '\0';
@@ -75,11 +77,15 @@ int typing_engine_get_accuracy(const TypingEngine *te) {
     return (te->total_typed * 100) / attempts;
 }
 
-static bool is_movement_key(int key) {
-    int k = toupper((unsigned char)key);
-    if (k == 'W' || k == 'A' || k == 'S' || k == 'D') return true;
-    if (key == KEY_W || key == KEY_A || key == KEY_S || key == KEY_D) return true;
-    if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT) return true;
+static bool is_movement_key(int key, int control_mode) {
+    if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT) {
+        return true;
+    }
+    if (control_mode == CONTROL_WASD_ARROWS) {
+        int k = toupper((unsigned char)key);
+        if (k == 'W' || k == 'A' || k == 'S' || k == 'D') return true;
+        if (key == KEY_W || key == KEY_A || key == KEY_S || key == KEY_D) return true;
+    }
     return false;
 }
 
@@ -112,9 +118,9 @@ const char *typing_engine_handle_key(TypingEngine *te, int key, int *errors_out)
         return "CORRECT";
     }
 
-    /* 2. Se nao coincidir, mas for tecla de movimento (WASD ou setas):
+    /* 2. Se nao coincidir, mas for tecla de movimento do esquema ativo:
      * O jogador esta apenas se movimentando/esquivando na arena. */
-    if (is_movement_key(key)) {
+    if (is_movement_key(key, te->control_mode)) {
         return NULL;
     }
 

@@ -8,26 +8,25 @@ echo   CESAR School - Projeto Integrador 2 (PI2)
 echo ========================================================
 echo.
 
-:: Obtém o caminho da pasta atual convertido dinamicamente para o WSL
 for /f "tokens=*" %%a in ('wsl wslpath -u "%CD%" 2^>nul') do set "WSL_PATH=%%a"
 
-:: 1. Compila as alterações para Windows através do WSL
-echo [1/2] Verificando compilacao e atualizacoes de codigo...
-wsl bash -c "cd '%WSL_PATH%' && make windows" 2>nul
-
-:: 2. Se o executável nativo do Windows existir, executa-o
-if exist "bin\jogo.exe" (
-    echo [OK] Executavel Windows atualizado: bin\jogo.exe
-    if exist "lib\raylib.dll" copy /y "lib\raylib.dll" "bin\" >nul
-    echo [2/2] Iniciando jogo nativo na tela...
-    start "" "bin\jogo.exe"
-    goto fim
+if defined WSL_PATH (
+    echo [1/2] Atualizando binarios compilados...
+    taskkill /f /im jogo.exe >nul 2>&1
+    wsl bash -c "cd '%WSL_PATH%' && make && make windows" 2>nul
 )
 
-:: 3. Caso contrário, executa o binário Linux no WSL
 echo.
-echo [INFO] Executando binario Linux via WSL...
-wsl bash -c "cd '%WSL_PATH%' && make && (test -n \"$DISPLAY\" || export DISPLAY=:0) && ./bin/jogo"
+echo [2/2] Tentando iniciar executavel nativo do Windows (bin\jogo.exe)...
+if exist "bin\jogo.exe" (
+    "bin\jogo.exe"
+    if not errorlevel 1 goto fim
+)
+
+echo.
+echo [AVISO] O Controle Inteligente de Aplicativos do Windows bloqueou o .exe nao assinado.
+echo         Iniciando via WSLg...
+wsl bash -c "cd '%WSL_PATH%' && DISPLAY=:0 PULSE_SERVER=unix:/mnt/wslg/PulseServer LD_LIBRARY_PATH=lib ./bin/jogo"
 
 :fim
 echo.
