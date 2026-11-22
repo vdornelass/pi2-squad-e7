@@ -15,25 +15,70 @@ void player_init(Player *p, float x, float y) {
     p->trail_len = 0;
 }
 
-void player_handle_input(Player *p) {
+void player_handle_input_ex(Player *p, int control_mode, Vector2 mouse_arena_pos) {
     float dx = 0.0f;
     float dy = 0.0f;
 
-    if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))    dy -= 1.0f;
-    if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))  dy += 1.0f;
-    if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))  dx -= 1.0f;
-    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) dx += 1.0f;
+    if (control_mode == CONTROL_WASD_ARROWS) {
+        if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))    dy -= 1.0f;
+        if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))  dy += 1.0f;
+        if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))  dx -= 1.0f;
+        if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) dx += 1.0f;
+    } else if (control_mode == CONTROL_ARROWS_ONLY) {
+        if (IsKeyDown(KEY_UP))    dy -= 1.0f;
+        if (IsKeyDown(KEY_DOWN))  dy += 1.0f;
+        if (IsKeyDown(KEY_LEFT))  dx -= 1.0f;
+        if (IsKeyDown(KEY_RIGHT)) dx += 1.0f;
+    } else if (control_mode == CONTROL_MOUSE) {
+        /* Setas continuam funcionando como apoio, mas se nao pressionadas segue o mouse */
+        if (IsKeyDown(KEY_UP))    dy -= 1.0f;
+        if (IsKeyDown(KEY_DOWN))  dy += 1.0f;
+        if (IsKeyDown(KEY_LEFT))  dx -= 1.0f;
+        if (IsKeyDown(KEY_RIGHT)) dx += 1.0f;
+
+        if (dx == 0.0f && dy == 0.0f) {
+            float cx = p->rect.x + p->rect.width / 2.0f;
+            float cy = p->rect.y + p->rect.height / 2.0f;
+            float mdx = mouse_arena_pos.x - cx;
+            float mdy = mouse_arena_pos.y - cy;
+            float dist = sqrtf(mdx * mdx + mdy * mdy);
+
+            if (dist > 3.0f) {
+                float factor = 1.35f;
+                if (dist < 28.0f) {
+                    factor = (dist / 28.0f) * 1.35f;
+                }
+                dx = (mdx / dist) * factor;
+                dy = (mdy / dist) * factor;
+            }
+        }
+    } else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        /* Em qualquer modo, segurar o botao esquerdo do mouse tambem guia o personagem */
+        float cx = p->rect.x + p->rect.width / 2.0f;
+        float cy = p->rect.y + p->rect.height / 2.0f;
+        float mdx = mouse_arena_pos.x - cx;
+        float mdy = mouse_arena_pos.y - cy;
+        float dist = sqrtf(mdx * mdx + mdy * mdy);
+        if (dist > 3.0f) {
+            float factor = 1.35f;
+            if (dist < 28.0f) {
+                factor = (dist / 28.0f) * 1.35f;
+            }
+            dx = (mdx / dist) * factor;
+            dy = (mdy / dist) * factor;
+        }
+    }
+
+    /* Normalizacao diagonal para teclado */
+    if (control_mode != CONTROL_MOUSE && dx != 0.0f && dy != 0.0f) {
+        dx *= 0.7071f;
+        dy *= 0.7071f;
+    }
 
     /* Inversao de eixos se status Prompt Injection ativo */
     if (p->confuse_timer > 0.0f) {
         dx = -dx;
         dy = -dy;
-    }
-
-    /* Normalizacao diagonal */
-    if (dx != 0.0f && dy != 0.0f) {
-        dx *= 0.7071f;
-        dy *= 0.7071f;
     }
 
     float move_x = dx * p->speed * GetFrameTime() + p->ext_fx;
@@ -47,10 +92,10 @@ void player_handle_input(Player *p) {
     p->ext_fy = 0.0f;
 
     /* Restricao de limites da arena */
-    float min_x = ARENA_MARGIN_X;
-    float max_x = SCREEN_WIDTH - ARENA_MARGIN_X - p->rect.width;
-    float min_y = ARENA_MARGIN_TOP;
-    float max_y = SCREEN_HEIGHT - ARENA_MARGIN_BOTTOM - p->rect.height;
+    float min_x = (float)ARENA_MARGIN_X;
+    float max_x = (float)(SCREEN_WIDTH - ARENA_MARGIN_X) - p->rect.width;
+    float min_y = (float)ARENA_MARGIN_TOP;
+    float max_y = (float)(SCREEN_HEIGHT - ARENA_MARGIN_BOTTOM) - p->rect.height;
 
     if (p->rect.x < min_x) p->rect.x = min_x;
     if (p->rect.x > max_x) p->rect.x = max_x;
@@ -66,6 +111,10 @@ void player_handle_input(Player *p) {
         }
         p->trail[MAX_TRAIL - 1] = (Vector2){ p->rect.x + p->rect.width / 2.0f, p->rect.y + p->rect.height / 2.0f };
     }
+}
+
+void player_handle_input(Player *p) {
+    player_handle_input_ex(p, CONTROL_WASD_ARROWS, (Vector2){ 0.0f, 0.0f });
 }
 
 void player_apply_force(Player *p, float fx, float fy) {
@@ -110,7 +159,7 @@ void player_draw(const Player *p) {
                            (unsigned char)(COLOR_PLAYER.g * 0.6f),
                            (unsigned char)(COLOR_PLAYER.b * 0.8f),
                            (unsigned char)(255 * alpha * 0.5f) };
-        DrawRectangleLines(p->trail[i].x - sz / 2.0f, p->trail[i].y - sz / 2.0f, sz, sz, c);
+        DrawRectangleLines((int)(p->trail[i].x - sz / 2.0f), (int)(p->trail[i].y - sz / 2.0f), (int)sz, (int)sz, c);
     }
 
     /* Piscar durante iframe ou indicador de confusao */
@@ -129,8 +178,8 @@ void player_draw(const Player *p) {
     DrawRectangleLinesEx(p->rect, 2.0f, outline_color);
 
     /* Core central branco */
-    DrawRectangle(p->rect.x + p->rect.width / 2.0f - 3.0f,
-                  p->rect.y + p->rect.height / 2.0f - 3.0f, 6.0f, 6.0f, WHITE);
+    DrawRectangle((int)(p->rect.x + p->rect.width / 2.0f - 3.0f),
+                  (int)(p->rect.y + p->rect.height / 2.0f - 3.0f), 6, 6, WHITE);
 
     /* Indicador textual acima da cabeca quando confuso */
     if (p->confuse_timer > 0.0f) {

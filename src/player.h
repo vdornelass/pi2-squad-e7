@@ -21,6 +21,7 @@ typedef struct {
 
 void player_init(Player *p, float x, float y);
 void player_handle_input(Player *p);
+void player_handle_input_ex(Player *p, int control_mode, Vector2 mouse_arena_pos);
 void player_apply_force(Player *p, float fx, float fy);
 void player_apply_confuse(Player *p, float duration);
 void player_update(Player *p, float dt);

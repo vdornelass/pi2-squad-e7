@@ -2,7 +2,8 @@ CC = gcc
 WIN_CC ?= x86_64-w64-mingw32-gcc
 CFLAGS = -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc
 TARGET = bin/jogo
-SRCS = src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c src/report.c
+SRCS = src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c src/tutorial.c src/report.c
+
 # Deteccao de Sistema Operacional
 UNAME_S := $(shell uname -s 2>/dev/null || echo Windows)
 
@@ -30,13 +31,15 @@ endif
 
 windows: $(SRCS)
 	@mkdir -p bin
-	$(WIN_CC) $(CFLAGS) $(SRCS) -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o bin/jogo.exe
+	@x86_64-w64-mingw32-windres src/icon.rc -O coff -o bin/icon.res 2>/dev/null || true
+	$(WIN_CC) $(CFLAGS) $(SRCS) bin/icon.res -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -static-libgcc -o bin/jogo.exe
+	@cp bin/jogo.exe AI_Safety.exe 2>/dev/null || true
 	@cp lib/raylib.dll bin/ 2>/dev/null || true
-	@echo "Compilacao nativa para Windows (bin/jogo.exe) concluida com sucesso!"
+	@echo "Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com sucesso!"
 
 test-lmc:
 	@mkdir -p bin
-	$(CC) $(CFLAGS) tests/test_logica_lmc.c src/typing_engine.c src/boss.c src/bullet.c src/player.c $(LDFLAGS) -o bin/test_lmc
+	$(CC) $(CFLAGS) tests/test_logica_lmc.c src/typing_engine.c src/boss.c src/bullet.c src/player.c src/ui.c $(LDFLAGS) -o bin/test_lmc
 	LD_LIBRARY_PATH=lib:$$LD_LIBRARY_PATH ./bin/test_lmc
 
 clean:

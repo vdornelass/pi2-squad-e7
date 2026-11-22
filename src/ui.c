@@ -151,7 +151,10 @@ void ui_update(UIManager *ui, float dt) {
 }
 
 void ui_draw_arena_grid(void) {
-    ClearBackground(COLOR_BG);
+    /* Piso da arena */
+    DrawRectangle(ARENA_MARGIN_X, ARENA_MARGIN_TOP,
+                  SCREEN_WIDTH - 2 * ARENA_MARGIN_X,
+                  SCREEN_HEIGHT - ARENA_MARGIN_TOP - ARENA_MARGIN_BOTTOM, COLOR_ARENA_BG);
 
     /* Grid lines */
     int step = 40;
