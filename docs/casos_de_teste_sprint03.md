@@ -22,11 +22,11 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 | :-- | :-: | :-: | :-: | :-: | :-: |
 | US16 | 4 | 2 | 0 | 1 | 1 |
 | US17 | 4 | 4 | 0 | 0 | 0 |
-| US18 | 4 | 3 | 0 | 1 | 0 |
+| US18 | 4 | 4 | 0 | 0 | 0 |
 | US19 | 6 | 6 | 0 | 0 | 0 |
 | US20 | 4 | 2 | 1 | 1 | 0 |
 | Regressão (Issues #2, #7, #8, #9, #10) | 5 | 3 | 2 | 0 | 0 |
-| **Total** | **27** | **20** | **3** | **3** | **1** |
+| **Total** | **27** | **21** | **3** | **2** | **1** |
 
 ## Como executar
 
@@ -77,14 +77,16 @@ Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com suce
 | CT-US17-03 | CA02 | No passo de digitação, errar letras de propósito. | Os erros aparecem, mas o jogador não perde vida. | Passou | Vídeo rodada 2 (vitória), `0:13 – 0:18`: a precisão cai de 100% para 60% com os erros e as 5 vidas continuam |
 | CT-US17-04 | CA03 | (a) Concluir a frase de treino. (b) Entrar de novo e apertar `ESC` no meio. | (a) Oferece iniciar o combate ou voltar ao menu. (b) Volta ao menu. | Passou | (a) Vídeo rodada 2 (partida), `0:20 – 0:22`: "TREINO CONCLUÍDO!" com `[ENTER]` iniciar combate real, `[R]` reiniciar e `[ESC]` voltar ao menu. (b) Vídeo rodada 2 (vitória), `0:18 – 0:19`: com a frase pela metade, o `ESC` volta ao menu |
 
-## US18: Interface Widescreen HD, Fonte e Menu Terminal ([PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219))
+## US18: Interface Widescreen HD, Fonte e Menu Principal ([PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219))
 
 | ID | Critério (Jira) | Passos | Resultado esperado | Resultado obtido | Evidência |
 | :-- | :-: | :-- | :-- | :-: | :-: |
 | CT-US18-01 | CA01 | Abrir o jogo e iniciar uma partida. | Janela e arena em 1280x720 (16:9), com HUD e caixa de digitação centralizadas e nada cortado. | Passou | Vídeo rodada 2 (partida), `0:24 – 0:34`: Configurações mostram "TELA: JANELA (1280x720)". De `0:40` em diante, arena, HUD e caixa de digitação inteiras |
 | CT-US18-02 | CA02 | Ler os textos da HUD, das diretrizes e das telas de vitória e derrota. | Fonte nítida e legível. | Passou | Vídeos rodada 2: textos legíveis no menu, tutorial, HUD, vitória, certificado e Game Over |
 | CT-US18-03 | CA02 | Procurar textos com acento ou cedilha. | Os caracteres do português aparecem corretamente. | Passou | Vídeo rodada 2 (partida): "CONFIGURAÇÕES", "ESTATÍSTICAS" (`0:00`), "BEM-VINDO À AURA-67", "DIGITAÇÃO" (`0:06 – 0:18`), "SESSÃO", "ALCANÇADA" (`2:08`). Na 1ª rodada (19/11) tinha falhado: Issue [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12), corrigida no commit `a2173ba` |
-| CT-US18-04 | CA03 | Olhar o Menu Principal. | Menu no estilo terminal CLI, sem texto sobreposto. | **Parcial** | Vídeo rodada 2 (partida), `0:00 – 0:04`: menu sem sobreposição de textos. Mas desde o commit `f91402c` o menu tem um visual novo (título "AI 67 SAFETY" e arte da AURA-67) e não está mais no estilo terminal CLI pedido pelo critério. Na 1ª rodada (menu antigo "AURA-67 KERNEL v2.0") tinha passado |
+| CT-US18-04 | CA03 | Olhar o Menu Principal e navegar pelas opções com teclado e mouse. | Menu com a arte da AURA-67, opções navegáveis e sem texto sobreposto. | Passou | Vídeo rodada 2 (partida), `0:00 – 0:36`: menu com a arte da AURA-67, opções Novo Jogo, Tutorial Guiado, Configurações, Ranking e Estatísticas e Sair, navegação entre elas e nenhum texto sobreposto |
+
+**Observação (mudança de critério):** o CA03 original pedia um menu "com estética de Terminal CLI", e o CT-US18-04 passou na 1ª rodada com o menu antigo ("AURA-67 KERNEL v2.0"). No commit `f91402c` o time trocou esse menu por um menu ilustrado. Em 21/11 o card [PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219) foi atualizado para o novo menu (com nota de rastreabilidade na descrição), e o caso foi reexecutado com o critério novo.
 
 **Observação:** as 10 diretrizes digitadas continuam sem acento (ex.: "CONSTITUICAO DE SEGURANCA ATIVADA"), o que facilita a digitação. Os acentos aparecem nos demais textos do jogo.
 
@@ -127,4 +129,3 @@ Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com suce
 * **Novas, encontradas na 2ª rodada:**
   * [US16] Ícone da AURA-67 não aparece na barra de título rodando pelo WSL, só na barra de tarefas (CT-US16-03).
   * [US20] Arquivo de auditoria sem hash de integridade e sem integridade restante, e com nome diferente do card (CT-US20-02 e CT-US20-04).
-  * [US18] Menu novo não segue mais o estilo terminal CLI do critério CA03 (CT-US18-04). Pode ser resolvido atualizando o card, se o time decidir manter o menu novo.
