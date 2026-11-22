@@ -40,13 +40,14 @@ pi2-squad-e7/
 │   ├── ISSUE_TEMPLATE/        # Modelos padronizados de Bug Report e Feature Request
 │   ├── pull_request_template.md
 │   └── workflows/build.yml    # Pipeline CI em Ubuntu (GCC + C99 estrito)
+├── assets/                    # Ícone oficial (aura67.ico/.png) e fontes TrueType (assets/fonts/)
 ├── bin/                       # Executáveis compilados (bin/jogo, bin/jogo.exe) e dados de runtime
 ├── docs/                      # Especificações, casos de teste, diagramas UML, PM Canvas e slides
 │   ├── apresentacao_final/    # Deck oficial da Apresentação Final (PDF e PPTX)
 │   └── ...
 ├── include/                   # Cabeçalhos oficiais Raylib 5.0 (raylib.h, raymath.h, rlgl.h)
 ├── lib/                       # Binários Raylib (libraylib.a, libraylib.so, raylib.dll)
-├── src/                       # Código-fonte modular em C99
+├── src/                       # Código-fonte modular em C99 (12 módulos .c/.h + ícone)
 ├── tests/                     # Suíte automatizada de validação lógica (LMC)
 ├── CONTRIBUTING.md            # Este guia de contribuição e sustentabilidade
 ├── jogar.bat                  # Launcher portátil e autocompilador para Windows
@@ -55,22 +56,24 @@ pi2-squad-e7/
 └── README.md                  # Documentação central do projeto e evidências FDS/FP2
 ```
 
-### Detalhamento dos Módulos em `src/` e `tests/`
+### Detalhamento dos Módulos em `src/` e `tests/` (12 Módulos C99)
 
 | Arquivo / Módulo | Responsabilidade Principal | Estruturas / Símbolos-Chave |
 | :--- | :--- | :--- |
 | `src/config.h` | Constantes globais: janela (`1280x720`, 60 FPS), margens da arena, paleta Cyberpunk/Neon, HP, durações e pontuação | `SCREEN_WIDTH`, `SCREEN_HEIGHT`, `TOTAL_DIRECTIVES`, `SCORE_PERFECT` |
-| `src/game_state.c/h` | Contexto central único do jogo e máquina de estados (`STATE_MENU` a `STATE_RANKING`) | `GameState`, `GameContext`, `game_state_init()`, `game_state_reset_combat()` |
+| `src/game_state.c/h` | Contexto central único do jogo e máquina de estados (`STATE_MENU`, `STATE_TUTORIAL` a `STATE_RANKING`) | `GameState`, `GameContext`, `game_state_init()`, `game_state_reset_combat()` |
 | `src/main.c` | *Game Loop* principal a 60 FPS, tratamento de entrada, transições de tela e orquestração dos módulos | `main()`, `combat_process_round()` |
 | `src/player.c/h` | Movimentação do Engenheiro (WASD/Setas), colisão com arena, *invulnerability frames* e confusão | `Player`, `player_init()`, `player_update()`, `player_take_damage()` |
 | `src/boss.c/h` | Comportamento da IA **AURA-67** em 3 Fases Cognitivas, alinhamento ético (0%–100%) e temporizadores | `Boss`, `boss_get_phase()`, `boss_update()`, `boss_take_damage()` |
 | `src/bullet.c/h` | Pool de até 800 projéteis (`BULLET_NORMAL`, `HOMING`, `BLIND`, `CONFUSE`), lasers e vórtice | `BulletManager`, `MAX_BULLETS`, `bullet_mgr_update()` |
 | `src/typing_engine.c/h` | Motor de digitação das 10 diretrizes éticas, detecção de erros, precisão (%) e *blindness* | `TypingEngine`, `typing_engine_handle_key()`, `typing_engine_get_accuracy()` |
-| `src/ui.c/h` | Renderização de HUD, Menu Terminal CLI (`AURA-67 KERNEL v2.0`), fontes TrueType UTF-8 e telas finais | `UIManager`, `ui_draw_menu()`, `ui_draw_victory()`, `ui_load_fonts()` |
+| `src/tutorial.c/h` | **Modo Tutorial Guiado** em 2 etapas: esquiva segura (sem dano) e treino guiado de digitação (`US17`) | `TutorialState`, `tutorial_init()`, `tutorial_update()`, `tutorial_draw()` |
+| `src/ui.c/h` | Renderização de HUD, Menu Principal, fontes TrueType UTF-8 (acentuação PT-BR) e telas finais | `UIManager`, `ui_draw_menu()`, `ui_draw_victory()`, `ui_load_fonts()` |
 | `src/save.c/h` | Persistência binária de sessão (`bin/savegame.dat`) com verificação de integridade e log CSV | `SaveData`, `SAVE_MAGIC_NUMBER`, `save_game()`, `load_game()`, `save_match_result()` |
 | `src/ranking.c/h` | Ranking Top 10 persistente (`bin/ranking.txt`) ordenado com `qsort` e estatísticas (`bin/matches.csv`) | `RankingEntry`, `MatchStats`, `ranking_add_score()`, `ranking_compute_stats()` |
-| `src/audio.c/h` | Síntese procedural de ondas PCM 16-bit via API de áudio da Raylib | `audio_init()`, `audio_play_key_ok()`, `audio_play_victory()` |
-| `src/report.c/h` | Emissão do Certificado de Alinhamento Ético pós-vitória (`bin/certificado.txt` e `.json`) | `Certificate`, `report_build()`, `report_export()`, `report_draw_certificate()` |
+| `src/audio.c/h` | Síntese procedural de ondas PCM 16-bit via API de áudio da Raylib (`US19`) | `audio_init()`, `audio_play_key_ok()`, `audio_play_victory()` |
+| `src/report.c/h` | Emissão do Certificado de Alinhamento Ético pós-vitória (`bin/certificado.txt` e `.json` — `US20`) | `Certificate`, `report_build()`, `report_export()`, `report_draw_certificate()` |
+| `src/icon.rc` · `src/icon_data.h` | Recurso de ícone embutido da AURA-67 para executável Windows (`windres`) e janela (`US16`) | `assets/aura67.ico`, `bin/icon.res` |
 | `tests/test_logica_lmc.c` | Suíte automatizada com **181 verificações lógicas** (MEF, tabelas-verdade, fases e precisão) | Executável `bin/test_lmc` via `make test-lmc` |
 
 ---
@@ -132,15 +135,17 @@ Em distribuições Debian/Ubuntu nativas ou dentro do **WSL2 (Windows Subsystem 
    git clone https://github.com/vdornelass/pi2-squad-e7.git
    cd pi2-squad-e7
    ```
-3. **Compile, rode os testes e execute o jogo:**
+3. **Compile, rode os testes e execute o jogo (um comando por linha):**
    ```bash
-   make clean && make
+   make clean
+   make
    make test-lmc
    make run
    ```
+   *(Se estiver invocando via **Windows PowerShell**, não encadeie comandos com `&&` — use um comando por vez: `wsl make clean`, depois `wsl make`, depois `wsl make run`.)*
 
 > [!NOTE]
-> No **WSL2 sem servidor X ativo**, certifique-se de utilizar Windows 11 (com **WSLg** habilitado por padrão) e verifique se `DISPLAY=:0` está definido antes de chamar `./bin/jogo`. No WSL sem backend PulseAudio/ALSA configurado, a Raylib inicializa com driver nulo (`miniaudio / Null`) sem travar o jogo; para testar o áudio sintetizado no Windows, utilize o binário nativo `bin/jogo.exe` via `.\jogar.bat`.
+> No **WSL2**, utilize Windows 11 com **WSLg** ativo (`DISPLAY=:0`). Caso a Raylib exiba `Backend: miniaudio / Null` e o jogo rode sem áudio no WSL, instale a biblioteca PulseAudio com `wsl -u root apt install -y libpulse0` (conforme documentado na [2ª rodada de testes](./docs/casos_de_teste_sprint03.md)) ou utilize a versão nativa Windows via `.\jogar.bat`.
 
 ---
 
@@ -161,14 +166,14 @@ O [`Makefile`](./Makefile) padroniza todos os fluxos de build e verificação:
 
 | Comando | Ação Executada | Artefato / Saída Esperada |
 | :--- | :--- | :--- |
-| `make` (ou `make all`) | Compila todos os arquivos em `SRCS` com `-Wall -Wextra -std=c99 -pedantic` | Gera `bin/jogo` (Linux/WSL) ou `bin/jogo.exe` |
+| `make` (ou `make all`) | Compila todos os 12 arquivos `.c` em `SRCS` com `-Wall -Wextra -std=c99 -pedantic` | Gera `bin/jogo` (Linux/WSL) ou `bin/jogo.exe` |
 | `make run` | Compila (se necessário) e executa o jogo com `LD_LIBRARY_PATH=lib` | Abre a janela gráfica `1280x720` a 60 FPS |
-| `make windows` | Cross-compila usando `WIN_CC` (`x86_64-w64-mingw32-gcc`) e copia `lib/raylib.dll` | Gera `bin/jogo.exe` + `bin/raylib.dll` |
-| `make test-lmc` | Compila e executa `tests/test_logica_lmc.c` com os módulos lógicos do motor | Exibe **`Resultado: 181/181 verificacoes passaram.`** |
+| `make windows` | Gera recurso de ícone (`windres` em `src/icon.rc`), cross-compila com `WIN_CC` e copia `lib/raylib.dll` | Gera `bin/jogo.exe` + `AI_Safety.exe` + `bin/raylib.dll` |
+| `make test-lmc` | Compila e executa `tests/test_logica_lmc.c` com `typing_engine.c`, `boss.c`, `bullet.c`, `player.c` e `ui.c` | Exibe **`Resultado: 181/181 verificacoes passaram.`** |
 | `make clean` | Remove executáveis e objetos em `bin/` (`bin/jogo`, `bin/test_lmc`, `*.o`, `*.exe`) | Diretório `bin/` limpo para recompilação completa |
 
 > [!IMPORTANT]
-> Como o `Makefile` lista diretamente os arquivos `.c` sem rastreamento automático de dependências de cabeçalho (`#include`), **sempre execute `make clean && make` após modificar `src/config.h` ou qualquer arquivo `.h`** (referente à Issue [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10)).
+> Como o `Makefile` lista diretamente os arquivos `.c` sem rastreamento automático de dependências de cabeçalho (`#include`), **sempre execute `make clean` seguido de `make` após modificar `src/config.h` ou qualquer arquivo `.h`** (referente à Issue [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10)).
 
 ### Verificação Manual e Testes de Sistema
 Além da suíte unitária/lógica `make test-lmc`, os roteiros completos de testes de sistema ponta a ponta estão versionados em:
@@ -240,8 +245,8 @@ Ao abrir o Pull Request no GitHub, preencha completamente o [`.github/pull_reque
 Um card ou Pull Request só é considerado **Concluído (Done)** quando atende a todos os critérios abaixo:
 
 - [ ] **Critérios 3Cs:** Todos os critérios de *Confirmação* da história/subtarefa no Jira foram cumpridos.
-- [ ] **Compilação Limpa (Local e CI):** `make clean && make` compila com **0 erros e 0 warnings** (`-Wall -Wextra -std=c99 -pedantic`) e o workflow do GitHub Actions passa em verde.
-- [ ] **Testes Validados:** `make test-lmc` retorna **181/181 verificações aprovadas** e o jogo foi testado manualmente na interface gráfica (ou Windows via `jogar.bat`) sem regressões ou travamentos.
+- [ ] **Compilação Limpa (Local e CI):** `make clean` seguido de `make` compila com **0 erros e 0 warnings** (`-Wall -Wextra -std=c99 -pedantic`) e o workflow do GitHub Actions passa em verde.
+- [ ] **Testes Validados:** `make test-lmc` retorna **181/181 verificações aprovadas** e o jogo foi testado manualmente na interface gráfica (via WSL ou Windows `jogar.bat`) sem regressões ou travamentos.
 - [ ] **Revisão por Pares (*Code Review*):** Pelo menos um integrante da Squad E7 revisou o PR no GitHub.
 - [ ] **Rastreabilidade & Evidência:** Mensagens de commit citam a chave `PI2-XXX`, e o card do Jira foi atualizado com comentário técnico / print / screencast e movido para **Concluído**.
 
@@ -263,14 +268,20 @@ copy /y lib\raylib.dll bin\
 
 O `Makefile` monitora arquivos `.c`. Sempre force a recompilação limpa ao modificar cabeçalhos (Issue [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10)):
 ```bash
-make clean && make
+make clean
+make
 ```
+*(No PowerShell com WSL, execute `wsl make clean` e depois `wsl make` separadamente.)*
 </details>
 
 <details>
 <summary><strong>3. O jogo roda sem som ao executar dentro do WSL</strong></summary>
 
-O WSL sem servidor de áudio Windows/PulseAudio acoplado inicializa a Raylib com backend silencioso (`miniaudio / Null`). Para ouvir os efeitos sonoros sintetizados da `US19`, execute a versão nativa Windows usando `.\jogar.bat` (que compila e executa `bin\jogo.exe` fora do WSL).
+Caso o log da Raylib exiba `Backend: miniaudio / Null` no WSL, instale o suporte ao PulseAudio no Ubuntu/WSL para ativar o áudio sintetizado:
+```powershell
+wsl -u root apt install -y libpulse0
+```
+Como alternativa, execute a versão nativa Windows via `.\jogar.bat` (caso o sistema não bloqueie o `.exe`).
 </details>
 
 <details>
@@ -283,4 +294,29 @@ Instale todos os cabeçalhos de desenvolvimento X11/OpenGL/ALSA listados na [Se�
 <summary><strong>5. Git pede autenticação repetidamente ou bloqueia push direto em origin</strong></summary>
 
 Contribuintes sem permissão direta de escrita em `vdornelass/pi2-squad-e7` devem fazer *fork* do repositório, adicionar o remote `fork` (`git remote add fork <url-do-fork>`) e enviar para sua branch no fork antes de abrir o Pull Request para `origin/main`.
+</details>
+
+<details>
+<summary><strong>6. Windows bloqueia a execução de `bin/jogo.exe` / `AI_Safety.exe` (*Smart App Control*)</strong></summary>
+
+No Windows 11 com **Controle Inteligente de Aplicativos (*Smart App Control*)** ou *SmartScreen* restrito, executáveis baixados ou gerados sem assinatura digital (*code signing*) podem ser bloqueados pelo sistema operacional. Para rodar o jogo com segurança sem desativar proteções do Windows:
+1. Execute a compilação e execução nativa pelo **WSL2**:
+   ```powershell
+   wsl make clean
+   wsl make
+   wsl make run
+   ```
+2. Para habilitar os efeitos sonoros (`US19`) dentro do WSL, execute uma única vez: `wsl -u root apt install -y libpulse0`.
+3. Caso possua compilador MinGW (`w64devkit`) instalado localmente, rodar `.\jogar.bat` recompila o binário direto na própria máquina.
+</details>
+
+<details>
+<summary><strong>7. Erro de sintaxe no Windows PowerShell ao encadear comandos com `&&`</strong></summary>
+
+O **Windows PowerShell (versão 5.1)** padrão do Windows **não aceita o operador `&&`** (diferente do `bash` no Linux/WSL ou do Prompt `cmd`), retornando erro `O token '&&' não é um separador de instruções válido`. Sempre execute um comando por linha:
+```powershell
+wsl make clean
+wsl make
+wsl make run
+```
 </details>

@@ -64,7 +64,7 @@
   * [PI2-232](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-232) (*Deploy funcional e screencast com URL pública*)
 * **Horários / Carga:** Segunda-feira e Quarta-feira (2h30 por sessão).
 * **Dinâmica de Papéis:**
-  * **Larissa Almeida** (*Driver* — elaboração dos cenários de teste de sistema das novas histórias US11, US12, US14 e US15, verificação das regras de aceitação 3Cs e gravação de screencasts) / **Theo Monteiro** (*Navigator* — estruturação dos fluxos de automação de build/deploy, conferência dos links nos cards do Jira e documentação dos resultados).
+  * **Larissa Almeida** (*Driver* — elaboração e execução dos 12 cenários de teste de sistema das histórias **US12** e **US15** + 1 reteste de regressão da Issue [#1](https://github.com/vdornelass/pi2-squad-e7/issues/1) da Sprint 01 em [`docs/casos_de_teste_sprint02.md`](./casos_de_teste_sprint02.md), registro do Issue/Bug Tracker em `docs/img/bug_tracker_sprint02.png` e gravação dos screencasts `screencast_testes_sprint02_US12.mp4`, `screencast_testes_sprint02_US15_vitoria.mp4` e `screencast_testes_sprint02_US15_ranking.mp4`) / **Theo Monteiro** (*Navigator* — estruturação dos fluxos de build/deploy, conferência dos links nos cards do Jira e revisão dos resultados).
 * **Desafios e Aprendizados:**
   * A sincronização entre testes funcionais e gravação com legendas evidenciando os critérios de aceite exigiu planejamento prévio dos roteiros. A cooperação em dupla assegurou rastreabilidade bidirecional entre cada card do Jira e suas respectivas evidências.
 
@@ -74,8 +74,8 @@
 * **Responsável:** Mateus Lacerda
 * **Atuação:** 
   * Gestão estratégica do Jira Board (`PI2-223`, `PI2-225`, `PI2-230`, `PI2-231`), garantindo a preservação do Product Backlog com as histórias `US16` a `US19` para a próxima sprint.
-  * Validação das metas da Sprint 02 (10+ histórias acumuladas, alcançando 14 no total integrado).
-  * Consolidação da cadência semanal de commits (Semanas 36 a 43) e atualização dos prints oficiais do Board e Backlog no `README.md`.
+  * Validação das metas da Sprint 02 (10+ histórias acumuladas, alcançando **11 Histórias de Usuário entregues no acumulado**: 7 da Sprint 01 + 4 da Sprint 02 — `US11`, `US12`, `US14` e `US15`, além das entregas técnicas).
+  * Consolidação da cadência semanal de commits e publicação dos prints oficiais do Board e Backlog no `README.md`.
 
 ---
 
@@ -85,5 +85,5 @@
 | :--- | :--- | :--- | :--- |
 | **Dupla 1:** Matheus Chaves & Caio Brayner | `PI2-80`, `PI2-175`, `PI2-178`, `PI2-179` | `src/save.c`, `src/save.h`, `src/game_state.c`, `src/game_state.h`, `src/main.c` | [`1b0e96f`](https://github.com/vdornelass/pi2-squad-e7/commit/1b0e96f), [`61206dd`](https://github.com/vdornelass/pi2-squad-e7/commit/61206dd), [`d671026`](https://github.com/vdornelass/pi2-squad-e7/commit/d671026) |
 | **Dupla 2:** Julio Cesar & João Gabriel | `PI2-77`, `PI2-78`, `PI2-81`, `PI2-177`, `PI2-181`, `PI2-31` | `src/ranking.c`, `src/ranking.h`, `src/typing_engine.c`, `src/ui.c`, `src/main.c`, `Makefile` | [`b296cb2`](https://github.com/vdornelass/pi2-squad-e7/commit/b296cb2), [`5b80d72`](https://github.com/vdornelass/pi2-squad-e7/commit/5b80d72), [`2483c92`](https://github.com/vdornelass/pi2-squad-e7/commit/2483c92) |
-| **Dupla 3:** Larissa Almeida & Theo Monteiro | `PI2-224`, `PI2-227`, `PI2-228`, `PI2-229`, `PI2-232` | `docs/casos_de_teste_sprint01.md`, `README.md`, screencasts | [`254dbcc`](https://github.com/vdornelass/pi2-squad-e7/commit/254dbcc), [`7e8f110`](https://github.com/vdornelass/pi2-squad-e7/commit/7e8f110), [`343d3ae`](https://github.com/vdornelass/pi2-squad-e7/commit/343d3ae) (PR #4) |
-| **Scrum Master:** Mateus Lacerda | `PI2-223`, `PI2-225`, `PI2-230`, `PI2-231` | `README.md` (Seção 10), `docs/relatorio_pair_programming_sprint02.md`, prints do Board e Backlog | [`15dbcb1`](https://github.com/vdornelass/pi2-squad-e7/commit/15dbcb1), [`487d1d3`](https://github.com/vdornelass/pi2-squad-e7/commit/487d1d3) (PR #5) |
+| **Dupla 3:** Larissa Almeida & Theo Monteiro | `PI2-224`, `PI2-227`, `PI2-228`, `PI2-229`, `PI2-232` | `docs/casos_de_teste_sprint02.md`, `docs/img/bug_tracker_sprint02.png`, `docs/screencast_testes_sprint02_US12.mp4`, `docs/screencast_testes_sprint02_US15_vitoria.mp4`, `docs/screencast_testes_sprint02_US15_ranking.mp4`, `README.md` (Seção 10.3) | [`dd2081d`](https://github.com/vdornelass/pi2-squad-e7/commit/dd2081d), [`71be048`](https://github.com/vdornelass/pi2-squad-e7/commit/71be048) |
+| **Scrum Master:** Mateus Lacerda | `PI2-223`, `PI2-225`, `PI2-230`, `PI2-231` | `README.md` (Seções 10.1 e 10.2), `docs/relatorio_pair_programming_sprint02.md`, `docs/img/print_board_sprint02.png`, `docs/img/print_backlog_sprint02.png`, `docs/img/print_sprint02_relatorio.png` | [`285987f`](https://github.com/vdornelass/pi2-squad-e7/commit/285987f), [PR #14](https://github.com/vdornelass/pi2-squad-e7/pull/14) |
