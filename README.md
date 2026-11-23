@@ -632,12 +632,12 @@ Os testes foram feitos em rodadas, à medida que cada história entrava na `main
 | 2ª | 21/11 | `3f7655d` | US16, US17, US18, US19, US20 e retestes das issues #9, #10 e #12 |
 | 3ª | 22/11 | `c35ea04` | Reteste da US20 depois da correção da issue #15 (PR #16) |
 
-* **Resultado:** 23 casos passaram, 3 falharam e 1 não foi testado.
+* **Resultado:** 24 casos passaram e 3 falharam, todos com issue aberta.
 * **Evidência em vídeo** (também anexada aos cards do Jira):
 
 | História | Card | Resultado | Evidência |
 | :-- | :-: | :-: | :-- |
-| US16: Ícone personalizado | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) | 2 passaram, 1 falhou, 1 não testado | [ícone no .exe](./docs/img/print_us16_icone_exe.png) · [make windows](./docs/img/print_us16_make_windows.png) · [barra de tarefas](./docs/img/print_us16_icone_barra_tarefas.png) |
+| US16: Ícone personalizado | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) | 3 passaram, 1 falhou | [ícone no .exe](./docs/img/print_us16_icone_exe.png) · [sem a pasta assets](./docs/img/print_us16_sem_assets.png) · [make windows](./docs/img/print_us16_make_windows.png) · [barra de tarefas](./docs/img/print_us16_icone_barra_tarefas.png) |
 | US17: Tutorial guiado | [PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218) | 4 de 4 passaram | [partida](./docs/screencast_testes_sprint03_rodada2_partida.mp4) · [vitória](./docs/screencast_testes_sprint03_rodada2_vitoria.mp4) |
 | US18: Widescreen HD, fonte e menu | [PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219) | 4 de 4 passaram | [partida](./docs/screencast_testes_sprint03_rodada2_partida.mp4) |
 | US19: Feedback sonoro | [PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220) | 6 de 6 passaram | [áudio](./docs/screencast_testes_sprint03_US19_audio.mp4) · [vitória](./docs/screencast_testes_sprint03_rodada2_vitoria.mp4) |

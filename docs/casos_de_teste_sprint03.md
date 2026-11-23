@@ -21,13 +21,13 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 
 | História | Casos | Passou | Falhou | Parcial | Não testado |
 | :-- | :-: | :-: | :-: | :-: | :-: |
-| US16 | 4 | 2 | 1 | 0 | 1 |
+| US16 | 4 | 3 | 1 | 0 | 0 |
 | US17 | 4 | 4 | 0 | 0 | 0 |
 | US18 | 4 | 4 | 0 | 0 | 0 |
 | US19 | 6 | 6 | 0 | 0 | 0 |
 | US20 | 4 | 4 | 0 | 0 | 0 |
 | Regressão (Issues #2, #7, #8, #9, #10) | 5 | 3 | 2 | 0 | 0 |
-| **Total** | **27** | **23** | **3** | **0** | **1** |
+| **Total** | **27** | **24** | **3** | **0** | **0** |
 
 ## Como executar
 
@@ -60,7 +60,7 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 | CT-US16-01 | CA04 | No Windows, rodar `make windows`. | Compila e gera `bin/jogo.exe` com o ícone embutido, sem warnings. | Passou | Teste de 21/11, depois de instalar o compilador no WSL (`wsl -u root apt install -y gcc-mingw-w64-x86-64 binutils-mingw-w64-x86-64`): o `wsl make windows` compilou com o recurso do ícone (`bin/icon.res`) e terminou sem nenhum warning (saída abaixo). [Print de 21/11](./img/print_us16_make_windows.png): o `jogo.exe` recém-gerado (19:54), junto com o `icon.res` (19:53), aparece com o ícone da AURA-67 |
 | CT-US16-02 | CA01 | Abrir a pasta `bin/` no Windows Explorer. | `jogo.exe` aparece com o ícone da AURA-67, não com o ícone padrão. | Passou | [Print de 21/11](./img/print_us16_icone_exe.png): na pasta `bin/`, o `jogo` do tipo Aplicativo (`jogo.exe`, versão `3f7655d`) aparece com o ícone da AURA-67. O binário Linux (`jogo`, sem extensão) aparece com o ícone padrão de arquivo, como esperado |
 | CT-US16-03 | CA02 | Abrir o jogo e olhar a barra de título e a barra de tarefas. | As duas mostram o ícone oficial do AI Safety. | **Falhou** | [Print de 21/11](./img/print_us16_icone_barra_tarefas.png), rodando pelo WSL: a **barra de tarefas** mostra o ícone da AURA-67 ✅, mas a **barra de título** da janela mostra o ícone genérico ❌ (também no vídeo rodada 2, partida, `0:00 – 0:04`). Em 22/11, o Caio Brayner abriu o `bin/jogo.exe` direto no Windows e relatou que a barra de título também mostra o ícone genérico (relato sem print). Registrado na Issue [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) |
-| CT-US16-04 | CA03 | Rodar o jogo sem o arquivo do ícone. | O jogo abre normalmente, sem travar. | Não testado | Na versão `3f7655d` o ícone está embutido no código (`src/icon_data.h`) e não é carregado de arquivo. O critério precisa ser revisto no card |
+| CT-US16-04 | CA03 | Renomear a pasta `assets/` para `assets_off/` e abrir o jogo. Depois, voltar o nome. | O ícone continua embutido e o jogo abre normalmente, mesmo sem a pasta `assets/`. | Passou | [Print de 22/11](./img/print_us16_sem_assets.png): sem a pasta `assets/`, o jogo abre normalmente com a arte da AURA-67 (embutida em `src/icon_data.h`). O log mostra o aviso de que a fonte TrueType não foi encontrada e o jogo usa a fonte padrão da Raylib, sem travar. O critério CA03 foi atualizado no card [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) em 22/11, porque o ícone passou a ser embutido no código (commit `f91402c`) |
 
 Saída do CT-US16-01 (21/11/2026, versão `3f7655d`):
 
