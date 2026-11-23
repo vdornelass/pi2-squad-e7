@@ -21,13 +21,13 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 
 | História | Casos | Passou | Falhou | Parcial | Não testado |
 | :-- | :-: | :-: | :-: | :-: | :-: |
-| US16 | 4 | 2 | 0 | 1 | 1 |
+| US16 | 4 | 2 | 1 | 0 | 1 |
 | US17 | 4 | 4 | 0 | 0 | 0 |
 | US18 | 4 | 4 | 0 | 0 | 0 |
 | US19 | 6 | 6 | 0 | 0 | 0 |
 | US20 | 4 | 4 | 0 | 0 | 0 |
 | Regressão (Issues #2, #7, #8, #9, #10) | 5 | 3 | 2 | 0 | 0 |
-| **Total** | **27** | **23** | **2** | **1** | **1** |
+| **Total** | **27** | **23** | **3** | **0** | **1** |
 
 ## Como executar
 
@@ -59,7 +59,7 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 | :-- | :-: | :-- | :-- | :-: | :-: |
 | CT-US16-01 | CA04 | No Windows, rodar `make windows`. | Compila e gera `bin/jogo.exe` com o ícone embutido, sem warnings. | Passou | Teste de 21/11, depois de instalar o compilador no WSL (`wsl -u root apt install -y gcc-mingw-w64-x86-64 binutils-mingw-w64-x86-64`): o `wsl make windows` compilou com o recurso do ícone (`bin/icon.res`) e terminou sem nenhum warning (saída abaixo). [Print de 21/11](./img/print_us16_make_windows.png): o `jogo.exe` recém-gerado (19:54), junto com o `icon.res` (19:53), aparece com o ícone da AURA-67 |
 | CT-US16-02 | CA01 | Abrir a pasta `bin/` no Windows Explorer. | `jogo.exe` aparece com o ícone da AURA-67, não com o ícone padrão. | Passou | [Print de 21/11](./img/print_us16_icone_exe.png): na pasta `bin/`, o `jogo` do tipo Aplicativo (`jogo.exe`, versão `3f7655d`) aparece com o ícone da AURA-67. O binário Linux (`jogo`, sem extensão) aparece com o ícone padrão de arquivo, como esperado |
-| CT-US16-03 | CA02 | Abrir o jogo e olhar a barra de título e a barra de tarefas. | As duas mostram o ícone oficial do AI Safety. | **Parcial** (no WSL) | [Print de 21/11](./img/print_us16_icone_barra_tarefas.png), rodando pelo WSL: a **barra de tarefas** mostra o ícone da AURA-67 ✅, mas a **barra de título** da janela mostra o ícone genérico ❌ (também no vídeo rodada 2, partida, `0:00 – 0:04`). Precisa ser retestado no `jogo.exe` para saber se é limitação do WSL |
+| CT-US16-03 | CA02 | Abrir o jogo e olhar a barra de título e a barra de tarefas. | As duas mostram o ícone oficial do AI Safety. | **Falhou** | [Print de 21/11](./img/print_us16_icone_barra_tarefas.png), rodando pelo WSL: a **barra de tarefas** mostra o ícone da AURA-67 ✅, mas a **barra de título** da janela mostra o ícone genérico ❌ (também no vídeo rodada 2, partida, `0:00 – 0:04`). Em 22/11, o Caio Brayner abriu o `bin/jogo.exe` direto no Windows e relatou que a barra de título também mostra o ícone genérico (relato sem print). Registrado na Issue [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) |
 | CT-US16-04 | CA03 | Rodar o jogo sem o arquivo do ícone. | O jogo abre normalmente, sem travar. | Não testado | Na versão `3f7655d` o ícone está embutido no código (`src/icon_data.h`) e não é carregado de arquivo. O critério precisa ser revisto no card |
 
 Saída do CT-US16-01 (21/11/2026, versão `3f7655d`):
@@ -129,4 +129,4 @@ Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com suce
 * **Fechadas com reteste:** [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) (W/A/S/D), [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (sem som), [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7) (contador 11/10), [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) (relatório da vitória) e [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12) (acentos, CT-US18-03) e [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15) (certificado sem hash e sem integridade restante, CT-US20-02 e CT-US20-04, corrigida no PR #16).
 * **Continuam abertas:** [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) (aviso narrativo na troca de fase) e [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) (Makefile).
 * **Novas, encontradas na 2ª rodada:**
-  * [US16] Ícone da AURA-67 não aparece na barra de título rodando pelo WSL, só na barra de tarefas (CT-US16-03).
+  * [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) [US16] Ícone da AURA-67 não aparece na barra de título da janela, nem no WSL nem no `jogo.exe` (CT-US16-03).

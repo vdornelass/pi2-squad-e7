@@ -632,12 +632,12 @@ Os testes foram feitos em rodadas, à medida que cada história entrava na `main
 | 2ª | 21/11 | `3f7655d` | US16, US17, US18, US19, US20 e retestes das issues #9, #10 e #12 |
 | 3ª | 22/11 | `c35ea04` | Reteste da US20 depois da correção da issue #15 (PR #16) |
 
-* **Resultado:** 23 casos passaram, 2 falharam, 1 passou só em parte e 1 não foi testado.
+* **Resultado:** 23 casos passaram, 3 falharam e 1 não foi testado.
 * **Evidência em vídeo** (também anexada aos cards do Jira):
 
 | História | Card | Resultado | Evidência |
 | :-- | :-: | :-: | :-- |
-| US16: Ícone personalizado | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) | 2 passaram, 1 parcial, 1 não testado | [ícone no .exe](./docs/img/print_us16_icone_exe.png) · [make windows](./docs/img/print_us16_make_windows.png) · [barra de tarefas](./docs/img/print_us16_icone_barra_tarefas.png) |
+| US16: Ícone personalizado | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) | 2 passaram, 1 falhou, 1 não testado | [ícone no .exe](./docs/img/print_us16_icone_exe.png) · [make windows](./docs/img/print_us16_make_windows.png) · [barra de tarefas](./docs/img/print_us16_icone_barra_tarefas.png) |
 | US17: Tutorial guiado | [PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218) | 4 de 4 passaram | [partida](./docs/screencast_testes_sprint03_rodada2_partida.mp4) · [vitória](./docs/screencast_testes_sprint03_rodada2_vitoria.mp4) |
 | US18: Widescreen HD, fonte e menu | [PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219) | 4 de 4 passaram | [partida](./docs/screencast_testes_sprint03_rodada2_partida.mp4) |
 | US19: Feedback sonoro | [PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220) | 6 de 6 passaram | [áudio](./docs/screencast_testes_sprint03_US19_audio.mp4) · [vitória](./docs/screencast_testes_sprint03_rodada2_vitoria.mp4) |
@@ -657,6 +657,8 @@ As falhas foram registradas como issues no GitHub no mesmo dia em que foram enco
   * [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) Vitória sem Precisão, Tempo e Rank (RT-08, fechada)
   * [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12) Textos sem acento (CT-US18-03, fechada)
   * [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15) Certificado sem hash de integridade e sem integridade restante (CT-US20-02 e CT-US20-04, fechada). Correção no PR [#16](https://github.com/vdornelass/pi2-squad-e7/pull/16), revisado pelo Matheus Chaves.
+* **Encontrada na 2ª rodada, ainda aberta:**
+  * [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) Ícone da AURA-67 não aparece na barra de título da janela (CT-US16-03)
 * **Continuam abertas:**
   * [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) Sem aviso narrativo na transição de fase (RT-09)
   * [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) Makefile não recompila quando só um `.h` muda (RT-10)
