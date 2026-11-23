@@ -220,8 +220,8 @@ bool report_export(const Certificate *c) {
 void report_draw_certificate(const Certificate *c, bool exported) {
     const int box_w = 760;
     const int box_x = SCREEN_WIDTH / 2 - box_w / 2;
-    const int box_y = 40;
-    const int box_h = SCREEN_HEIGHT - 120;
+    const int box_h = 470; /* sem as linhas técnicas, a moldura fica mais compacta */
+    const int box_y = (SCREEN_HEIGHT - box_h) / 2 - 30; /* centralizada acima do rodapé */
     char tbuf[16];
     Color rating_c;
 
@@ -254,16 +254,11 @@ void report_draw_certificate(const Certificate *c, bool exported) {
 
     ui_draw_text_centered(report_rating(c->accuracy_pct), box_y + 380, 28, rating_c);
 
-    ui_draw_text_centered(TextFormat("Emitido em: %s", c->issued_at), box_y + 420, 16, COLOR_TEXT_UNTYPED);
-    ui_draw_text_centered(TextFormat("ID: %s   |   Hash: %08lX", c->cert_id, compute_hash(c)),
-                          box_y + 445, 16, COLOR_TEXT_UNTYPED);
-
-    if (exported) {
-        ui_draw_text_centered("Relatórios salvos: " REPORT_TXT_FILE "  e  " REPORT_JSON_FILE,
-                              box_y + 495, 16, GREEN);
-    } else {
+    /* Emissão, ID, hash e caminho dos arquivos ficam só no .txt/.json:
+       o jogador não precisa desses detalhes técnicos na tela. Só avisa se falhar. */
+    if (!exported) {
         ui_draw_text_centered("ERRO: não foi possível salvar os relatórios em bin/",
-                              box_y + 495, 16, RED);
+                              box_y + 440, 16, RED);
     }
 
     ui_draw_text_centered("[ENTER] Ver ranking   |   [M] ou [ESC] Menu", SCREEN_HEIGHT - 60, 20, COLOR_TEXT_UNTYPED);
