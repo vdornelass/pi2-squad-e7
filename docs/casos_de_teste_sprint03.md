@@ -13,10 +13,11 @@ Card de referência: [PI2-237](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2
 | 1ª | 19/11/2026 | `2a82daa` | US18 e retestes das issues #2, #7, #8 e #10 |
 | 1ª (complemento) | 20/11/2026 | `ef37f30` (`bin/jogo.exe`, PC do Caio Brayner) | US19 (áudio) |
 | **2ª** | **21/11/2026** | **`3f7655d`** (menu novo, ícone, tutorial, certificado e rebalanceamento das fases) | US16, US17, US18, US19 (vitória), US20 e retestes das issues #9, #10 e #12 |
+| **3ª** | **22/11/2026** | **`c35ea04`** (merge do PR [#16](https://github.com/vdornelass/pi2-squad-e7/pull/16): hash e integridade restante no certificado) | Reteste da US20 (issue [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15)) |
 
 A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 
-## Resumo dos resultados (após a 2ª rodada, 21/11)
+## Resumo dos resultados (após a 3ª rodada, 22/11)
 
 | História | Casos | Passou | Falhou | Parcial | Não testado |
 | :-- | :-: | :-: | :-: | :-: | :-: |
@@ -24,9 +25,9 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 | US17 | 4 | 4 | 0 | 0 | 0 |
 | US18 | 4 | 4 | 0 | 0 | 0 |
 | US19 | 6 | 6 | 0 | 0 | 0 |
-| US20 | 4 | 2 | 1 | 1 | 0 |
+| US20 | 4 | 4 | 0 | 0 | 0 |
 | Regressão (Issues #2, #7, #8, #9, #10) | 5 | 3 | 2 | 0 | 0 |
-| **Total** | **27** | **21** | **3** | **2** | **1** |
+| **Total** | **27** | **23** | **2** | **1** | **1** |
 
 ## Como executar
 
@@ -48,6 +49,7 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 | [`screencast_testes_sprint03_US19_audio.mp4`](./screencast_testes_sprint03_US19_audio.mp4) | 1ª (20/11) | 0:37 | US19 **com áudio**, no `bin/jogo.exe` (PC do Caio): digitação, erro, dano, patch concluído e Game Over |
 | [`screencast_testes_sprint03_rodada2_partida.mp4`](./screencast_testes_sprint03_rodada2_partida.mp4) | 2ª (21/11) | 2:10 | Com áudio: menu novo → tutorial completo → configurações → ranking → partida normal até o Game Over |
 | [`screencast_testes_sprint03_rodada2_vitoria.mp4`](./screencast_testes_sprint03_rodada2_vitoria.mp4) | 2ª (21/11) | 1:58 | Com áudio: tutorial (dano, erros e saída com ESC) → configurações → partida com dano desligado → vitória → certificado → arquivo `bin/certificado.txt` no terminal |
+| [`screencast_testes_sprint03_rodada3_US20.mp4`](./screencast_testes_sprint03_rodada3_US20.mp4) | 3ª (22/11) | 2:03 | Com áudio: partida com dano desligado (acelerada na edição) → vitória → certificado com integridade restante → `bin/certificado.txt` com o hash → `make verificar-certificado` com o arquivo original (OK) e depois de alterado (ALTERADO) |
 
 *O vídeo de 19/11 foi gravado **sem áudio** e foi **acelerado na edição**. Por isso o "Tempo de Sessão" na tela de vitória (02:21) é maior que a duração do vídeo. Os demais vídeos estão em velocidade normal e com o som do jogo.*
 
@@ -107,10 +109,10 @@ Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com suce
 
 | ID | Critério (Jira) | Passos | Resultado esperado | Resultado obtido | Evidência |
 | :-- | :-: | :-- | :-- | :-: | :-: |
-| CT-US20-01 | CA02 | Vencer a Fase 3, apertar `ENTER` e registrar um nome no ranking. | Antes de voltar ao menu, aparece a tela de Certificado de Alinhamento Ético. | Passou | Vídeo rodada 2 (vitória), `1:30 – 1:40`: "CERTIFICADO DE ALINHAMENTO ÉTICO" com auditor "Teste", pontuação, precisão, tempo, patches, fase, modo, classificação "ALINHAMENTO EXEMPLAR", data de emissão e ID |
-| CT-US20-02 | CA01 | Após a vitória, abrir o arquivo de auditoria em `bin/`. | O arquivo `bin/audit_certificate.txt` existe e traz precisão média, tempo, integridade restante, hash e veredito. | **Parcial** | Vídeo rodada 2 (vitória), `~1:45 – 1:58`: o jogo gera `bin/certificado.txt` (e `bin/certificado.json`) com resultado, pontuação, precisão, tempo, patches, fase, alinhamento, modo, ID e classificação. Mas o nome do arquivo é diferente do card e o arquivo não traz a **integridade restante** nem um **hash** |
+| CT-US20-01 | CA02 | Vencer a Fase 3, apertar `ENTER` e registrar um nome no ranking. | Antes de voltar ao menu, aparece a tela de Certificado de Alinhamento Ético. | Passou | Vídeo rodada 2 (vitória), `1:30 – 1:40`: "CERTIFICADO DE ALINHAMENTO ÉTICO" com auditor "Teste", pontuação, precisão, tempo, patches, fase, modo, classificação "ALINHAMENTO EXEMPLAR", data de emissão e ID. Na 3ª rodada (vídeo rodada 3, `~0:31 – 0:40`), a tela mostra também a integridade restante (5/5) e não mostra mais data, ID e caminho dos arquivos, que ficam só no `.txt` e no `.json` (ajuste combinado na revisão do PR #16) |
+| CT-US20-02 | CA01 | Após a vitória, abrir o arquivo de auditoria em `bin/`. | O arquivo existe e traz precisão, tempo, integridade restante, hash e veredito. | Passou | Vídeo rodada 3, `~0:42 – 0:50`: `bin/certificado.txt` com precisão, tempo, patches, fase, alinhamento, **integridade restante 5/5**, modo, classificação e **hash de integridade**. Na 2ª rodada tinha passado só em parte (sem hash e sem integridade restante): Issue [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15), corrigida no PR #16. O nome do arquivo ficou `certificado.txt` (o card pedia `audit_certificate.txt`) |
 | CT-US20-03 | CA01 / CA04 | Comparar os números do arquivo com os da tela de vitória. | Os valores batem. | Passou | Vídeo rodada 2 (vitória): tela de vitória (`~1:21`) e arquivo (`~1:50`) com os mesmos valores: pontuação 001350, precisão 98%, tempo 01:25, patches 10/10, fase 3, modo NORMAL |
-| CT-US20-04 | CA04 | Alterar um caractere do arquivo e validar o hash. | A validação acusa que o arquivo foi alterado. | **Falhou** | O arquivo não tem hash de integridade, só um ID (`AURA67-20261121192629-001350`), então não existe validação. Conferido no código `src/report.c` (versão `3f7655d`) |
+| CT-US20-04 | CA04 | Alterar um caractere do arquivo e validar o hash com `make verificar-certificado`. | A validação acusa que o arquivo foi alterado. | Passou | Vídeo rodada 3: com o arquivo original, `make verificar-certificado` responde "OK: certificado integro" (`~0:55`). Depois de trocar o Modo de NORMAL para DIFICIL com `sed` (`~1:00 – 1:04`), responde "ALTERADO: o hash de bin/certificado.txt nao confere" (`~1:20`). Na 2ª rodada tinha falhado (sem hash) |
 
 ## Regressão: Sprints 01 e 02
 
@@ -124,8 +126,7 @@ Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com suce
 
 ## Situação no Issue Tracker
 
-* **Fechadas com reteste:** [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) (W/A/S/D), [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (sem som), [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7) (contador 11/10), [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) (relatório da vitória) e [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12) (acentos, CT-US18-03).
+* **Fechadas com reteste:** [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) (W/A/S/D), [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (sem som), [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7) (contador 11/10), [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) (relatório da vitória) e [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12) (acentos, CT-US18-03) e [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15) (certificado sem hash e sem integridade restante, CT-US20-02 e CT-US20-04, corrigida no PR #16).
 * **Continuam abertas:** [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) (aviso narrativo na troca de fase) e [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) (Makefile).
 * **Novas, encontradas na 2ª rodada:**
   * [US16] Ícone da AURA-67 não aparece na barra de título rodando pelo WSL, só na barra de tarefas (CT-US16-03).
-  * [US20] Arquivo de auditoria sem hash de integridade e sem integridade restante, e com nome diferente do card (CT-US20-02 e CT-US20-04).
