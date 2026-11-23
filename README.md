@@ -77,7 +77,7 @@ No papel de um(a) **AI Safety Engineer (Human-in-the-Loop)**, você entra direta
 
 ## 4. Histórias de Usuário (Padrão 3Cs - INVEST)
 
-O projeto possui **15 Histórias de Usuário** cadastradas e priorizadas no Jira, detalhadas no padrão **3Cs (Card, Conversation, Confirmation)**:
+O projeto possui **20 Histórias de Usuário** cadastradas e priorizadas no Jira (15 na Unidade 1 e 5 na Unidade 2), detalhadas no padrão **3Cs (Card, Conversation, Confirmation)**:
 
 * **Documento Completo das Histórias:** [Consulte as 15 Histórias de Usuário detalhadas em docs/historias_de_usuario.md](./docs/historias_de_usuario.md)
 
@@ -101,6 +101,12 @@ O projeto possui **15 Histórias de Usuário** cadastradas e priorizadas no Jira
   * `US13`: Menu Principal, Instruções de Alinhamento e Configurações Web.
   * `US14`: Persistência de Progresso (Save/Load Local de Sessão).
   * `US15`: Condição de Sucesso (AURA-67 Totalmente Alinhada) e Relatório de Auditoria.
+* **Módulo 5: Histórias da Unidade 2 (Sprint 03)** — cards no Jira, sem detalhamento em `docs/historias_de_usuario.md`
+  * `US16`: Identidade Visual e Ícone Personalizado no Executável (.exe) e na Janela ([PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217)).
+  * `US17`: Modo Tutorial Guiado de AI Safety ([PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218)).
+  * `US18`: Interface Widescreen HD (1280x720), Fonte TrueType e Menu Principal Ilustrado ([PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219)).
+  * `US19`: Feedback Sonoro e Efeitos de Áudio de Combate e Terminal ([PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220)).
+  * `US20`: Exportação de Relatório de Auditoria e Certificado de Alinhamento Ético ([PI2-246](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-246)).
 
 ---
 
@@ -176,27 +182,63 @@ Sketches (SK) e storyboards (SB) de cada História de Usuário, disponíveis em 
 
 ---
 
-### 6.3. Matriz de Rastreabilidade Bidirecional (Estruturada por Larissa Almeida)
+### 6.3. Matriz de Rastreabilidade Bidirecional (US01 a US20 · PI2-222 · Larissa Almeida)
 
-A Matriz de Rastreabilidade mapeia a correlação formal entre Requisitos, Histórias de Usuário, Cards de Gestão no Jira e os respectivos Módulos no Motor C99:
+A matriz liga cada história ao card no Jira, à modelagem (diagrama de atividades e protótipo lo-fi), ao código em C, aos commits e aos casos de teste. A primeira versão, da Entrega 02, cobria só US01 a US15 e marcava a US14 como "A implementar". Esta versão foi conferida com a branch `main` (commit [`50c6934`](https://github.com/vdornelass/pi2-squad-e7/commit/50c6934)) e com o Jira em 22/11/2026.
 
-| US | Requisito / Card Jira | Diagrama de Atividades | Protótipo Lo-Fi | Módulo em C (Código) |
-| :---: | :---: | :---: | :---: | :---: |
-| **US01** | [PI2-67](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-67) | [AD-US01](./docs/diagramas_atividade/HU1_Movimentacao_e_Esquiva_na_Arena.png) | Gameplay Arena | [`src/player.c`](./src/player.c) |
-| **US02** | [PI2-68](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-68) | [AD-US02](./docs/diagramas_atividade/HU2_HUD_de_Combate_Integridade_e_Alinhamento.png) | HUD / Arena | [`src/ui.c`](./src/ui.c) |
-| **US03** | [PI2-69](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-69) | [AD-US03](./docs/diagramas_atividade/HU3_Fases_Cognitivas_e_Padroes_da_AURA-67.png) | Chefe / Arena | [`src/boss.c`](./src/boss.c) |
-| **US04** | [PI2-70](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-70) | [AD-US04](./docs/diagramas_atividade/HU4_Efeitos_de_Status_Adversariais.png) | Debuffs / Arena | [`src/player.c`](./src/player.c) |
-| **US05** | [PI2-71](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-71) | [AD-US05](./docs/diagramas_atividade/HU5_Terminal_de_Insercao_de_Diretrizes.png) | Terminal Neural | [`src/typing_engine.c`](./src/typing_engine.c) |
-| **US06** | [PI2-72](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-72) | [AD-US06](./docs/diagramas_atividade/HU6_Validacao_de_Digitacao_em_Tempo_Real.png) | Tutorial / Terminal | [`src/typing_engine.c`](./src/typing_engine.c) |
-| **US07** | [PI2-73](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-73) | [AD-US07](./docs/diagramas_atividade/HU7_Avaliacao_de_Precisao_e_Patches.png) | Terminal / HUD | [`src/typing_engine.c`](./src/typing_engine.c) |
-| **US08** | [PI2-74](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-74) | [AD-US08](./docs/diagramas_atividade/HU8_Tratamento_de_Excecoes_e_Penalidade.png) | Arena / HUD | [`src/player.c`](./src/player.c) |
-| **US09** | [PI2-75](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-75) | [AD-US09](./docs/diagramas_atividade/HU9_Coleta_de_Datasets_Constitucionais.png) | Arena Gameplay | [`src/bullet.c`](./src/bullet.c) |
-| **US10** | [PI2-76](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-76) | [AD-US10](./docs/diagramas_atividade/HU10_Painel_de_Auditoria_e_Score.png) | Painel de Score | [`src/ui.c`](./src/ui.c) |
-| **US11** | [PI2-77](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-77) | [AD-US11](./docs/diagramas_atividade/HU11_Insercao_de_Patches_de_Alinhamento.png) | Terminal / Avaliação | [`src/typing_engine.c`](./src/typing_engine.c), [`src/main.c`](./src/main.c) |
-| **US12** | [PI2-78](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-78) | [AD-US12](./docs/diagramas_atividade/HU12_Barra_de_Alinhamento_Etico.png) | HUD / Fases | [`src/boss.c`](./src/boss.c), [`src/ui.c`](./src/ui.c) |
-| **US13** | [PI2-79](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-79) | [AD-US13](./docs/diagramas_atividade/HU13_Menu_Principal_Instrucoes_e_Configuracoes.png) | Menu Principal | [`src/main.c`](./src/main.c), [`src/ui.c`](./src/ui.c) |
-| **US14** | [PI2-80](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-80) | [AD-US14](./docs/diagramas_atividade/HU14_Persistencia_de_Progresso.png) | Retomar Sessão | A implementar |
-| **US15** | [PI2-81](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-81) | [AD-US15](./docs/diagramas_atividade/HU15_Condicao_de_Sucesso_e_Relatorio.png) | Tela de Vitória | [`src/main.c`](./src/main.c), [`src/ui.c`](./src/ui.c) |
+**Legenda dos testes:** S01, S02 e S03 são os relatórios de teste de sistema das Sprints 01, 02 e 03 ([`sprint01`](./docs/casos_de_teste_sprint01.md) · [`sprint02`](./docs/casos_de_teste_sprint02.md) · [`sprint03`](./docs/casos_de_teste_sprint03.md)). "P" = passou, "F" = falhou.
+
+#### Requisito → implementação → teste
+
+| US | Card no Jira | Diagrama | Lo-Fi | Código em C | Commits | Testes |
+| :---: | :---: | :---: | :---: | :--- | :---: | :--- |
+| **US01** | [PI2-67](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-67) | [AD-US01](./docs/diagramas_atividade/HU1_Movimentacao_e_Esquiva_na_Arena.png) | Gameplay Arena | [`src/player.c`](./src/player.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | S01: 3 P |
+| **US02** | [PI2-68](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-68) | [AD-US02](./docs/diagramas_atividade/HU2_HUD_de_Combate_Integridade_e_Alinhamento.png) | HUD / Arena | [`src/ui.c`](./src/ui.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | S01: 3 P |
+| **US03** | [PI2-69](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-69) | [AD-US03](./docs/diagramas_atividade/HU3_Fases_Cognitivas_e_Padroes_da_AURA-67.png) | Chefe / Arena | [`src/boss.c`](./src/boss.c), [`src/bullet.c`](./src/bullet.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa), [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c) | S01: 1 P, 2 parciais |
+| **US04** | [PI2-70](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-70) | [AD-US04](./docs/diagramas_atividade/HU4_Efeitos_de_Status_Adversariais.png) | Debuffs / Arena | [`src/boss.c`](./src/boss.c), [`src/bullet.c`](./src/bullet.c), [`src/player.c`](./src/player.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | Sem caso de teste formal |
+| **US05** | [PI2-71](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-71) | [AD-US05](./docs/diagramas_atividade/HU5_Terminal_de_Insercao_de_Diretrizes.png) | Terminal Neural | [`src/ui.c`](./src/ui.c), [`src/typing_engine.c`](./src/typing_engine.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | S01: 3 P |
+| **US06** | [PI2-72](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-72) | [AD-US06](./docs/diagramas_atividade/HU6_Validacao_de_Digitacao_em_Tempo_Real.png) | Tutorial / Terminal | [`src/typing_engine.c`](./src/typing_engine.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | S01: 3 F → corrigidas e retestadas (#1 na S02; #2 e #3 na S03) |
+| **US07** | [PI2-73](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-73) | [AD-US07](./docs/diagramas_atividade/HU7_Avaliacao_de_Precisao_e_Patches.png) | Terminal / HUD | [`src/typing_engine.c`](./src/typing_engine.c), [`src/main.c`](./src/main.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | S01: 2 P, 3 F → corrigidas e retestadas (#1 na S02; #3 na S03) |
+| **US08** | [PI2-74](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-74) | [AD-US08](./docs/diagramas_atividade/HU8_Tratamento_de_Excecoes_e_Penalidade.png) | Arena / HUD | [`src/typing_engine.c`](./src/typing_engine.c) (recuo de 3 caracteres no erro) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | Sem caso de teste formal |
+| **US09** | [PI2-75](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-75) | [AD-US09](./docs/diagramas_atividade/HU9_Coleta_de_Datasets_Constitucionais.png) | Arena Gameplay | [`src/typing_engine.c`](./src/typing_engine.c) (as 10 diretrizes: viés, alucinação, privacidade etc.) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | Sem caso de teste formal. Implementada de forma adaptada (ver nota abaixo) |
+| **US10** | [PI2-76](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-76) | [AD-US10](./docs/diagramas_atividade/HU10_Painel_de_Auditoria_e_Score.png) | Painel de Score | [`src/ui.c`](./src/ui.c), [`src/ranking.c`](./src/ranking.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa), [`b296cb2`](https://github.com/vdornelass/pi2-squad-e7/commit/b296cb2) | Indireto: ranking e estatísticas nos CT-US15-05 e 06 (S02) |
+| **US11** | [PI2-77](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-77) | [AD-US11](./docs/diagramas_atividade/HU11_Insercao_de_Patches_de_Alinhamento.png) | Terminal / Avaliação | [`src/typing_engine.c`](./src/typing_engine.c), [`src/main.c`](./src/main.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa) | Indireto: aplicação do patch nos CT-US07-01 a 04 (S01) |
+| **US12** | [PI2-78](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-78) | [AD-US12](./docs/diagramas_atividade/HU12_Barra_de_Alinhamento_Etico.png) | HUD / Fases | [`src/boss.c`](./src/boss.c), [`src/ui.c`](./src/ui.c) | [`2aabbfa`](https://github.com/vdornelass/pi2-squad-e7/commit/2aabbfa), [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c) | S02: 3 P, 2 F, 1 não testado · S03: RT-09 F (issue [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) aberta) |
+| **US13** | [PI2-79](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-79) | [AD-US13](./docs/diagramas_atividade/HU13_Menu_Principal_Instrucoes_e_Configuracoes.png) | Menu Principal | [`src/main.c`](./src/main.c), [`src/ui.c`](./src/ui.c) | [`57dd405`](https://github.com/vdornelass/pi2-squad-e7/commit/57dd405), [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c) | S01: 7 P |
+| **US14** | [PI2-80](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-80) | [AD-US14](./docs/diagramas_atividade/HU14_Persistencia_de_Progresso.png) | Retomar Sessão | [`src/save.c`](./src/save.c), [`src/game_state.c`](./src/game_state.c), [`src/main.c`](./src/main.c) | [`1b0e96f`](https://github.com/vdornelass/pi2-squad-e7/commit/1b0e96f), [`5b80d72`](https://github.com/vdornelass/pi2-squad-e7/commit/5b80d72) | Sem caso de teste formal |
+| **US15** | [PI2-81](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-81) | [AD-US15](./docs/diagramas_atividade/HU15_Condicao_de_Sucesso_e_Relatorio.png) | Tela de Vitória | [`src/ui.c`](./src/ui.c), [`src/ranking.c`](./src/ranking.c), [`src/main.c`](./src/main.c) | [`61206dd`](https://github.com/vdornelass/pi2-squad-e7/commit/61206dd), [`b296cb2`](https://github.com/vdornelass/pi2-squad-e7/commit/b296cb2) | S02: 3 P, 3 parciais → #7 e #8 corrigidas e retestadas (RT-07 e RT-08 na S03) |
+| **US16** | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) | — | — | [`src/icon.rc`](./src/icon.rc), [`src/icon_data.h`](./src/icon_data.h), [`assets/aura67.ico`](./assets/aura67.ico), [`Makefile`](./Makefile) (`make windows`) | [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c), [`3f7655d`](https://github.com/vdornelass/pi2-squad-e7/commit/3f7655d) | S03: 3 P, 1 F (issue [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) aberta) |
+| **US17** | [PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218) | — | — | [`src/tutorial.c`](./src/tutorial.c), [`src/main.c`](./src/main.c) | [`c2453bb`](https://github.com/vdornelass/pi2-squad-e7/commit/c2453bb), [`4a32f16`](https://github.com/vdornelass/pi2-squad-e7/commit/4a32f16) (PR [#13](https://github.com/vdornelass/pi2-squad-e7/pull/13)) | S03: 4 P |
+| **US18** | [PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219) | — | — | [`src/config.h`](./src/config.h), [`src/ui.c`](./src/ui.c), [`src/main.c`](./src/main.c), [`assets/fonts/`](./assets/fonts) | [`a9c8bb4`](https://github.com/vdornelass/pi2-squad-e7/commit/a9c8bb4), [`a2173ba`](https://github.com/vdornelass/pi2-squad-e7/commit/a2173ba), [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c) | S03: 4 P |
+| **US19** | [PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220) | — | — | [`src/audio.c`](./src/audio.c), [`src/main.c`](./src/main.c) | [`6a8a9d4`](https://github.com/vdornelass/pi2-squad-e7/commit/6a8a9d4) | S03: 6 P (fecha a issue [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3)) |
+| **US20** | [PI2-246](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-246) | — | — | [`src/report.c`](./src/report.c), [`src/main.c`](./src/main.c), [`tests/verificar_certificado.c`](./tests/verificar_certificado.c) | [`ef37f30`](https://github.com/vdornelass/pi2-squad-e7/commit/ef37f30), [`a4a8ffa`](https://github.com/vdornelass/pi2-squad-e7/commit/a4a8ffa) (PR [#16](https://github.com/vdornelass/pi2-squad-e7/pull/16)) | S03: 4 P (fecha a issue [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15)) |
+
+#### Implementação → requisito (sentido inverso)
+
+| Arquivo em C | Histórias que ele atende |
+| :--- | :--- |
+| [`src/player.c`](./src/player.c) | US01, US04 |
+| [`src/boss.c`](./src/boss.c) / [`src/bullet.c`](./src/bullet.c) | US03, US04, US12 |
+| [`src/typing_engine.c`](./src/typing_engine.c) | US05, US06, US07, US08, US09, US11 |
+| [`src/ui.c`](./src/ui.c) | US02, US05, US10, US12, US13, US15, US18 |
+| [`src/main.c`](./src/main.c) | US07, US11, US13, US14, US15, US17, US19, US20 |
+| [`src/save.c`](./src/save.c) / [`src/game_state.c`](./src/game_state.c) | US14 |
+| [`src/ranking.c`](./src/ranking.c) | US10, US15 |
+| [`src/tutorial.c`](./src/tutorial.c) | US17 |
+| [`src/audio.c`](./src/audio.c) | US19 |
+| [`src/report.c`](./src/report.c) | US20 |
+| [`src/icon.rc`](./src/icon.rc) / [`src/icon_data.h`](./src/icon_data.h) | US16 |
+| [`src/config.h`](./src/config.h) | US18 (resolução 1280x720) |
+
+**O que a matriz mostra:**
+
+* As 20 histórias têm card no Jira e código na `main`.
+* Seis histórias da Unidade 1 não têm caso de teste formal próprio: US04, US08, US09 e US14 não foram testadas, e US10 e US11 só foram cobertas de forma indireta por outros casos.
+* A US09 foi adaptada: as diretrizes éticas (viés, alucinação, privacidade) chegam pelo terminal de digitação, e não como itens coletados no cenário. Os critérios do card (item com destaque no cenário e notificação de coleta) não batem com o jogo atual.
+* As histórias US16 a US20 foram criadas na Unidade 2 e não têm diagrama de atividades nem protótipo lo-fi.
+* Os commits da Unidade 1 não citam o card da história. Por isso, nas US01 a US15 o commit indicado é o que criou ou alterou o módulo. Da Sprint 03 em diante, os commits passaram a citar o card (ex.: `PI2-218`, `PI2-246`).
+* No Jira, em 22/11/2026, os cards US16 ([PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217)), US19 ([PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220)) e US20 ([PI2-246](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-246)) ainda estavam em "Tarefas pendentes". O código das três já estava na `main`.
+
 ---
 
 ### 6.4. Demonstração (Roteiro e Screencast — PI2-127)
@@ -215,34 +257,37 @@ Roteiro de apresentação e narração estruturado por Larissa Almeida para o sc
 * **Vídeo da Demonstração (Áudio e Legendas Integradas):** [`docs/screencast_demonstracao_lofi.mp4`](./docs/screencast_demonstracao_lofi.mp4)
 ---
 
-## 7. Estrutura do Repositório
+## 7. Estrutura do Repositório (arquitetura do código)
 
 ```text
 pi2-squad-e7/
-├── bin/                       # Executáveis compilados (ignorado no Git)
-├── docs/                      # Documentações de Requisitos, IHC, LMC e Gestão
-│   ├── entrega_02_modelagem_prototipacao.md # Planejamento e Matriz de Rastreabilidade da Entrega 02 (FDS)
-│   ├── historias_de_usuario.md# As 15 Histórias de Usuário completas de AI Safety (3Cs)
-│   ├── pm_canvas.md           # Project Model Canvas de AI Safety (FP2)
-│   └── img/                   # Imagens e evidências documentais
-├── include/                   # Cabeçalhos de bibliotecas gráficas (Raylib C99)
-│   ├── raylib.h
-│   ├── raymath.h
-│   └── rlgl.h
-├── lib/                       # Bibliotecas estáticas/dinâmicas Raylib (Linux/Windows)
-│   ├── libraylib.a
-│   ├── libraylib.so
-│   └── raylib.dll
-├── src/                       # Código-fonte do Motor Gráfico 2D em C99
-│   ├── config.h               # Dimensões (900x700), física e paleta de cores
-│   ├── player.h / player.c    # Jogador (Engenheiro de AI Safety), movimentação e iframes
-│   ├── boss.h / boss.c        # Modelo AURA-67, 3 fases cognitivas e padrões de ataque
-│   ├── bullet.h / bullet.c    # Projéteis (normal, homing, status), lasers e vórtice
-│   ├── typing_engine.h / .c   # Motor de digitação das 10 diretrizes e avaliação de precisão
-│   ├── ui.h / ui.c            # HUD retrô (>_), barra do chefe, partículas e screen shake
-│   └── main.c                 # Game loop a 60 FPS com máquina de estados
-├── .gitignore                 # Configuração de arquivos ignorados
-├── Makefile                   # Automação de compilação C99 multiplataforma
+├── .github/                   # CI (build.yml), templates de issue e de Pull Request
+├── assets/                    # Ícone da AURA-67 (.ico/.png) e fonte JetBrains Mono (TrueType)
+├── bin/                       # Saída da compilação (no Git ficam só jogo.exe e raylib.dll)
+├── docs/                      # Histórias, diagramas, protótipos, testes, relatórios e retrospectiva
+├── include/                   # Cabeçalhos da Raylib (raylib.h, raymath.h, rlgl.h)
+├── lib/                       # Bibliotecas Raylib para Linux e Windows
+├── src/                       # Código-fonte do jogo em C99
+│   ├── config.h               # Resolução 1280x720, física, cores e constantes
+│   ├── main.c                 # Game loop a 60 FPS e máquina de estados (menu, combate, vitória, tutorial...)
+│   ├── player.h / player.c    # Jogador: movimento, esquiva, dano e efeitos de status
+│   ├── boss.h / boss.c        # AURA-67: 3 fases cognitivas e padrões de ataque
+│   ├── bullet.h / bullet.c    # Projéteis (normal, teleguiado, cegueira, confusão) e lasers
+│   ├── typing_engine.h / .c   # Motor de digitação das 10 diretrizes, precisão e penalidade
+│   ├── ui.h / ui.c            # HUD, barras, menus, tela de vitória e textos flutuantes
+│   ├── game_state.h / .c      # Estado da sessão
+│   ├── save.h / save.c        # Save/Load binário da sessão com validação de integridade (US14)
+│   ├── ranking.h / ranking.c  # Ranking ordenado e estatísticas das partidas (US10, US15)
+│   ├── tutorial.h / .c        # Modo tutorial guiado (US17)
+│   ├── audio.h / audio.c      # Efeitos sonoros sintetizados em C (US19)
+│   ├── report.h / report.c    # Certificado .txt/.json com hash de integridade (US20)
+│   └── icon.rc / icon_data.h  # Ícone embutido no .exe e na janela (US16)
+├── tests/
+│   ├── test_logica_lmc.c      # Suíte de lógica (make test-lmc)
+│   └── verificar_certificado.c# Verificação do hash do certificado (make verificar-certificado)
+├── CONTRIBUTING.md            # Guia de contribuição, ambiente e solução de problemas
+├── jogar.bat                  # Atalho para abrir o jogo no Windows
+├── Makefile                   # make, make run, make windows, make test-lmc, make verificar-certificado
 └── README.md                  # Documento principal de entrega
 ```
 
@@ -598,10 +643,10 @@ No Jira Software, a **Sprint 03** corresponde à sprint ativa **`Week 15 e 16`**
 | US / ID | Card no Jira | Descrição Funcional & Técnica | Módulos / Evidências no Repositório | SP | Situação (Ref. `main` / Jira) |
 | :---: | :---: | :--- | :--- | :---: | :--- |
 | **US17** | [PI2-218](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-218) / [PI2-215](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-215) | Modo Tutorial Guiado de AI Safety (Treinamento de Esquiva e Digitação) | `src/tutorial.c`, `src/tutorial.h`, `src/main.c` ([PR #13](https://github.com/vdornelass/pi2-squad-e7/pull/13), [`4a32f16`](https://github.com/vdornelass/pi2-squad-e7/commit/4a32f16), [`236da44`](https://github.com/vdornelass/pi2-squad-e7/commit/236da44)) | `3.0` | **Integrada na `main`** e **Concluída** (**4/4 CTs aprovados**) |
-| **US18** | [PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219) / [PI2-216](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-216) | Interface Widescreen HD (`1280x720`), Fonte TrueType UTF-8 e Menu Principal Ilustrado | `src/config.h`, `src/ui.c`, `src/main.c` ([`a9c8bb4`](https://github.com/vdornelass/pi2-squad-e7/commit/a9c8bb4), [`2a82daa`](https://github.com/vdornelass/pi2-squad-e7/commit/2a82daa), [`a2173ba`](https://github.com/vdornelass/pi2-squad-e7/commit/a2173ba), [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c)) | `3.0` | **Integrada na `main`** e **Concluída** (3 CTs aprovados, 1 parcial no critério visual do menu) |
+| **US18** | [PI2-219](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-219) / [PI2-216](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-216) | Interface Widescreen HD (`1280x720`), Fonte TrueType UTF-8 e Menu Principal Ilustrado | `src/config.h`, `src/ui.c`, `src/main.c` ([`a9c8bb4`](https://github.com/vdornelass/pi2-squad-e7/commit/a9c8bb4), [`2a82daa`](https://github.com/vdornelass/pi2-squad-e7/commit/2a82daa), [`a2173ba`](https://github.com/vdornelass/pi2-squad-e7/commit/a2173ba), [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c)) | `3.0` | **Integrada na `main`** e **Concluída** (**4/4 CTs aprovados**, após o critério do menu ser atualizado no card) |
 | **US19** | [PI2-220](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-220) | Sistema de Feedback Sonoro Sintetizado em C e Efeitos de Combate/Terminal (Issue [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3)) | `src/audio.c`, `src/audio.h`, `src/main.c` ([`6a8a9d4`](https://github.com/vdornelass/pi2-squad-e7/commit/6a8a9d4)) | `3.0` | **Integrada na `main`** (**6/6 CTs aprovados** na 2ª rodada) |
-| **US20** | [PI2-246](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-246) / [PI2-247](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-247) | Exportação de Relatório de Auditoria (`bin/certificado.txt`/`.json`) e Certificado Ético | `src/report.c`, `src/report.h`, `Makefile` ([`ef37f30`](https://github.com/vdornelass/pi2-squad-e7/commit/ef37f30), [`9c9b832`](https://github.com/vdornelass/pi2-squad-e7/commit/9c9b832)) | `5.0` | **Integrada na `main`** (2 CTs aprovados, 1 parcial, 1 falhou — hash ausente) |
-| **US16** | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) / [PI2-221](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-221) | Identidade Visual e Ícone Personalizado no Executável (`.exe`) e Janela *(não contabilizada no total concluído)* | `src/icon.rc`, `src/icon_data.h`, `assets/aura67.ico` ([`3f7655d`](https://github.com/vdornelass/pi2-squad-e7/commit/3f7655d)) | `2.0` | **Pendente / Parcial no Jira** (2 CTs aprovados, 1 parcial no WSL, 1 não testado) |
+| **US20** | [PI2-246](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-246) / [PI2-247](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-247) | Exportação de Relatório de Auditoria (`bin/certificado.txt`/`.json`) e Certificado Ético | `src/report.c`, `src/report.h`, `Makefile` ([`ef37f30`](https://github.com/vdornelass/pi2-squad-e7/commit/ef37f30), [`9c9b832`](https://github.com/vdornelass/pi2-squad-e7/commit/9c9b832)) | `5.0` | **Integrada na `main`** (**4/4 CTs aprovados** na 3ª rodada, com hash de integridade · [PR #16](https://github.com/vdornelass/pi2-squad-e7/pull/16)) |
+| **US16** | [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) / [PI2-221](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-221) | Identidade Visual e Ícone Personalizado no Executável (`.exe`) e Janela *(não contabilizada no total concluído)* | `src/icon.rc`, `src/icon_data.h`, `assets/aura67.ico` ([`3f7655d`](https://github.com/vdornelass/pi2-squad-e7/commit/3f7655d)) | `2.0` | **Pendente no Jira** (3 CTs aprovados, 1 falhou: ícone fora da barra de título, issue [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17)) |
 | **PIF-02** | [PI2-254](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-254) | Portabilidade do launcher [`jogar.bat`](./jogar.bat) para execução em qualquer PC Windows | [`jogar.bat`](./jogar.bat) ([`939fe6e`](https://github.com/vdornelass/pi2-squad-e7/commit/939fe6e)) | `3.0` | **Integrada na `main`** e **Concluída** |
 | **LMC-02** | [PI2-31](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-31) | Validação lógica formal da Unidade 2 e suíte automatizada (`make test-lmc`) | [`docs/relatorio_lmc_unidade2.md`](./docs/relatorio_lmc_unidade2.md), [`tests/test_logica_lmc.c`](./tests/test_logica_lmc.c), [`Makefile`](./Makefile) ([`e519ed1`](https://github.com/vdornelass/pi2-squad-e7/commit/e519ed1), [`f91402c`](https://github.com/vdornelass/pi2-squad-e7/commit/f91402c)) | `5.0` | **Concluída** (alvo `test-lmc` corrigido no `Makefile` com `src/ui.c` após ter quebrado na `main`) |
 | **IHC-02** | [PI2-248](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-248) / [PI2-251](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-251) | Comprovação de usabilidade e auditoria visual das telas do produto final | `src/main.c`, `src/ui.c` ([`2a82daa`](https://github.com/vdornelass/pi2-squad-e7/commit/2a82daa)) | `10.0` | `PI2-251` **Concluída** · `PI2-248` em andamento |
@@ -609,7 +654,7 @@ No Jira Software, a **Sprint 03** corresponde à sprint ativa **`Week 15 e 16`**
 #### Síntese do Acumulado de Histórias de Usuário (Meta da Rubrica: $\ge 15$ Histórias)
 * **Sprint 01 (Entrega 03):** **7 Histórias de Usuário** entregues (`US01`, `US02`, `US03`, `US05`, `US06`, `US07`, `US13`).
 * **Sprint 02 (Entrega 04):** **4 Novas Histórias de Usuário** entregues (`US11`, `US12`, `US14`, `US15`) → acumulado de 11 histórias.
-* **Sprint 03 (Entrega 05):** **4 Novas Histórias de Usuário** integradas na `main` (`US17`, `US18`, `US19`, `US20`) — a `US16` permaneceu parcial/pendente e não entrou nesta conta.
+* **Sprint 03 (Entrega 05):** **4 Novas Histórias de Usuário** integradas na `main` (`US17`, `US18`, `US19`, `US20`) — a `US16` ficou com 1 falha aberta (issue #17) e não entrou nesta conta.
 * **Total Acumulado no Projeto:** **`7 + 4 + 4 = 15 Histórias de Usuário`** implementadas e testadas no acumulado das 3 sprints ([`docs/casos_de_teste_sprint01.md`](./docs/casos_de_teste_sprint01.md), [`sprint02`](./docs/casos_de_teste_sprint02.md) e [`sprint03`](./docs/casos_de_teste_sprint03.md)), atingindo exatamente a meta de **15 histórias acumuladas** exigida na Entrega 05.
 
 #### Evidências do Board e Backlog na Sprint 03 (`Week 15 e 16`)
@@ -707,3 +752,14 @@ Apresentação técnica cronometrada de **15 minutos** estruturada rigorosamente
 * **Roteiro Cronometrado, Divisão de Falas & Dossiê de Processo (Projetos 2 / FDS):** [`docs/roteiro_apresentacao_final_pi2.md`](./docs/roteiro_apresentacao_final_pi2.md)
 * **Slides Oficiais (PDF):** [`docs/apresentacao_final/apresentacao_final_squad_e7.pdf`](./docs/apresentacao_final/apresentacao_final_squad_e7.pdf)
 * **Arquivo Editável (PowerPoint):** [`docs/apresentacao_final/apresentacao_final_squad_e7.pptx`](./docs/apresentacao_final/apresentacao_final_squad_e7.pptx)
+
+---
+
+### 11.6. Documentação Técnica Final e Retrospectiva (PI2-222)
+
+Consolidação da documentação da Unidade 2, conferida com o código da `main` e com o Jira em 22/11/2026:
+
+* **Matriz de rastreabilidade US01 a US20** (requisito → card → modelagem → código → commit → teste, e o sentido inverso): [seção 6.3](#63-matriz-de-rastreabilidade-bidirecional-us01-a-us20--pi2-222--larissa-almeida).
+* **Relatórios de teste de sistema:** [Sprint 01](./docs/casos_de_teste_sprint01.md) · [Sprint 02](./docs/casos_de_teste_sprint02.md) · [Sprint 03](./docs/casos_de_teste_sprint03.md), com screencasts e Issue Tracker na [seção 11.3](#113-qualidade-e-testes-pi2-237--pi2-238--pi2-239).
+* **Arquitetura e build:** estrutura dos módulos em C na [seção 7](#7-estrutura-do-repositório-arquitetura-do-código), compilação e execução na [seção 8](#8-como-compilar-e-executar-o-jogo-gráfico-pif--unidade-1) e no [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+* **Retrospectiva técnica da Unidade 2:** [`docs/retrospectiva_unidade2.md`](./docs/retrospectiva_unidade2.md), com o que funcionou, o que não funcionou e as ações para a próxima unidade.
