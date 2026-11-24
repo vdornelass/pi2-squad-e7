@@ -11,7 +11,7 @@
 
 | Item | Resultado |
 | :--- | :--- |
-| Histórias de usuário | 20 no backlog, todas com código na `main`. 15 contam como entregues e testadas, a US16 ficou com falha aberta (ver [matriz no README, seção 6.3](../README.md#63-matriz-de-rastreabilidade-bidirecional-us01-a-us20--pi2-222--larissa-almeida)) |
+| Histórias de usuário | 20 no backlog, todas com código na `main`. 15 contam como entregues e testadas, a US16 ficou com falha aberta (ver [matriz no README, seção 5.2](../README.md#52-matriz-de-rastreabilidade-bidirecional-us01-a-us20)) |
 | Testes de sistema | Sprint 02: 13 casos. Sprint 03: 27 casos em 3 rodadas, com 24 aprovados e 3 falhas, todas com issue aberta ([`casos_de_teste_sprint03.md`](./casos_de_teste_sprint03.md)) |
 | Testes automatizados | `make test-lmc` com 181 verificações de lógica (LMC) e `make verificar-certificado` para o hash do certificado (US20) |
 | Issue Tracker | Fechadas com reteste: [#1](https://github.com/vdornelass/pi2-squad-e7/issues/1), [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2), [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3), [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7), [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8), [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12), [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15). Abertas: [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9), [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10), [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) |

@@ -7,7 +7,7 @@ Esta pasta consolida todos os artefatos técnicos, relatórios executivos, espec
 ## 🧭 Índice Geral por Disciplina
 
 ### 💻 1. Programação Imperativa e Funcional (PIF)
-* **Instruções de Compilação e Execução:** Consulte a [Seção 8 do README principal](../README.md#8-como-compilar-e-executar-o-jogo-gr%C3%A1fico-pif--unidade-1).
+* **Instruções de Compilação e Execução:** Consulte a [Seção 3 do README principal](../README.md#3-como-executar).
 * **Script de Execução Automática no Windows:** [`../jogar.bat`](../jogar.bat)
 * **Código-Fonte C99 (Motor Gráfico Raylib 5.0):** Diretório [`../src/`](../src/)
 * **Bibliotecas Embutidas (Vendored):** [`../lib/`](../lib/) e [`../include/`](../include/)
