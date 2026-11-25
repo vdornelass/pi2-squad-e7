@@ -23,8 +23,11 @@ typedef struct {
 /* Verifica se um nome de jogador ja esta registrado no ranking (case-insensitive) */
 bool ranking_name_exists(const char *player_name);
 
-/* Adiciona uma nova pontuacao, ordena em ordem decrescente e persiste o Top 10.
-   Retorna a posicao no Top 10 (1..10), 0 se a pontuacao ficou fora do Top 10
+/* Retorna a pontuacao atual de um jogador no ranking, ou -1 se nao existir */
+int ranking_get_score(const char *player_name);
+
+/* Adiciona (ou atualiza se superar o proprio recorde) uma pontuacao, ordena e persiste o Top 10.
+   Retorna a posicao no Top 10 (1..10), 0 se ficou fora do Top 10 ou nao superou o recorde,
    ou -1 se o arquivo do ranking nao pode ser gravado. */
 int ranking_add_score(const char *player_name, int score);
 

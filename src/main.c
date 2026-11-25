@@ -48,6 +48,31 @@
 #define SETTINGS_ITEM_STEP 52
 
 static int g_end_rank_pos = 0; /* posicao projetada no ranking */
+static RankingEntry g_cached_ranking[MAX_RANKING_ENTRIES];
+static int g_cached_ranking_count = 0;
+static MatchStats g_cached_stats = {0};
+
+static void refresh_ranking_cache(void)
+{
+    g_cached_ranking_count = ranking_load(g_cached_ranking, MAX_RANKING_ENTRIES);
+    ranking_compute_stats(&g_cached_stats);
+}
+
+static bool is_enter_pressed(void)
+{
+    return IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER);
+}
+
+static bool has_non_space_char(const char *s)
+{
+    if (!s) return false;
+    for (int i = 0; s[i] != '\0'; i++)
+    {
+        if (s[i] != ' ' && s[i] != '\t')
+            return true;
+    }
+    return false;
+}
 
 /* Resultado do ultimo registro de nome, mostrado na tela de ranking */
 static int g_last_rank_result = 0;   /* 1..10 = posicao, 0 = fora do Top 10, -1 = erro ao gravar */
@@ -270,6 +295,7 @@ static void combat_process_round(GameContext *ctx, float dt, Vector2 mouse_arena
                     enter_end_state(ctx, STATE_VICTORY);
                     audio_play_victory();
                     save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 1);
+                    return;
                 }
             }
             else if (strcmp(res, "CORRECT") == 0)
@@ -311,6 +337,7 @@ static void combat_process_round(GameContext *ctx, float dt, Vector2 mouse_arena
                     enter_end_state(ctx, STATE_VICTORY);
                     audio_play_victory();
                     save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 1);
+                    return;
                 }
             }
             else if (strcmp(res, "CORRECT") == 0)
@@ -357,6 +384,7 @@ static void combat_process_round(GameContext *ctx, float dt, Vector2 mouse_arena
             enter_end_state(ctx, STATE_GAME_OVER);
             audio_play_game_over();
             save_match_result(ctx->score, typing_engine_get_accuracy(&ctx->typing_engine), 0);
+            return;
         }
     }
 
@@ -690,6 +718,7 @@ int main(int argc, char **argv)
 
     char player_name[MAX_NAME_LEN] = "";
     int letter_count = 0;
+    char name_error_buf[128] = "";
     const char *name_error_msg = NULL;
     bool quit_requested = false;
     GameState prev_state = ctx.state;
@@ -775,7 +804,7 @@ int main(int argc, char **argv)
                 audio_play_key_ok();
             }
 
-            bool confirm_menu = IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER) || clicked_menu_item;
+            bool confirm_menu = IsKeyPressed(KEY_SPACE) || is_enter_pressed() || clicked_menu_item;
             int menu_action = -1;
             if (IsKeyPressed(KEY_T))
             {
@@ -819,6 +848,7 @@ int main(int argc, char **argv)
             {
                 audio_play_key_ok();
                 g_last_rank_valid = false; /* aberto pelo menu: sem mensagem de registro */
+                refresh_ranking_cache();
                 ctx.state = STATE_RANKING;
             }
             else if (menu_action == 4)
@@ -976,7 +1006,7 @@ int main(int argc, char **argv)
                 {
                 }
             }
-            else if (IsKeyPressed(KEY_ENTER))
+            else if (is_enter_pressed())
             {
                 while (GetCharPressed() > 0)
                 {
@@ -1021,50 +1051,57 @@ int main(int argc, char **argv)
                 name_error_msg = NULL;
             }
 
-            if (IsKeyPressed(KEY_ENTER))
+            if (is_enter_pressed())
             {
-                if (letter_count == 0)
+                if (letter_count == 0 || !has_non_space_char(player_name))
                 {
                     audio_play_key_error();
                     name_error_msg = "DIGITE UM NOME VÁLIDO ANTES DE CONFIRMAR!";
                 }
-                else if (ranking_name_exists(player_name))
-                {
-                    audio_play_key_error();
-                    name_error_msg = "ESTE NOME JÁ ESTÁ NO RANKING! ESCOLHA OUTRO NOME.";
-                }
                 else
                 {
-                    g_last_rank_result = ranking_add_score(player_name, ctx.score);
-                    g_last_rank_valid = true;
-                    g_last_rank_score = ctx.score;
-                    ranking_clean_name(player_name, g_last_rank_name);
-                    if (g_last_rank_result < 0)
+                    int existing_score = ranking_get_score(player_name);
+                    if (existing_score >= 0 && ctx.score <= existing_score)
+                    {
                         audio_play_key_error();
+                        snprintf(name_error_buf, sizeof(name_error_buf),
+                                 "NOME JÁ EXISTE (%d PTS)! USE OUTRO OU SUPERE O RECORDE.", existing_score);
+                        name_error_msg = name_error_buf;
+                    }
                     else
-                        audio_play_patch_complete();
+                    {
+                        g_last_rank_result = ranking_add_score(player_name, ctx.score);
+                        g_last_rank_valid = true;
+                        g_last_rank_score = ctx.score;
+                        ranking_clean_name(player_name, g_last_rank_name);
+                        refresh_ranking_cache();
+                        if (g_last_rank_result < 0)
+                            audio_play_key_error();
+                        else
+                            audio_play_patch_complete();
 
-                    if (last_end_victory)
-                    {
-                        int done = ctx.typing_engine.phrase_index;
-                        if (done > ctx.typing_engine.phrase_count)
-                            done = ctx.typing_engine.phrase_count;
-                        report_build(&cert, player_name, ctx.score,
-                                     typing_engine_get_accuracy(&ctx.typing_engine),
-                                     ctx.session_time, done, ctx.typing_engine.phrase_count,
-                                     boss_get_phase(&ctx.boss), ctx.difficulty,
-                                     ctx.boss.alignment_pct,
-                                     ctx.player.hp, ctx.player.max_hp);
-                        cert_exported = report_export(&cert);
-                        ctx.state = STATE_CERTIFICATE;
+                        if (last_end_victory)
+                        {
+                            int done = ctx.typing_engine.phrase_index;
+                            if (done > ctx.typing_engine.phrase_count)
+                                done = ctx.typing_engine.phrase_count;
+                            report_build(&cert, player_name, ctx.score,
+                                         typing_engine_get_accuracy(&ctx.typing_engine),
+                                         ctx.session_time, done, ctx.typing_engine.phrase_count,
+                                         boss_get_phase(&ctx.boss), ctx.difficulty,
+                                         ctx.boss.alignment_pct,
+                                         ctx.player.hp, ctx.player.max_hp);
+                            cert_exported = report_export(&cert);
+                            ctx.state = STATE_CERTIFICATE;
+                        }
+                        else
+                        {
+                            ctx.state = STATE_RANKING;
+                        }
+                        player_name[0] = '\0';
+                        letter_count = 0;
+                        name_error_msg = NULL;
                     }
-                    else
-                    {
-                        ctx.state = STATE_RANKING;
-                    }
-                    player_name[0] = '\0';
-                    letter_count = 0;
-                    name_error_msg = NULL;
                 }
             }
             else if (IsKeyPressed(KEY_ESCAPE))
@@ -1085,9 +1122,10 @@ int main(int argc, char **argv)
         }
         else if (ctx.state == STATE_CERTIFICATE)
         {
-            if (IsKeyPressed(KEY_ENTER))
+            if (is_enter_pressed())
             {
                 audio_play_key_ok();
+                refresh_ranking_cache();
                 ctx.state = STATE_RANKING;
             }
             else if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE))
@@ -1151,15 +1189,12 @@ int main(int argc, char **argv)
             BeginMode2D(center_cam);
             ui_draw_text_centered("=== RANKING DE ALINHAMENTO (TOP 10) ===", 50, 26, GOLD);
 
-            RankingEntry entries[MAX_RANKING_ENTRIES];
-            int count = ranking_load(entries, MAX_RANKING_ENTRIES);
-
-            /* Tabela em colunas fixas e centralizada (PI2-252) */
+            /* Tabela em colunas fixas e centralizada (usando cache em memoria) */
             const int table_w = 480;
             const int col_pos = SCREEN_WIDTH / 2 - table_w / 2;
             const int col_name = col_pos + 52;
             const int col_pts_right = col_pos + table_w;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < g_cached_ranking_count; i++)
             {
                 Color row_c = (i == 0) ? GOLD : ((i < 3) ? GREEN : RAYWHITE);
                 int row_y = 105 + (i * 32);
@@ -1171,12 +1206,12 @@ int main(int argc, char **argv)
                     row_c = COLOR_PLAYER;
                 }
                 ui_draw_text(TextFormat("%02d.", i + 1), col_pos, row_y, 20, row_c);
-                ui_draw_text(entries[i].name, col_name, row_y, 20, row_c);
-                const char *pts = TextFormat("%06d PTS", entries[i].score);
+                ui_draw_text(g_cached_ranking[i].name, col_name, row_y, 20, row_c);
+                const char *pts = TextFormat("%06d PTS", g_cached_ranking[i].score);
                 ui_draw_text(pts, col_pts_right - ui_measure_text(pts, 20), row_y, 20, row_c);
             }
 
-            if (count == 0)
+            if (g_cached_ranking_count == 0)
             {
                 ui_draw_text_centered("NENHUMA PONTUAÇÃO REGISTRADA", 200, 20, COLOR_TEXT_UNTYPED);
             }
@@ -1207,15 +1242,13 @@ int main(int argc, char **argv)
             }
 
             /* Estatisticas agregadas das partidas (PI2-177) */
-            MatchStats stats;
-            ranking_compute_stats(&stats);
             const int box_w = 760;
             DrawRectangle(SCREEN_WIDTH / 2 - box_w / 2, SCREEN_HEIGHT - 185, box_w, 75, (Color){20, 24, 38, 255});
             DrawRectangleLines(SCREEN_WIDTH / 2 - box_w / 2, SCREEN_HEIGHT - 185, box_w, 75, COLOR_TYPING_BORDER);
             ui_draw_text_centered("ESTATÍSTICAS GERAIS DE AUDITORIA:", SCREEN_HEIGHT - 173, 16, COLOR_PLAYER);
             ui_draw_text_centered(TextFormat("Partidas: %d  |  Vitórias: %d (%d%%)  |  Precisão Média: %d%%  |  Recorde: %d",
-                                             stats.total_matches, stats.victories, stats.win_rate_pct,
-                                             stats.avg_accuracy_pct, stats.highest_score),
+                                             g_cached_stats.total_matches, g_cached_stats.victories, g_cached_stats.win_rate_pct,
+                                             g_cached_stats.avg_accuracy_pct, g_cached_stats.highest_score),
                                   SCREEN_HEIGHT - 143, 16, RAYWHITE);
 
             ui_draw_text_centered("Pressione [M] ou [ESC] para voltar ao menu", SCREEN_HEIGHT - 75, 20, COLOR_TEXT_UNTYPED);
