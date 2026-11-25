@@ -8,6 +8,8 @@ void game_state_init(GameContext *ctx) {
     ctx->score = 0;
     ctx->session_time = 0.0f;
     ctx->end_screen_lock = 0.0f;
+    ctx->last_phase = 0;
+    ctx->phase_banner_timer = 0.0f;
 
     player_init(&ctx->player, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 200.0f);
     tutorial_init(&ctx->tutorial);
@@ -29,6 +31,8 @@ void game_state_reset_combat(GameContext *ctx) {
     ctx->score = 0;
     ctx->session_time = 0.0f;
     ctx->end_screen_lock = 0.0f;
+    ctx->last_phase = 0;
+    ctx->phase_banner_timer = 0.0f;
 
     /* Descarta caracteres que ainda estao na fila do raylib */
     while (GetCharPressed() > 0) { }

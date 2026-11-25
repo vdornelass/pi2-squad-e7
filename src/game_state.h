@@ -33,6 +33,10 @@ typedef struct {
     float session_time;      /* Tempo de sessao do combate, em segundos */
     float end_screen_lock;   /* Ignora teclas logo ao entrar na Vitoria/Game Over */
 
+    /* Aviso narrativo da troca de fase (issue #9) */
+    int last_phase;            /* fase da AURA-67 no frame anterior (0 = partida nova) */
+    float phase_banner_timer;  /* tempo restante do aviso na tela */
+
     Player player;
     Boss boss;
     Tutorial tutorial;

@@ -1,1 +1,3 @@
-1 ICON "../assets/aura67.ico"
+/* GLFW usa o recurso chamado GLFW_ICON como icone da janela (barra de titulo,
+   Alt+Tab e barra de tarefas) ja na criacao da janela - issue #17 */
+GLFW_ICON ICON "../assets/aura67.ico"

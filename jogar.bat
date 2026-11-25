@@ -33,7 +33,19 @@ if not defined CC goto :tentar_wsl
 echo [1/2] Compilador encontrado: %CC%. Compilando...
 if not exist bin mkdir bin
 if exist "%TMP_EXE%" del /q "%TMP_EXE%"
-%CC% -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc %SRCS% -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o "%TMP_EXE%"
+rem Icone da AURA-67 embutido no .exe (barra de titulo e Explorer - issue #17)
+set "RES="
+set "WINDRES="
+where x86_64-w64-mingw32-windres >nul 2>nul
+if not errorlevel 1 set "WINDRES=x86_64-w64-mingw32-windres"
+if not defined WINDRES (
+    where windres >nul 2>nul
+    if not errorlevel 1 set "WINDRES=windres"
+)
+if exist "bin\icon.res" del /q "bin\icon.res"
+if defined WINDRES %WINDRES% src/icon.rc -O coff -o bin/icon.res >nul 2>nul
+if exist "bin\icon.res" set "RES=bin\icon.res"
+%CC% -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc %SRCS% %RES% -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -o "%TMP_EXE%"
 if errorlevel 1 goto :falha_compilacao
 move /y "%TMP_EXE%" "%EXE%" >nul
 goto :executar

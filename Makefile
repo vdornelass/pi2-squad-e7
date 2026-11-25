@@ -2,6 +2,8 @@ CC = gcc
 WIN_CC ?= x86_64-w64-mingw32-gcc
 CFLAGS = -Wall -Wextra -std=c99 -pedantic -Iinclude -Isrc
 TARGET = bin/jogo
+# Headers entram como dependencia: mudar src/config.h (ou outro .h) recompila o jogo (issue #10)
+HDRS = $(wildcard src/*.h)
 SRCS = src/main.c src/player.c src/boss.c src/bullet.c src/typing_engine.c src/ui.c src/save.c src/game_state.c src/ranking.c src/audio.c src/tutorial.c src/report.c
 
 # Deteccao de Sistema Operacional
@@ -16,7 +18,7 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): $(SRCS)
+$(TARGET): $(SRCS) $(HDRS)
 	@mkdir -p bin
 	$(CC) $(CFLAGS) $(SRCS) $(LDFLAGS) -o $(TARGET)
 	@cp lib/raylib.dll bin/ 2>/dev/null || true
@@ -29,10 +31,10 @@ else
 	./$(TARGET)
 endif
 
-windows: $(SRCS)
+windows: $(SRCS) $(HDRS)
 	@mkdir -p bin
-	@x86_64-w64-mingw32-windres src/icon.rc -O coff -o bin/icon.res 2>/dev/null || true
-	$(WIN_CC) $(CFLAGS) $(SRCS) bin/icon.res -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -static-libgcc -o bin/jogo.exe
+	@x86_64-w64-mingw32-windres src/icon.rc -O coff -o bin/icon.res 2>/dev/null || rm -f bin/icon.res
+	$(WIN_CC) $(CFLAGS) $(SRCS) $$(test -f bin/icon.res && echo bin/icon.res) -Llib -lraylib -lopengl32 -lgdi32 -lwinmm -static-libgcc -o bin/jogo.exe
 	@cp bin/jogo.exe AI_Safety.exe 2>/dev/null || true
 	@cp lib/raylib.dll bin/ 2>/dev/null || true
 	@echo "Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com sucesso!"

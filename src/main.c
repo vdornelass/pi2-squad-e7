@@ -19,6 +19,11 @@
 #ifdef __linux__
 #include <unistd.h>
 #endif
+#ifdef _WIN32
+#include <direct.h> /* _mkdir */
+#else
+#include <sys/stat.h> /* mkdir */
+#endif
 
 /* =========================================================================
  * Processamento de Rodadas e Game Loop (PI2-89 - Julio Cesar)
@@ -28,6 +33,7 @@
 /* =========================================================================
  * Consistencia visual e de interacao (PI2-252 - Matheus Chaves)
  * ========================================================================= */
+#define PHASE_BANNER_TIME 3.0f    /* aviso narrativo na troca de fase (issue #9) */
 #define END_SCREEN_LOCK_TIME 1.0f /* trava de teclas ao entrar na tela final */
 #define FADE_TIME 0.25f           /* duracao do fade entre telas */
 
@@ -42,6 +48,102 @@
 #define SETTINGS_ITEM_STEP 52
 
 static int g_end_rank_pos = 0; /* posicao projetada no ranking */
+
+/* Resultado do ultimo registro de nome, mostrado na tela de ranking */
+static int g_last_rank_result = 0;   /* 1..10 = posicao, 0 = fora do Top 10, -1 = erro ao gravar */
+static bool g_last_rank_valid = false;
+static char g_last_rank_name[MAX_NAME_LEN] = "";
+static int g_last_rank_score = 0;
+
+/* Os arquivos do jogo (bin/ranking.txt, bin/savegame.dat, assets/...) usam caminhos
+   relativos. Se o .exe for aberto com duplo clique dentro de bin/, ou de uma pasta
+   extraida de um .zip sem bin/, a pasta atual nao tem bin/ e o ranking nao era gravado.
+   Aqui o jogo passa a trabalhar sempre na pasta do projeto e cria bin/ se faltar. */
+static void setup_working_directory(void)
+{
+    char dir[1024];
+    strncpy(dir, GetApplicationDirectory(), sizeof(dir) - 1);
+    dir[sizeof(dir) - 1] = '\0';
+
+    size_t len = strlen(dir);
+    while (len > 0 && (dir[len - 1] == '/' || dir[len - 1] == '\\'))
+        dir[--len] = '\0';
+
+    /* Executavel dentro de bin/: sobe para a pasta do projeto */
+    char *sep = strrchr(dir, '/');
+    char *sep2 = strrchr(dir, '\\');
+    if (sep2 != NULL && (sep == NULL || sep2 > sep))
+        sep = sep2;
+    const char *last = (sep != NULL) ? sep + 1 : dir;
+    if ((last[0] == 'b' || last[0] == 'B') && (last[1] == 'i' || last[1] == 'I') &&
+        (last[2] == 'n' || last[2] == 'N') && last[3] == '\0' && sep != NULL)
+    {
+        *sep = '\0';
+    }
+
+    if (dir[0] != '\0')
+        ChangeDirectory(dir);
+
+    if (!DirectoryExists("bin"))
+    {
+#ifdef _WIN32
+        _mkdir("bin");
+#else
+        mkdir("bin", 0755);
+#endif
+    }
+}
+
+/* Tela cheia sem borda (janela do tamanho do monitor). Nao troca a resolucao
+   do monitor, entao alternar com F11 e rapido e nao pisca a tela. */
+static bool is_full_screen(void)
+{
+    return IsWindowState(FLAG_BORDERLESS_WINDOWED_MODE);
+}
+
+static void toggle_full_screen(void)
+{
+    if (!is_full_screen() && IsWindowMaximized())
+        RestoreWindow();
+    ToggleBorderlessWindowed();
+}
+
+/* Aviso narrativo da troca de fase da AURA-67 (issue #9 / US12) */
+static void draw_phase_banner(int phase, float timer)
+{
+    static const char *titles[3] = {
+        "FASE 1 - VIÉS",
+        "ALERTA: FASE 2 - JAILBREAKS",
+        "ALERTA CRÍTICO: FASE 3 - AGI SEM RESTRIÇÕES"};
+    static const char *lines[3] = {
+        "A AURA-67 está desalinhada. Aplique os patches éticos para corrigir os vieses.",
+        "A IA resiste ao alinhamento e tenta burlar as regras: ataques mais rápidos!",
+        "Última camada de defesa. Conclua o alinhamento antes do colapso cognitivo!"};
+    if (phase < 1 || phase > 3 || timer <= 0.0f)
+        return;
+
+    /* Entra e sai com fade de 0.3s */
+    float a = 1.0f;
+    if (timer > PHASE_BANNER_TIME - 0.3f)
+        a = (PHASE_BANNER_TIME - timer) / 0.3f;
+    else if (timer < 0.3f)
+        a = timer / 0.3f;
+    if (a < 0.0f)
+        a = 0.0f;
+    if (a > 1.0f)
+        a = 1.0f;
+
+    Color accent = (phase == 1) ? (Color){255, 220, 0, 255}
+                                : ((phase == 2) ? (Color){255, 150, 40, 255} : (Color){255, 60, 60, 255});
+    const int box_w = 820;
+    const int box_h = 74;
+    const int box_x = SCREEN_WIDTH / 2 - box_w / 2;
+    const int box_y = 228;
+    DrawRectangle(box_x, box_y, box_w, box_h, Fade((Color){12, 14, 24, 255}, 0.88f * a));
+    DrawRectangleLinesEx((Rectangle){(float)box_x, (float)box_y, (float)box_w, (float)box_h}, 2.0f, Fade(accent, a));
+    ui_draw_text_centered(titles[phase - 1], box_y + 12, 22, Fade(accent, a));
+    ui_draw_text_centered(lines[phase - 1], box_y + 44, 16, Fade(RAYWHITE, a));
+}
 
 static int ranking_projected_position(int score)
 {
@@ -87,6 +189,20 @@ static void combat_process_round(GameContext *ctx, float dt, Vector2 mouse_arena
         ctx->player.rect.x + ctx->player.rect.width / 2.0f,
         ctx->player.rect.y + ctx->player.rect.height / 2.0f};
     boss_update(&ctx->boss, dt, &ctx->bullet_mgr, p_pos);
+
+    /* Aviso narrativo na troca de fase (issue #9): mostra ao entrar em cada fase */
+    {
+        int phase_now = boss_get_phase(&ctx->boss);
+        if (phase_now != ctx->last_phase)
+        {
+            ctx->last_phase = phase_now;
+            ctx->phase_banner_timer = PHASE_BANNER_TIME;
+        }
+        else if (ctx->phase_banner_timer > 0.0f)
+        {
+            ctx->phase_banner_timer -= dt;
+        }
+    }
 
     /* 3. Motor de Digitacao */
     typing_engine_update(&ctx->typing_engine, dt);
@@ -357,10 +473,7 @@ static void draw_gow_footer(const char *hint)
     Color dark_shadow = (Color){10, 4, 6, 255};
     DrawRectangleGradientH(68, SCREEN_HEIGHT - 62, 760, 38,
                            (Color){25, 12, 16, 200}, (Color){12, 12, 20, 0});
-    DrawCircle(92, SCREEN_HEIGHT - 43, 12.0f, (Color){180, 30, 40, 255});
-    DrawCircleLines(92, SCREEN_HEIGHT - 43, 12.0f, (Color){255, 215, 90, 255});
-    ui_draw_text("E", 87, SCREEN_HEIGHT - 51, 16, WHITE);
-    draw_gow_text(hint, 114, SCREEN_HEIGHT - 51, 16, (Color){230, 230, 235, 255}, dark_shadow, 2);
+    draw_gow_text(hint, 84, SCREEN_HEIGHT - 51, 16, (Color){230, 230, 235, 255}, dark_shadow, 2);
 }
 
 /* Menu Principal inspirado em God of War */
@@ -405,7 +518,7 @@ static void draw_gow_menu(const GameContext *ctx, Texture2D aura_tex, int select
                   MENU_LIST_X, MENU_LIST_Y + MENU_ITEM_COUNT * MENU_ITEM_STEP + 12, 15,
                   (Color){170, 180, 200, 220}, dark_shadow, 2);
 
-    draw_gow_footer("= SELECIONAR [ENTER/ESPAÇO/CLIQUE]   |   [W/S ou SETAS] = NAVEGAR   |   [F11] = MAXIMIZAR");
+    draw_gow_footer("[ENTER/ESPAÇO/CLIQUE] = SELECIONAR   |   [W/S ou SETAS] = NAVEGAR   |   [F11] = TELA CHEIA");
 }
 
 /* Menu de Configuracoes (Esquema de Controle, Dificuldade, Audio e Janela) */
@@ -426,7 +539,7 @@ static void draw_gow_settings(const GameContext *ctx, Texture2D aura_tex, int se
              (ctx->difficulty == DIFFICULTY_HARD) ? "DIFÍCIL (ANOMALIAS)" : "NORMAL (PADRÃO)");
     snprintf(item_vol, sizeof(item_vol), "VOLUME DO ÁUDIO: < %d%% >", ctx->volume_pct);
     snprintf(item_win, sizeof(item_win), "TELA: < %s >",
-             IsWindowMaximized() ? "MAXIMIZADA" : "JANELA (1280x720)");
+             is_full_screen() ? "TELA CHEIA" : "JANELA");
 
     const char *settings_items[SETTINGS_ITEM_COUNT];
     settings_items[0] = item_ctrl;
@@ -484,7 +597,7 @@ static void draw_gow_settings(const GameContext *ctx, Texture2D aura_tex, int se
     }
     else if (selected_item == 3)
     {
-        help_line = "DICA: alterna entre janela 1280x720 e janela maximizada (atalho F11).";
+        help_line = "DICA: alterna entre tela cheia e janela (atalho F11).";
     }
     else
     {
@@ -493,11 +606,12 @@ static void draw_gow_settings(const GameContext *ctx, Texture2D aura_tex, int se
     draw_gow_text(help_line, 122, SETTINGS_LIST_Y + SETTINGS_ITEM_COUNT * SETTINGS_ITEM_STEP + 14, 15,
                   (Color){80, 230, 140, 255}, dark_shadow, 2);
 
-    draw_gow_footer("= ALTERAR [SETAS LADO / CLIQUE]   |   [W/S] = NAVEGAR   |   [ENTER/ESC] = CONFIRMAR E VOLTAR");
+    draw_gow_footer("[SETAS LADO / CLIQUE] = ALTERAR   |   [W/S] = NAVEGAR   |   [ENTER/ESC] = CONFIRMAR E VOLTAR");
 }
 
 int main(int argc, char **argv)
 {
+    setup_working_directory(); /* ranking/save/assets sempre na pasta do projeto */
 #ifdef __linux__
     /* No WSLg o servidor grafico so conecta quando a primeira janela X11 abre.
        Um processo filho rapido (--warmup) acorda o shell antes da janela do jogo. */
@@ -535,6 +649,7 @@ int main(int argc, char **argv)
     SetTargetFPS(TARGET_FPS);
     ui_load_fonts();      /* Fonte TrueType com acentos (PI2-259) */
     SetExitKey(KEY_NULL); /* ESC passa a ser tratado por tela (PI2-252) */
+    toggle_full_screen(); /* Comeca em tela cheia; F11 volta para janela */
     audio_init();
 
     /* Icone da janela e arte do menu carregados da memoria (US16 / PI2-217) */
@@ -544,7 +659,29 @@ int main(int argc, char **argv)
         .height = AURA67_ART_HEIGHT,
         .mipmaps = 1,
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8};
-    SetWindowIcon(aura_icon_img);
+    /* Barra de titulo (issue #17): o Windows usa um icone pequeno (16-24px) na
+       barra de titulo e um grande (32-48px) no Alt+Tab. Uma imagem so de 128x128
+       deixava a escolha para o sistema; agora vao varios tamanhos ja reduzidos. */
+    {
+        const int icon_sizes[] = {16, 24, 32, 48, 64, 128};
+        Image icon_set[6];
+        int icon_count = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            Image copy = ImageCopy(aura_icon_img);
+            if (copy.data == NULL)
+                continue;
+            if (icon_sizes[i] != copy.width)
+                ImageResize(&copy, icon_sizes[i], icon_sizes[i]);
+            icon_set[icon_count++] = copy;
+        }
+        if (icon_count > 0)
+            SetWindowIcons(icon_set, icon_count);
+        else
+            SetWindowIcon(aura_icon_img);
+        for (int i = 0; i < icon_count; i++)
+            UnloadImage(icon_set[i]);
+    }
     Texture2D aura_art_tex = LoadTextureFromImage(aura_icon_img);
     SetTextureFilter(aura_art_tex, TEXTURE_FILTER_POINT);
 
@@ -575,26 +712,21 @@ int main(int argc, char **argv)
 
         if (IsKeyPressed(KEY_F11))
         {
-            if (IsWindowMaximized())
-            {
-                RestoreWindow();
-            }
-            else
-            {
-                MaximizeWindow();
-            }
+            toggle_full_screen();
         }
 
-        /* Canvas logico 1280x720 centralizado em qualquer tamanho de janela */
-        float center_x = (GetScreenWidth() - SCREEN_WIDTH) / 2.0f;
-        float center_y = (GetScreenHeight() - SCREEN_HEIGHT) / 2.0f;
-        if (center_x < 0.0f)
-            center_x = 0.0f;
-        if (center_y < 0.0f)
-            center_y = 0.0f;
+        /* Canvas logico 1280x720 escalado para ocupar a janela inteira, mantendo
+           a proporcao 16:9 (sobra faixa so se o monitor nao for 16:9) */
+        float view_scale = fminf((float)GetScreenWidth() / (float)SCREEN_WIDTH,
+                                 (float)GetScreenHeight() / (float)SCREEN_HEIGHT);
+        if (view_scale <= 0.0f)
+            view_scale = 1.0f;
+        float center_x = ((float)GetScreenWidth() - SCREEN_WIDTH * view_scale) / 2.0f;
+        float center_y = ((float)GetScreenHeight() - SCREEN_HEIGHT * view_scale) / 2.0f;
 
         Vector2 raw_mouse = GetMousePosition();
-        Vector2 mouse_arena_pos = (Vector2){raw_mouse.x - center_x, raw_mouse.y - center_y};
+        Vector2 mouse_arena_pos = (Vector2){(raw_mouse.x - center_x) / view_scale,
+                                            (raw_mouse.y - center_y) / view_scale};
         Vector2 mouse_delta = GetMouseDelta();
         bool mouse_moved = (fabsf(mouse_delta.x) > 0.5f || fabsf(mouse_delta.y) > 0.5f);
         bool mouse_clicked = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
@@ -686,6 +818,7 @@ int main(int argc, char **argv)
             else if (menu_action == 3)
             {
                 audio_play_key_ok();
+                g_last_rank_valid = false; /* aberto pelo menu: sem mensagem de registro */
                 ctx.state = STATE_RANKING;
             }
             else if (menu_action == 4)
@@ -789,14 +922,7 @@ int main(int argc, char **argv)
             }
             else if (settings_selected == 3 && (right_pressed || left_pressed))
             {
-                if (IsWindowMaximized())
-                {
-                    RestoreWindow();
-                }
-                else
-                {
-                    MaximizeWindow();
-                }
+                toggle_full_screen();
                 audio_play_key_ok();
             }
         }
@@ -909,8 +1035,14 @@ int main(int argc, char **argv)
                 }
                 else
                 {
-                    audio_play_patch_complete();
-                    ranking_add_score(player_name, ctx.score);
+                    g_last_rank_result = ranking_add_score(player_name, ctx.score);
+                    g_last_rank_valid = true;
+                    g_last_rank_score = ctx.score;
+                    ranking_clean_name(player_name, g_last_rank_name);
+                    if (g_last_rank_result < 0)
+                        audio_play_key_error();
+                    else
+                        audio_play_patch_complete();
 
                     if (last_end_victory)
                     {
@@ -994,7 +1126,7 @@ int main(int argc, char **argv)
         center_cam.offset = (Vector2){center_x, center_y};
         center_cam.target = (Vector2){0.0f, 0.0f};
         center_cam.rotation = 0.0f;
-        center_cam.zoom = 1.0f;
+        center_cam.zoom = view_scale;
 
         if (ctx.state == STATE_TUTORIAL)
         {
@@ -1031,6 +1163,13 @@ int main(int argc, char **argv)
             {
                 Color row_c = (i == 0) ? GOLD : ((i < 3) ? GREEN : RAYWHITE);
                 int row_y = 105 + (i * 32);
+                if (g_last_rank_valid && g_last_rank_result == i + 1)
+                {
+                    /* Destaca a pontuacao que acabou de ser registrada */
+                    DrawRectangle(col_pos - 12, row_y - 5, table_w + 24, 30, (Color){0, 240, 255, 40});
+                    DrawRectangleLines(col_pos - 12, row_y - 5, table_w + 24, 30, COLOR_PLAYER);
+                    row_c = COLOR_PLAYER;
+                }
                 ui_draw_text(TextFormat("%02d.", i + 1), col_pos, row_y, 20, row_c);
                 ui_draw_text(entries[i].name, col_name, row_y, 20, row_c);
                 const char *pts = TextFormat("%06d PTS", entries[i].score);
@@ -1040,6 +1179,31 @@ int main(int argc, char **argv)
             if (count == 0)
             {
                 ui_draw_text_centered("NENHUMA PONTUAÇÃO REGISTRADA", 200, 20, COLOR_TEXT_UNTYPED);
+            }
+
+            /* Confirmacao do registro feito agora (pontuacao registrada ou nao) */
+            if (g_last_rank_valid)
+            {
+                const char *msg;
+                Color msg_c;
+                if (g_last_rank_result > 0)
+                {
+                    msg = TextFormat("PONTUAÇÃO REGISTRADA: %s - %d PTS (%dº LUGAR)",
+                                     g_last_rank_name, g_last_rank_score, g_last_rank_result);
+                    msg_c = COLOR_TEXT_TYPED;
+                }
+                else if (g_last_rank_result == 0)
+                {
+                    msg = TextFormat("%s - %d PTS: PONTUAÇÃO ABAIXO DO TOP 10, NÃO ENTROU NO RANKING",
+                                     g_last_rank_name, g_last_rank_score);
+                    msg_c = GOLD;
+                }
+                else
+                {
+                    msg = "ERRO: NÃO FOI POSSÍVEL GRAVAR O RANKING (bin/ranking.txt)";
+                    msg_c = (Color){255, 80, 80, 255};
+                }
+                ui_draw_text_centered(msg, SCREEN_HEIGHT - 222, 18, msg_c);
             }
 
             /* Estatisticas agregadas das partidas (PI2-177) */
@@ -1094,7 +1258,7 @@ int main(int argc, char **argv)
             combat_cam.offset = (Vector2){center_x, center_y};
             combat_cam.target = (Vector2){-shake_x, -shake_y};
             combat_cam.rotation = 0.0f;
-            combat_cam.zoom = 1.0f;
+            combat_cam.zoom = view_scale;
 
             BeginMode2D(combat_cam);
             ui_draw_arena_grid();
@@ -1126,6 +1290,7 @@ int main(int argc, char **argv)
             if (ctx.state == STATE_COMBAT)
             {
                 ui_draw_typing_box(&ctx.typing_engine);
+                draw_phase_banner(ctx.last_phase, ctx.phase_banner_timer);
             }
             else
             {

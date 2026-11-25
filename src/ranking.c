@@ -44,14 +44,14 @@ static void normalize_player_name(const char *player_name, char clean_name[MAX_N
     }
 }
 
-static void ranking_save_entries(const RankingEntry entries[], int count) {
+static bool ranking_save_entries(const RankingEntry entries[], int count) {
     FILE *f = fopen(RANKING_FILE, "w");
-    if (!f) return;
+    if (!f) return false;
 
     for (int i = 0; i < count; i++) {
         fprintf(f, "%s %d\n", entries[i].name, entries[i].score);
     }
-    fclose(f);
+    return fclose(f) == 0;
 }
 
 int ranking_load(RankingEntry entries[], int max_entries) {
@@ -111,7 +111,7 @@ bool ranking_name_exists(const char *player_name) {
     return false;
 }
 
-void ranking_add_score(const char *player_name, int score) {
+int ranking_add_score(const char *player_name, int score) {
     RankingEntry entries[MAX_TEMP_ENTRIES];
     int count = ranking_load(entries, MAX_TEMP_ENTRIES - 1);
 
@@ -121,7 +121,7 @@ void ranking_add_score(const char *player_name, int score) {
     /* Nao sobrescreve um nome ja existente no ranking */
     for (int i = 0; i < count; i++) {
         if (names_equal_nocase(entries[i].name, clean_name)) {
-            return;
+            return 0;
         }
     }
 
@@ -137,7 +137,22 @@ void ranking_add_score(const char *player_name, int score) {
         count = MAX_RANKING_ENTRIES;
     }
 
-    ranking_save_entries(entries, count);
+    if (!ranking_save_entries(entries, count)) {
+        return -1;
+    }
+
+    /* Posicao em que o nome ficou (0 = fora do Top 10) */
+    for (int i = 0; i < count; i++) {
+        if (names_equal_nocase(entries[i].name, clean_name)) {
+            return i + 1;
+        }
+    }
+    return 0;
+}
+
+const char *ranking_clean_name(const char *player_name, char out[MAX_NAME_LEN]) {
+    normalize_player_name(player_name, out);
+    return out;
 }
 
 void ranking_compute_stats(MatchStats *stats) {
