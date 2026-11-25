@@ -4,7 +4,7 @@
 [![Engine](https://img.shields.io/badge/Engine-Raylib%205.0-white?logo=raylib&logoColor=black)](https://www.raylib.com/)
 [![CI Build](https://github.com/vdornelass/pi2-squad-e7/actions/workflows/build.yml/badge.svg)](https://github.com/vdornelass/pi2-squad-e7/actions/workflows/build.yml)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20WSL%20%7C%20Windows-0284c7)](./jogar.bat)
-[![Release](https://img.shields.io/badge/Release-v1.0.0--mvp1-purple)](https://github.com/vdornelass/pi2-squad-e7/releases)
+[![Release](https://img.shields.io/badge/Release-v2.0.0%20(final)-purple)](https://github.com/theo1996-dot/pi2-squad-e7/releases/tag/v2.0.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Jira Board](https://img.shields.io/badge/Jira-Sprint%2003%20(Week%2015%20e%2016)-0052CC?logo=jira&logoColor=white)](https://csprj-adsr-2p-e7.atlassian.net/jira/software/c/projects/PI2/boards/2)
 
@@ -36,7 +36,7 @@ Onde encontrar cada item da **Entrega 05 de FDS** (26/11) neste README:
 | Item avaliado | Onde está |
 | :-- | :-- |
 | **1. Implementação:** 15 histórias no acumulado, Sprint 03 no Board e Board atualizado | [8.5. Entrega 05 (Sprint 03)](#85-entrega-05-sprint-03) e [5.2. Matriz de rastreabilidade](#52-matriz-de-rastreabilidade-bidirecional-us01-a-us20) |
-| **2. Produto em produção:** executável e screencasts | [3. Como executar](#3-como-executar) e [6.4. Testes da Sprint 03](#64-sprint-03-entrega-05--pi2-237--pi2-238--pi2-239) |
+| **2. Produto em produção:** deploy funcional, URL pública e screencast | [Release v2.0.0 (download)](https://github.com/theo1996-dot/pi2-squad-e7/releases/tag/v2.0.0), [screencast da release](https://drive.google.com/file/d/1AOfw4mLiuFYOPCzvTkvBTAOcSL0dfkoW/view) e [3.0. Versão final pronta para jogar](#30-versão-final-pronta-para-jogar-release-v200--pi2-235--pi2-236) |
 | **3. Qualidade e testes:** testes de sistema, screencasts e Issue Tracker com print | [6. Qualidade e testes](#6-qualidade-e-testes) |
 | **4. Sustentabilidade:** commits frequentes, programação em pares e `CONTRIBUTING.md` | [7. Processo e sustentabilidade](#7-processo-e-sustentabilidade) |
 | **Apresentação final** | [10. Apresentação final](#10-apresentação-final) |
@@ -97,6 +97,18 @@ No papel de um(a) **AI Safety Engineer (Human-in-the-Loop)**, você entra direta
 ## 3. Como executar
 
 O jogo possui interface gráfica 2D completa em tempo real desenvolvida em **C99** utilizando a biblioteca **Raylib 5.0**. Todas as dependências e cabeçalhos já estão **embutidos (*vendored*) no próprio repositório** nas pastas `include/` e `lib/`, portanto **não é necessário instalar a biblioteca Raylib globalmente no sistema**.
+
+### 3.0. Versão final pronta para jogar (Release v2.0.0 · PI2-235 / PI2-236)
+
+Para jogar sem compilar nada no Windows 10/11:
+
+1. Abra a **[Release v2.0.0](https://github.com/theo1996-dot/pi2-squad-e7/releases/tag/v2.0.0)** e baixe o arquivo `AI_Safety_AURA-67_v2.0.0_windows.zip` em *Assets*.
+2. Extraia o `.zip` e dê dois cliques em `AI_Safety.exe`. Se o SmartScreen avisar, clique em *Mais informações → Executar assim mesmo*.
+
+* **Screencast da release:** [vídeo no Google Drive](https://drive.google.com/file/d/1AOfw4mLiuFYOPCzvTkvBTAOcSL0dfkoW/view). Mostra a URL pública, o download, a execução do jogo e o ranking.
+* **Build:** gerado a partir da `main` de 21/11, sem warnings no CI e com 181/181 verificações lógicas (`make test-lmc`).
+* **Limitação conhecida:** o `.exe` publicado ainda não inclui a correção de 22/11 no certificado da US20 ([issue #15](https://github.com/vdornelass/pi2-squad-e7/issues/15)), que já está no código-fonte.
+
 ### 3.1. Linux / Ubuntu / WSL
 Basta clonar o repositório e executar via terminal:
 
