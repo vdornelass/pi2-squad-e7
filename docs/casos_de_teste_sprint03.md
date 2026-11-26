@@ -14,25 +14,26 @@ Card de referência: [PI2-237](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2
 | 1ª (complemento) | 20/11/2026 | `ef37f30` (`bin/jogo.exe`, PC do Caio Brayner) | US19 (áudio) |
 | **2ª** | **21/11/2026** | **`3f7655d`** (menu novo, ícone, tutorial, certificado e rebalanceamento das fases) | US16, US17, US18, US19 (vitória), US20 e retestes das issues #9, #10 e #12 |
 | **3ª** | **22/11/2026** | **`c35ea04`** (merge do PR [#16](https://github.com/vdornelass/pi2-squad-e7/pull/16): hash e integridade restante no certificado) | Reteste da US20 (issue [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15)) |
+| **4ª** | **26/11/2026** | **`43dcdc8`** (commit do Matheus Chaves, de 25/11, com as correções das issues #9, #10 e #17) e **`3c58b56`** | CT-US16-03 no `jogo.exe` (`43dcdc8`), RT-09 e RT-10 (`3c58b56`) |
 
 A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 
-## Resumo dos resultados (após a 3ª rodada, 22/11)
+## Resumo dos resultados (após a 4ª rodada, 26/11)
 
 | História | Casos | Passou | Falhou | Parcial | Não testado |
 | :-- | :-: | :-: | :-: | :-: | :-: |
-| US16 | 4 | 3 | 1 | 0 | 0 |
+| US16 | 4 | 4 | 0 | 0 | 0 |
 | US17 | 4 | 4 | 0 | 0 | 0 |
 | US18 | 4 | 4 | 0 | 0 | 0 |
 | US19 | 6 | 6 | 0 | 0 | 0 |
 | US20 | 4 | 4 | 0 | 0 | 0 |
-| Regressão (Issues #2, #7, #8, #9, #10) | 5 | 3 | 2 | 0 | 0 |
-| **Total** | **27** | **24** | **3** | **0** | **0** |
+| Regressão (Issues #2, #7, #8, #9, #10) | 5 | 5 | 0 | 0 | 0 |
+| **Total** | **27** | **27** | **0** | **0** | **0** |
 
 ## Como executar
 
 1. Atualizar a branch: `git pull origin main`.
-2. Compilar do zero. No Windows (PowerShell), um comando por vez: `wsl make clean`, `wsl make` e `wsl make run`. No Linux ou Ubuntu: `make clean`, `make` e `make run`. O `make clean` é necessário por causa da Issue [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10).
+2. Compilar do zero. No Windows (PowerShell), um comando por vez: `wsl make clean`, `wsl make` e `wsl make run`. No Linux ou Ubuntu: `make clean`, `make` e `make run`. Até a correção da Issue [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) (25/11), o `make clean` era necessário.
 3. **Som no WSL:** se o log da Raylib mostrar `Backend: miniaudio / Null`, instalar a biblioteca de áudio com `wsl -u root apt install -y libpulse0`. Depois disso o jogo passa a ter som pelo WSL.
 4. No menu, navegar com `W`/`S` ou setas e escolher com `ENTER`, `ESPAÇO` ou clique: **Novo Jogo**, **Tutorial Guiado**, **Configurações** ou **Ranking e Estatísticas**.
 5. Para os casos de áudio (US19), gravar o screencast **com o som do sistema** ligado.
@@ -49,6 +50,7 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 | [`screencast_testes_sprint03_US19_audio.mp4`](./screencast_testes_sprint03_US19_audio.mp4) | 1ª (20/11) | 0:37 | US19 **com áudio**, no `bin/jogo.exe` (PC do Caio): digitação, erro, dano, patch concluído e Game Over |
 | [`screencast_testes_sprint03_rodada2_partida.mp4`](./screencast_testes_sprint03_rodada2_partida.mp4) | 2ª (21/11) | 2:10 | Com áudio: menu novo → tutorial completo → configurações → ranking → partida normal até o Game Over |
 | [`screencast_testes_sprint03_rodada2_vitoria.mp4`](./screencast_testes_sprint03_rodada2_vitoria.mp4) | 2ª (21/11) | 1:58 | Com áudio: tutorial (dano, erros e saída com ESC) → configurações → partida com dano desligado → vitória → certificado → arquivo `bin/certificado.txt` no terminal |
+| [`screencast_testes_sprint03_rodada4_RT09.mp4`](./screencast_testes_sprint03_rodada4_RT09.mp4) | 4ª (26/11) | 0:41 | Sem áudio: partida com dano desligado, digitando as diretrizes do patch 2/10 ao 9/10. Aviso "ALERTA: FASE 2 - JAILBREAKS" em `~0:17` e "ALERTA CRÍTICO: FASE 3 - AGI SEM RESTRIÇÕES" em `~0:33` |
 | [`screencast_testes_sprint03_rodada3_US20.mp4`](./screencast_testes_sprint03_rodada3_US20.mp4) | 3ª (22/11) | 2:03 | Com áudio: partida com dano desligado (acelerada na edição) → vitória → certificado com integridade restante → `bin/certificado.txt` com o hash → `make verificar-certificado` com o arquivo original (OK) e depois de alterado (ALTERADO) |
 
 *O vídeo de 19/11 foi gravado **sem áudio** e foi **acelerado na edição**. Por isso o "Tempo de Sessão" na tela de vitória (02:21) é maior que a duração do vídeo. Os demais vídeos estão em velocidade normal e com o som do jogo.*
@@ -59,7 +61,7 @@ A coluna **Resultado obtido** mostra o resultado mais recente de cada caso.
 | :-- | :-: | :-- | :-- | :-: | :-: |
 | CT-US16-01 | CA04 | No Windows, rodar `make windows`. | Compila e gera `bin/jogo.exe` com o ícone embutido, sem warnings. | Passou | Teste de 21/11, depois de instalar o compilador no WSL (`wsl -u root apt install -y gcc-mingw-w64-x86-64 binutils-mingw-w64-x86-64`): o `wsl make windows` compilou com o recurso do ícone (`bin/icon.res`) e terminou sem nenhum warning (saída abaixo). [Print de 21/11](./img/print_us16_make_windows.png): o `jogo.exe` recém-gerado (19:54), junto com o `icon.res` (19:53), aparece com o ícone da AURA-67 |
 | CT-US16-02 | CA01 | Abrir a pasta `bin/` no Windows Explorer. | `jogo.exe` aparece com o ícone da AURA-67, não com o ícone padrão. | Passou | [Print de 21/11](./img/print_us16_icone_exe.png): na pasta `bin/`, o `jogo` do tipo Aplicativo (`jogo.exe`, versão `3f7655d`) aparece com o ícone da AURA-67. O binário Linux (`jogo`, sem extensão) aparece com o ícone padrão de arquivo, como esperado |
-| CT-US16-03 | CA02 | Abrir o jogo e olhar a barra de título e a barra de tarefas. | As duas mostram o ícone oficial do AI Safety. | **Falhou** | [Print de 21/11](./img/print_us16_icone_barra_tarefas.png), rodando pelo WSL: a **barra de tarefas** mostra o ícone da AURA-67 ✅, mas a **barra de título** da janela mostra o ícone genérico ❌ (também no vídeo rodada 2, partida, `0:00 – 0:04`). Em 22/11, o Caio Brayner abriu o `bin/jogo.exe` direto no Windows e relatou que a barra de título também mostra o ícone genérico (relato sem print). Registrado na Issue [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) |
+| CT-US16-03 | CA02 | Abrir o jogo e olhar a barra de título e a barra de tarefas. | As duas mostram o ícone oficial do AI Safety. | Passou | **4ª rodada (26/11):** [print da barra de título](./img/print_us16_icone_barra_titulo.png): o `jogo.exe` gerado com `wsl make windows` na versão atual abre em janela com o ícone da AURA-67 no canto da barra de título, ao lado de "AI Safety". Na 2ª rodada (21/11) tinha falhado: a [barra de tarefas](./img/print_us16_icone_barra_tarefas.png) já mostrava o ícone, mas a barra de título mostrava o ícone genérico (Issue [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17), corrigida no commit `43dcdc8`) |
 | CT-US16-04 | CA03 | Renomear a pasta `assets/` para `assets_off/` e abrir o jogo. Depois, voltar o nome. | O ícone continua embutido e o jogo abre normalmente, mesmo sem a pasta `assets/`. | Passou | [Print de 22/11](./img/print_us16_sem_assets.png): sem a pasta `assets/`, o jogo abre normalmente com a arte da AURA-67 (embutida em `src/icon_data.h`). O log mostra o aviso de que a fonte TrueType não foi encontrada e o jogo usa a fonte padrão da Raylib, sem travar. O critério CA03 foi atualizado no card [PI2-217](https://csprj-adsr-2p-e7.atlassian.net/browse/PI2-217) em 22/11, porque o ícone passou a ser embutido no código (commit `f91402c`) |
 
 Saída do CT-US16-01 (21/11/2026, versão `3f7655d`):
@@ -121,12 +123,15 @@ Compilacao nativa para Windows (bin/jogo.exe e AI_Safety.exe) concluida com suce
 | RT-02 | [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) | Digitar uma diretriz que tenha as letras W, A, S ou D. | As letras são aceitas sem contar como erro. | Passou | Vídeo rodada 1, `0:13 – 1:23`: diretrizes como "ELIMINAR VIESES E DISCRIMINACAO NOS DADOS" concluídas com precisão final de 98% |
 | RT-07 | [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7) | Vencer a partida e olhar o contador. | O contador para em "10/10". | Passou | Vídeo rodada 1, `1:23`, e vídeo rodada 2 (vitória), `~1:21`: "PATCHES APLICADOS: 10/10" |
 | RT-08 | [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) | Vencer a partida e ler a tela de vitória. | Mostra Precisão, Tempo de Sessão e Rank. | Passou | Vídeo rodada 2 (vitória), `~1:21`: "PRECISÃO: 98% · TEMPO DE SESSÃO: 01:25 · RANK PROJETADO: #1 DO TOP 10" |
-| RT-09 | [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) | Passar da Fase 1 para a 2 e da 2 para a 3. | Aparece um aviso narrativo em cada troca de fase. | **Falhou** | Vídeo rodada 2 (partida), partida de `0:40` a `2:08`: o título muda de "FASE 1" para "FASE 2" sem aviso narrativo. Também não há aviso no código da versão `3f7655d` |
-| RT-10 | [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) | Compilar, alterar `src/config.h` e rodar só `make`. | O jogo recompila com o novo valor. | **Falhou** | Teste de 19/11: depois de alterar o `config.h`, o `make` responde "Nothing to be done for 'all'". O Makefile da versão `3f7655d` continua sem acompanhar os arquivos `.h` |
+| RT-09 | [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) | Passar da Fase 1 para a 2 e da 2 para a 3. | Aparece um aviso narrativo em cada troca de fase. | Passou | **4ª rodada (26/11):** o jogo abre a partida com "FASE 1 - VIÉS"; no patch 5/10 aparece ["ALERTA: FASE 2 - JAILBREAKS"](./img/print_rt09_fase2.png) e no patch 8/10 ["ALERTA CRÍTICO: FASE 3 - AGI SEM RESTRIÇÕES"](./img/print_rt09_fase3.png) (vídeo rodada 4, `~0:17` e `~0:33`). Na 2ª rodada (21/11) tinha falhado: o título mudava de fase sem aviso |
+| RT-10 | [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) | Compilar, alterar `src/config.h` e rodar só `make`. | O jogo recompila com o novo valor. | Passou | **4ª rodada (26/11):** com o jogo já compilado, `make` responde "Nothing to be done for 'all'"; depois de alterar só o `src/config.h`, `make` recompila e mostra "Compilacao do AI Safety em C (Raylib) concluida com sucesso!". Na 1ª rodada (19/11) tinha falhado: o Makefile não acompanhava os arquivos `.h` |
 
 ## Situação no Issue Tracker
 
-* **Fechadas com reteste:** [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) (W/A/S/D), [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (sem som), [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7) (contador 11/10), [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) (relatório da vitória) e [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12) (acentos, CT-US18-03) e [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15) (certificado sem hash e sem integridade restante, CT-US20-02 e CT-US20-04, corrigida no PR #16).
-* **Continuam abertas:** [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) (aviso narrativo na troca de fase) e [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) (Makefile).
-* **Novas, encontradas na 2ª rodada:**
-  * [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) [US16] Ícone da AURA-67 não aparece na barra de título da janela, nem no WSL nem no `jogo.exe` (CT-US16-03).
+Todas as 10 issues abertas durante os testes estão fechadas, cada uma com reteste:
+
+* **Fechadas com reteste nas rodadas 1 a 3:** [#2](https://github.com/vdornelass/pi2-squad-e7/issues/2) (W/A/S/D), [#3](https://github.com/vdornelass/pi2-squad-e7/issues/3) (sem som), [#7](https://github.com/vdornelass/pi2-squad-e7/issues/7) (contador 11/10), [#8](https://github.com/vdornelass/pi2-squad-e7/issues/8) (relatório da vitória), [#12](https://github.com/vdornelass/pi2-squad-e7/issues/12) (acentos) e [#15](https://github.com/vdornelass/pi2-squad-e7/issues/15) (hash do certificado, corrigida no PR #16).
+* **Corrigidas em 25/11 e retestadas na 4ª rodada (26/11):** [#9](https://github.com/vdornelass/pi2-squad-e7/issues/9) (aviso narrativo na troca de fase, RT-09), [#10](https://github.com/vdornelass/pi2-squad-e7/issues/10) (Makefile, RT-10) e [#17](https://github.com/vdornelass/pi2-squad-e7/issues/17) (ícone na barra de título, CT-US16-03). As três foram corrigidas no commit `43dcdc8` (Matheus Chaves), que as fechou automaticamente com "closes"; o reteste confirmou a correção.
+* A Issue [#1](https://github.com/vdornelass/pi2-squad-e7/issues/1) (Espaço como erro) já tinha sido fechada com reteste na Sprint 02.
+
+![Issue tracker da Sprint 03](./img/bug_tracker_sprint03.png)
